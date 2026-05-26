@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Support Ticket — Critically Yours</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#C9A84C;--gold-l:#E8C97A;--gold-d:#9A7A2E;
+  --green:#2D5016;--gm:#3D6B1F;--gl:#4E8A28;--gp:#8FBC5A;
+  --bg:#0D1A06;--bg2:#111E07;--bg3:#162408;
+  --tl:#F5F0E8;--tm:#B8B09A;--ts:#7A7468;
+  --br:rgba(201,168,76,0.22);--br2:rgba(201,168,76,0.12);
+  --red:#E05555;--blue:#6495ED;
+  --glass:rgba(17,30,7,0.75);
+}
+[data-theme="light"]{
+  --bg:#F0EDE4;--bg2:#E8E3D8;--bg3:#DDD7C8;
+  --tl:#1A2E0A;--tm:#4A4236;--ts:#8A7A6A;
+  --br:rgba(154,122,46,0.28);--br2:rgba(154,122,46,0.14);
+  --glass:rgba(232,227,216,0.85);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{min-height:100%;overflow-x:hidden;}
+body{background:var(--bg);color:var(--tl);font-family:'Inter',sans-serif;font-size:13px;transition:background .3s,color .3s;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 20%, rgba(45,80,22,0.18) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 80% 80%, rgba(201,168,76,0.06) 0%,transparent 60%);pointer-events:none;z-index:0;}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(18px);border-bottom:1px solid var(--br);padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;}
+.topbar-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.topbar-logo-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--gold);}
+.topbar-logo-sub{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--tm);}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.user-chip{display:flex;align-items:center;gap:8px;background:rgba(201,168,76,0.08);border:1px solid var(--br);border-radius:20px;padding:5px 12px 5px 6px;}
+.user-chip img{width:24px;height:24px;border-radius:50%;object-fit:cover;}
+.user-chip-init{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--gm),var(--gl));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--gold);}
+.user-chip-name{font-size:11px;font-weight:600;color:var(--tl);}
+.theme-btn{background:rgba(201,168,76,0.1);border:1px solid var(--br);border-radius:6px;color:var(--gold);cursor:pointer;padding:5px 9px;font-size:12px;font-family:'Inter',sans-serif;}
+.btn-link{background:none;border:none;color:var(--tm);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:underline;}
+.btn-link:hover{color:var(--tl);}
+
+/* MAIN WRAPPER */
+.wrapper{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:32px 20px 60px;}
+
+/* AUTH WALL */
+.wall{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;gap:14px;}
+.sp{width:14px;height:14px;border:2px solid rgba(201,168,76,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:5px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* PAGE TITLE */
+.page-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--tl);margin-bottom:4px;}
+.page-sub{font-size:12px;color:var(--tm);margin-bottom:24px;line-height:1.5;}
+
+/* CARD */
+.card{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--br);border-radius:12px;padding:20px;margin-bottom:16px;transition:box-shadow .2s;}
+.card-title{font-size:10px;font-weight:700;color:var(--tm);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;}
+
+/* FORM */
+.fg{margin-bottom:12px;}
+.fl{display:block;font-size:10px;font-weight:700;letter-spacing:.5px;color:var(--tm);margin-bottom:5px;text-transform:uppercase;}
+.fi,.fs,.fta{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--br);border-radius:6px;color:var(--tl);padding:9px 12px;font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:border-color .15s,box-shadow .15s;}
+[data-theme="light"] .fi,[data-theme="light"] .fs,[data-theme="light"] .fta{background:rgba(0,0,0,0.04);}
+.fi:focus,.fs:focus,.fta:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.1);}
+.fs option{background:var(--bg2);}
+.fta{resize:vertical;min-height:100px;}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+
+/* BUTTONS */
+.btn-g{background:linear-gradient(135deg,var(--gold-d),var(--gold));color:#0D1A06;border:none;border-radius:6px;padding:10px 22px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:.3px;transition:opacity .15s,transform .15s;width:100%;}
+.btn-g:hover{opacity:.88;transform:translateY(-1px);}
+.btn-g:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+/* BADGE */
+.bx{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;}
+.bx-g{background:rgba(143,188,90,.15);color:var(--gp);border:1px solid rgba(143,188,90,.3);}
+.bx-o{background:rgba(255,166,0,.15);color:#FFA600;border:1px solid rgba(255,166,0,.3);}
+.bx-r{background:rgba(224,85,85,.15);color:var(--red);border:1px solid rgba(224,85,85,.3);}
+.bx-b{background:rgba(100,149,237,.15);color:var(--blue);border:1px solid rgba(100,149,237,.3);}
+
+/* TICKET ITEMS */
+.ticket-item{background:var(--glass);backdrop-filter:blur(10px);border:1px solid var(--br);border-left:3px solid var(--gold);border-radius:10px;padding:16px;margin-bottom:12px;transition:box-shadow .2s;}
+.ticket-item:hover{box-shadow:0 4px 20px rgba(201,168,76,.1);}
+.ti-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+.ti-subject{font-size:14px;font-weight:600;color:var(--tl);}
+.ti-body{font-size:12px;color:var(--tm);line-height:1.6;margin-bottom:8px;}
+.ti-meta{font-size:10px;color:var(--ts);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--br);margin:20px 0;}
+
+/* TABS */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--br);margin-bottom:16px;}
+.tab{padding:7px 14px;background:none;border:none;color:var(--tm);font-size:11px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;font-family:'Inter',sans-serif;margin-bottom:-1px;transition:color .15s;}
+.tab.act{color:var(--gold);border-bottom-color:var(--gold);}
+
+/* SUCCESS BANNER */
+.success-banner{background:rgba(143,188,90,.1);border:1px solid rgba(143,188,90,.3);border-radius:8px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:16px;display:none;}
+.success-banner.show{display:flex;}
+.success-icon{font-size:20px;flex-shrink:0;}
+.success-text{font-size:13px;color:var(--gp);}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--bg2);border:1px solid var(--br);border-radius:8px;padding:10px 16px;font-size:12px;color:var(--tl);z-index:9999;max-width:280px;transform:translateY(10px);opacity:0;transition:all .25s;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.3);}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.err{border-left:3px solid var(--red);}
+.toast.ok{border-left:3px solid var(--gp);}
+
+/* NO LOGIN STATE */
+.login-prompt{text-align:center;padding:48px 24px;}
+.login-prompt h2{font-family:'Playfair Display',serif;font-size:22px;color:var(--gold);margin-bottom:8px;}
+.login-prompt p{font-size:13px;color:var(--tm);line-height:1.6;margin-bottom:20px;}
+.btn-login{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#333;border:none;border-radius:7px;padding:11px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:box-shadow .2s;}
+.btn-login:hover{box-shadow:0 4px 14px rgba(255,255,255,.15);}
+.btn-login svg{width:18px;height:18px;flex-shrink:0;}
+
+@media(max-width:600px){
+  .wrapper{padding:20px 14px 50px;}
+  .fr{grid-template-columns:1fr;}
+  .topbar{padding:0 14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a class="topbar-logo" href="index.html">
+    <img src="cys_logo.png" alt="CYS" style="height:32px;width:32px;object-fit:contain;" onerror="this.style.display='none'">
+    <div>
+      <div class="topbar-logo-name">Critically Yours</div>
+      <div class="topbar-logo-sub">Support</div>
+    </div>
+  </a>
+  <div class="topbar-right">
+    <div class="user-chip" id="userChip" style="display:none;">
+      <div class="user-chip-init" id="chipInit">?</div>
+      <span class="user-chip-name" id="chipName"></span>
+    </div>
+    <button class="theme-btn" id="themeBtn">&#9788;</button>
+    <button class="btn-link" id="backBtn" style="display:none;" onclick="history.back()">&#8592; Back</button>
+  </div>
+</div>
+
+<!-- AUTH LOADING WALL -->
+<div id="authWall" class="wall">
+  <span class="sp"></span>
+  <p style="color:var(--tm);font-size:12px;">Loading&#8230;</p>
+</div>
+
+<!-- MAIN CONTENT (shown after auth check) -->
+<div id="appRoot" style="display:none;">
+  <div class="wrapper">
+
+    <!-- NOT LOGGED IN STATE -->
+    <div id="notLoggedIn" style="display:none;">
+      <div class="login-prompt">
+        <h2>&#9635; Support Tickets</h2>
+        <p>Sign in with your school Google account to raise a support ticket or view your existing tickets. Your issue will be reviewed by the IT Team or Core Team.</p>
+        <button class="btn-login" id="googleSignInBtn">
+          <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Continue with Google
+        </button>
+        <p style="font-size:11px;color:var(--ts);margin-top:12px;">Any Google account may raise a ticket (school or non-school).</p>
+      </div>
+    </div>
+
+    <!-- LOGGED IN STATE -->
+    <div id="loggedIn" style="display:none;">
+      <div class="page-title">&#9635; Support Tickets</div>
+      <p class="page-sub">Raise a ticket for any issue &#8212; technical, website, abuse, event-related, or any urgent matter. Tickets are reviewed by the IT Team and Core Team.</p>
+
+      <!-- SUCCESS BANNER -->
+      <div class="success-banner" id="successBanner">
+        <div class="success-icon">&#10003;</div>
+        <div class="success-text">Your ticket has been submitted successfully. The team will review it and respond shortly.</div>
+      </div>
+
+      <!-- NEW TICKET FORM -->
+      <div class="card">
+        <div class="card-title">Raise New Ticket</div>
+        <div class="fr">
+          <div class="fg">
+            <label class="fl">Category</label>
+            <select class="fs" id="tk-cat">
+              <option value="Technical">Technical Issue</option>
+              <option value="Website">Website Bug</option>
+              <option value="Abuse">Member Abuse / Misconduct</option>
+              <option value="Event">Event-related Issue</option>
+              <option value="Login">Login / Access Issue</option>
+              <option value="Urgent">Urgent / Emergency</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label class="fl">Priority</label>
+            <select class="fs" id="tk-pri">
+              <option value="Normal">Normal</option>
+              <option value="High">High</option>
+              <option value="Critical">Critical &#8212; Needs immediate attention</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl">Subject</label>
+          <input type="text" class="fi" id="tk-subject" placeholder="Brief description of the issue" maxlength="120">
+        </div>
+        <div class="fg">
+          <label class="fl">Details</label>
+          <textarea class="fta" id="tk-body" placeholder="Describe the issue in detail. Include any relevant information such as steps to reproduce, what happened, what you expected, etc."></textarea>
+        </div>
+        <button class="btn-g" id="submitTkBtn">Submit Ticket</button>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- MY TICKETS -->
+      <div class="page-title" style="font-size:18px;margin-bottom:14px;">My Tickets</div>
+      <div class="tabs">
+        <button class="tab act" data-tf="Open">Open</button>
+        <button class="tab" data-tf="In Progress">In Progress</button>
+        <button class="tab" data-tf="Resolved">Resolved</button>
+        <button class="tab" data-tf="">All</button>
+      </div>
+      <div id="myTickets">
+        <span class="sp"></span> Loading your tickets&#8230;
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getFirestore,doc,getDoc,getDocs,addDoc,collection,onSnapshot,query,where,orderBy,serverTimestamp,updateDoc}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import{getAuth,onAuthStateChanged,signInWithPopup,GoogleAuthProvider,signOut}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const FB={apiKey:"AIzaSyCogmTX4tW4EZfTqsMunRu3XuuOTBDKN-E",authDomain:"cys-dpsm.firebaseapp.com",projectId:"cys-dpsm",storageBucket:"cys-dpsm.firebasestorage.app",messagingSenderId:"198853363575",appId:"1:198853363575:web:365ff3bcb9b54b760b4372"};
+const app=initializeApp(FB);
+const db=getFirestore(app);
+const auth=getAuth(app);
+const provider=new GoogleAuthProvider();
+
+let CU=null,ticketFilter="Open";
+
+/* THEME */
+const th=localStorage.getItem("cys_theme")||"dark";
+document.documentElement.setAttribute("data-theme",th);
+document.getElementById("themeBtn").innerHTML=th==="dark"?"&#9788;":"&#9790;";
+document.getElementById("themeBtn").onclick=()=>{
+  const c=document.documentElement.getAttribute("data-theme");
+  const n=c==="dark"?"light":"dark";
+  document.documentElement.setAttribute("data-theme",n);
+  localStorage.setItem("cys_theme",n);
+  document.getElementById("themeBtn").innerHTML=n==="dark"?"&#9788;":"&#9790;";
+};
+
+function toast(m,t="ok"){
+  const el=document.getElementById("toast");
+  el.innerHTML=m;el.className="toast show "+(t==="err"?"err":"ok");
+  setTimeout(()=>el.classList.remove("show"),3200);
+}
+
+/* AUTH */
+onAuthStateChanged(auth,async user=>{
+  document.getElementById("authWall").style.display="none";
+  document.getElementById("appRoot").style.display="block";
+  if(!user){
+    document.getElementById("notLoggedIn").style.display="block";
+    document.getElementById("loggedIn").style.display="none";
+    return;
+  }
+  CU=user;
+  // Show user chip
+  const chip=document.getElementById("userChip");chip.style.display="flex";
+  const init=document.getElementById("chipInit");
+  if(user.photoURL){const img=document.createElement("img");img.src=user.photoURL;img.style.cssText="width:24px;height:24px;border-radius:50%;object-fit:cover;";init.replaceWith(img);}
+  else{init.textContent=(user.displayName||user.email||"?")[0].toUpperCase();}
+  document.getElementById("chipName").textContent=user.displayName||user.email||"User";
+  document.getElementById("backBtn").style.display="block";
+  document.getElementById("notLoggedIn").style.display="none";
+  document.getElementById("loggedIn").style.display="block";
+  loadMyTickets();
+});
+
+/* GOOGLE SIGN IN */
+document.getElementById("googleSignInBtn").onclick=async()=>{
+  try{
+    // Check if non-dpsm allowed
+    let settings={};
+    try{const sd=await getDoc(doc(db,"settings","global"));if(sd.exists())settings=sd.data();}catch(e){}
+    if(!settings.showAllAccounts){provider.setCustomParameters({hd:"dpsmegacity.in"});}
+    await signInWithPopup(auth,provider);
+  }catch(e){
+    if(e.code!=="auth/popup-closed-by-user")toast("Sign-in failed. Please try again.","err");
+  }
+};
+
+/* TABS */
+document.querySelectorAll(".tab[data-tf]").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll(".tab[data-tf]").forEach(x=>x.classList.remove("act"));
+    b.classList.add("act");ticketFilter=b.dataset.tf;renderMyTickets();
+  };
+});
+
+let allMyTickets=[];
+function loadMyTickets(){
+  if(!CU)return;
+  onSnapshot(query(collection(db,"tickets"),where("userId","==",CU.uid),orderBy("createdAt","desc")),snap=>{
+    allMyTickets=[];snap.forEach(d=>allMyTickets.push({id:d.id,...d.data()}));
+    renderMyTickets();
+  });
+}
+
+function renderMyTickets(){
+  const container=document.getElementById("myTickets");container.innerHTML="";
+  const filtered=ticketFilter?allMyTickets.filter(t=>t.status===ticketFilter):allMyTickets;
+  if(!filtered.length){
+    container.innerHTML=`<div style="text-align:center;padding:28px;color:var(--tm);font-size:13px;font-style:italic;">No tickets in this category.</div>`;
+    return;
+  }
+  filtered.forEach(t=>{
+    const bc=t.status==="Open"?"bx-o":t.status==="In Progress"?"bx-b":"bx-g";
+    const pc=t.priority==="Critical"?"bx-r":t.priority==="High"?"bx-o":"bx-b";
+    const date=t.createdAt?.toDate?.().toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})||"";
+    const el=document.createElement("div");el.className="ticket-item";
+    el.innerHTML=`
+      <div class="ti-header">
+        <div class="ti-subject">${t.subject}</div>
+        <div style="display:flex;gap:5px;align-items:center;flex-shrink:0;">
+          <span class="bx ${pc}">${t.priority||"Normal"}</span>
+          <span class="bx ${bc}">${t.status}</span>
+        </div>
+      </div>
+      <div class="ti-body">${t.body}</div>
+      <div class="ti-meta">
+        <span class="bx bx-b">${t.category||"General"}</span>
+        <span>&#183;</span>
+        <span>${date}</span>
+        ${t.resolvedAt?`<span>&#183;</span><span style="color:var(--gp);">Resolved ${t.resolvedAt?.toDate?.().toLocaleDateString("en-IN")||""}</span>`:""}
+        ${t.adminResponse?`<span>&#183;</span><span style="color:var(--gold);">&#9635; Response received</span>`:""}
+      </div>
+      ${t.adminResponse?`<div style="margin-top:10px;background:rgba(201,168,76,0.07);border:1px solid var(--br);border-radius:6px;padding:10px 12px;"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);margin-bottom:4px;">&#9635; Response from Team</div><div style="font-size:12px;color:var(--tl);line-height:1.5;">${t.adminResponse}</div></div>`:""}
+    `;
+    container.appendChild(el);
+  });
+}
+
+/* SUBMIT TICKET */
+document.getElementById("submitTkBtn").onclick=async()=>{
+  if(!CU){toast("Please sign in first.","err");return;}
+  const subject=document.getElementById("tk-subject").value.trim();
+  const body=document.getElementById("tk-body").value.trim();
+  const category=document.getElementById("tk-cat").value;
+  const priority=document.getElementById("tk-pri").value;
+  if(!subject||!body){toast("Subject and details are required.","err");return;}
+  if(subject.length<5){toast("Subject is too short.","err");return;}
+  if(body.length<10){toast("Please provide more details.","err");return;}
+
+  const btn=document.getElementById("submitTkBtn");
+  btn.disabled=true;btn.innerHTML='<span class="sp"></span> Submitting&#8230;';
+
+  try{
+    // Get user role from Firestore
+    let userRole="Guest";let regNo="";
+    try{const ud=await getDoc(doc(db,"users",CU.uid));if(ud.exists()){const d=ud.data();userRole=(d.roles||[d.role]).filter(Boolean).join(", ")||"Guest";}}catch(e){}
+    // Check if participant
+    try{const rd=await getDoc(doc(db,"registrations",CU.uid));if(rd.exists()){const r=rd.data();regNo=r.regNo||"";if(!userRole||userRole==="Guest")userRole="Participant";}}catch(e){}
+
+    await addDoc(collection(db,"tickets"),{
+      userId:CU.uid,
+      userName:CU.displayName||"",
+      userEmail:CU.email||"",
+      userRole,regNo,
+      subject,body,category,priority,
+      status:"Open",
+      createdAt:serverTimestamp()
+    });
+
+    // Clear form
+    document.getElementById("tk-subject").value="";
+    document.getElementById("tk-body").value="";
+    document.getElementById("tk-cat").value="Technical";
+    document.getElementById("tk-pri").value="Normal";
+
+    // Show success
+    const banner=document.getElementById("successBanner");
+    banner.classList.add("show");
+    setTimeout(()=>banner.classList.remove("show"),5000);
+    toast("Ticket submitted successfully.","ok");
+
+    // Switch to Open tab
+    document.querySelectorAll(".tab[data-tf]").forEach(x=>x.classList.remove("act"));
+    document.querySelector('.tab[data-tf="Open"]').classList.add("act");
+    ticketFilter="Open";
+  }catch(e){
+    toast("Failed to submit: "+e.message,"err");
+  }finally{
+    btn.disabled=false;btn.innerHTML="Submit Ticket";
+  }
+};
+</script>
+</body>
+</html>

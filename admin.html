@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Portal — Critically Yours</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#C9A84C;--gold-l:#E8C97A;--gold-d:#9A7A2E;--green:#2D5016;--gm:#3D6B1F;--gl:#4E8A28;--gp:#8FBC5A;--bg:#0D1A06;--bgc:#111E07;--tl:#F5F0E8;--tm:#B8B09A;--br:rgba(201,168,76,0.25);--red:#E05555;--blue:#6495ED;--sw:260px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--tl);font-family:'Montserrat',sans-serif;min-height:100vh;}
+.shell{display:flex;min-height:100vh;}
+/* SIDEBAR */
+.sidebar{width:var(--sw);background:rgba(0,0,0,0.38);border-right:1px solid var(--br);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto;}
+.sb-logo{padding:18px 20px;border-bottom:1px solid var(--br);}
+.sb-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--gold);}
+.sb-role{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gp);margin-top:2px;}
+.sb-user{display:flex;align-items:center;gap:9px;padding:12px 20px;border-bottom:1px solid var(--br);}
+.sb-user img{width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid var(--gold-d);flex-shrink:0;}
+.sb-uname{font-size:12px;font-weight:600;}
+.sb-utag{font-size:10px;color:var(--gold);}
+.sb-nav{flex:1;padding:8px 0;}
+.nav-grp{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(184,176,154,0.4);padding:10px 20px 3px;}
+.nav-btn{display:flex;align-items:center;gap:10px;padding:9px 20px;color:var(--tm);font-size:12px;font-weight:500;cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:'Montserrat',sans-serif;transition:all 0.15s;}
+.nav-btn:hover{color:var(--tl);background:rgba(255,255,255,0.03);}
+.nav-btn.act{color:var(--gold);background:rgba(201,168,76,0.08);border-right:3px solid var(--gold);}
+.nav-ico{width:16px;text-align:center;font-style:normal;font-size:13px;flex-shrink:0;}
+.sb-bot{padding:12px 20px;border-top:1px solid var(--br);}
+.lo-btn{display:flex;align-items:center;gap:8px;color:var(--tm);font-size:12px;cursor:pointer;background:none;border:none;font-family:'Montserrat',sans-serif;}
+.lo-btn:hover{color:var(--red);}
+/* MAIN */
+.main{flex:1;margin-left:var(--sw);padding:24px 28px;min-height:100vh;overflow-x:hidden;}
+.page{display:none;}.page.act{display:block;animation:pgfade 0.2s ease;}
+@keyframes pgfade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.ph{margin-bottom:20px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.pt{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;}
+.ps{font-size:11px;color:var(--tm);margin-top:2px;}
+/* CARDS */
+.card{background:var(--bgc);border:1px solid var(--br);border-radius:11px;padding:18px;margin-bottom:14px;}
+.ct{font-size:10px;font-weight:700;color:var(--tm);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+/* STATS */
+.sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:14px;}
+.sc{background:var(--bgc);border:1px solid var(--br);border-radius:10px;padding:14px;text-align:center;}
+.sn{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--gold);}
+.sl{font-size:9px;color:var(--tm);letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
+/* BTNS */
+.bg{background:linear-gradient(135deg,var(--gold-d),var(--gold));color:var(--bg);border:none;border-radius:5px;padding:7px 16px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;letter-spacing:0.3px;}
+.bg:hover{opacity:0.88;}
+.bo{background:transparent;color:var(--gold);border:1px solid var(--gold);border-radius:5px;padding:6px 14px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;}
+.bo:hover{background:rgba(201,168,76,0.08);}
+.bd{background:rgba(224,85,85,0.1);color:var(--red);border:1px solid rgba(224,85,85,0.3);border-radius:5px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;}
+.bd:hover{background:rgba(224,85,85,0.2);}
+/* BADGES */
+.bx{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;}
+.bx-g{background:rgba(143,188,90,0.15);color:var(--gp);border:1px solid rgba(143,188,90,0.3);}
+.bx-o{background:rgba(255,166,0,0.15);color:#FFA600;border:1px solid rgba(255,166,0,0.3);}
+.bx-r{background:rgba(224,85,85,0.15);color:var(--red);border:1px solid rgba(224,85,85,0.3);}
+.bx-b{background:rgba(100,149,237,0.15);color:var(--blue);border:1px solid rgba(100,149,237,0.3);}
+.bx-gold{background:rgba(201,168,76,0.15);color:var(--gold);border:1px solid rgba(201,168,76,0.3);}
+/* FORMS */
+.fg{margin-bottom:12px;}
+.fl{display:block;font-size:10px;font-weight:700;letter-spacing:0.5px;color:var(--tm);margin-bottom:4px;text-transform:uppercase;}
+.fi,.fs,.fta{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--br);border-radius:5px;color:var(--tl);padding:8px 11px;font-size:12px;font-family:'Montserrat',sans-serif;outline:none;transition:border-color 0.15s;}
+.fi:focus,.fs:focus,.fta:focus{border-color:var(--gold);}
+.fs option{background:var(--bg);}
+.fta{resize:vertical;}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+/* TABLE */
+.tw{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+th{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tm);padding:9px 12px;text-align:left;border-bottom:1px solid var(--br);}
+td{padding:9px 12px;font-size:12px;border-bottom:1px solid rgba(201,168,76,0.06);}
+tr:hover td{background:rgba(255,255,255,0.02);}
+/* CHAT */
+.chat-layout{display:grid;grid-template-columns:250px 1fr;gap:14px;height:540px;}
+.conv-panel{background:var(--bgc);border:1px solid var(--br);border-radius:11px;display:flex;flex-direction:column;overflow:hidden;}
+.conv-search{padding:9px 11px;border-bottom:1px solid var(--br);}
+.conv-search input{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--br);border-radius:5px;color:var(--tl);padding:6px 9px;font-size:11px;font-family:'Montserrat',sans-serif;outline:none;}
+.conv-list{flex:1;overflow-y:auto;}
+.ci{display:flex;align-items:center;gap:9px;padding:9px 12px;cursor:pointer;border-bottom:1px solid rgba(201,168,76,0.06);transition:background 0.12s;position:relative;}
+.ci:hover{background:rgba(255,255,255,0.025);}
+.ci.active-c{background:rgba(201,168,76,0.07);}
+.ca{width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid var(--br);flex-shrink:0;background:var(--gm);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--gold);}
+.ca img{width:32px;height:32px;border-radius:50%;object-fit:cover;}
+.cn{font-size:12px;font-weight:600;line-height:1.2;}
+.cp{font-size:10px;color:var(--tm);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px;}
+.cm{margin-left:auto;text-align:right;flex-shrink:0;}
+.ct2{font-size:9px;color:var(--tm);}
+.ud{width:7px;height:7px;border-radius:50%;background:var(--gold);display:block;margin:3px 0 0 auto;}
+/* CHAT PANEL */
+.chat-panel{background:var(--bgc);border:1px solid var(--br);border-radius:11px;display:flex;flex-direction:column;overflow:hidden;}
+.chat-hdr{padding:11px 14px;border-bottom:1px solid var(--br);display:flex;align-items:center;gap:9px;}
+.chat-hdr-img{width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid var(--br);flex-shrink:0;}
+.chat-hdr-name{font-size:13px;font-weight:600;}
+.chat-hdr-role{font-size:10px;color:var(--tm);}
+.chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:6px;}
+.bw{display:flex;flex-direction:column;max-width:66%;}
+.bw.out{align-self:flex-end;align-items:flex-end;}
+.bw.in{align-self:flex-start;align-items:flex-start;}
+.bubble{padding:8px 12px;border-radius:10px;font-size:12px;line-height:1.5;position:relative;word-break:break-word;cursor:pointer;}
+.bubble.out{background:linear-gradient(135deg,var(--gold-d),var(--gold));color:var(--bg);border-radius:10px 10px 2px 10px;}
+.bubble.in{background:rgba(255,255,255,0.07);border-radius:10px 10px 10px 2px;}
+.b-sender{font-size:10px;font-weight:700;color:var(--gold);margin-bottom:2px;}
+.b-role{font-size:9px;color:var(--tm);margin-bottom:2px;}
+.b-footer{display:flex;align-items:center;gap:4px;margin-top:3px;font-size:9px;color:var(--tm);}
+.b-footer.out{justify-content:flex-end;color:rgba(13,26,6,0.7);}
+.fwd-tag{font-size:9px;color:var(--tm);font-style:italic;margin-bottom:2px;}
+.reply-box{background:rgba(255,255,255,0.07);border-left:2px solid var(--gold);border-radius:4px;padding:4px 8px;margin-bottom:5px;font-size:10px;color:var(--tm);}
+.reply-box strong{color:var(--tl);display:block;font-size:10px;}
+.msg-ctx{display:none;position:absolute;right:0;top:-28px;background:var(--bgc);border:1px solid var(--br);border-radius:6px;padding:3px 5px;gap:3px;z-index:20;white-space:nowrap;}
+.bubble:hover .msg-ctx{display:flex;}
+.mc-btn{background:none;border:none;color:var(--tm);cursor:pointer;font-size:10px;padding:2px 5px;border-radius:3px;font-family:'Montserrat',sans-serif;}
+.mc-btn:hover{color:var(--tl);background:rgba(255,255,255,0.06);}
+.reply-bar{padding:7px 12px;background:rgba(201,168,76,0.05);border-top:1px solid var(--br);display:none;align-items:center;gap:8px;}
+.reply-bar.show{display:flex;}
+.rp-preview{flex:1;font-size:11px;color:var(--tm);border-left:2px solid var(--gold);padding-left:7px;}
+.rp-preview strong{color:var(--tl);display:block;font-size:10px;}
+.rp-close{background:none;border:none;color:var(--tm);cursor:pointer;font-size:15px;}
+.chat-inp-area{padding:10px;border-top:1px solid var(--br);display:flex;gap:7px;align-items:flex-end;}
+.chat-inp{flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--br);border-radius:7px;padding:8px 11px;color:var(--tl);font-size:12px;font-family:'Montserrat',sans-serif;outline:none;resize:none;max-height:90px;}
+.chat-inp:focus{border-color:var(--gold);}
+.send-btn{background:linear-gradient(135deg,var(--gold-d),var(--gold));color:var(--bg);border:none;border-radius:7px;padding:8px 14px;cursor:pointer;font-size:12px;font-weight:700;flex-shrink:0;}
+/* MODAL */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:2000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px);}
+.mo.open{display:flex;}
+.mc{background:var(--bgc);border:1px solid var(--br);border-radius:14px;padding:28px 24px;max-width:500px;width:100%;position:relative;max-height:90vh;overflow-y:auto;}
+.mclose{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--tm);font-size:20px;cursor:pointer;}
+.mclose:hover{color:var(--tl);}
+.mt{font-family:'Playfair Display',serif;font-size:18px;color:var(--tl);margin-bottom:4px;}
+.ms{font-size:11px;color:var(--tm);margin-bottom:18px;}
+/* TOGGLES */
+.tog-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--br);}
+.tog-row:last-child{border-bottom:none;}
+.tog-label{flex:1;}
+.tog-title{font-size:13px;font-weight:600;}
+.tog-desc{font-size:11px;color:var(--tm);margin-top:1px;}
+.toggle{position:relative;width:40px;height:22px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.tslider{position:absolute;inset:0;background:rgba(255,255,255,0.1);border-radius:11px;cursor:pointer;transition:background 0.2s;}
+.tslider::before{content:'';position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform 0.2s;}
+.toggle input:checked+.tslider{background:var(--gold);}
+.toggle input:checked+.tslider::before{transform:translateX(18px);}
+/* TABS */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--br);margin-bottom:14px;}
+.tb{padding:7px 14px;background:none;border:none;color:var(--tm);font-size:11px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;font-family:'Montserrat',sans-serif;margin-bottom:-1px;}
+.tb.act{color:var(--gold);border-bottom-color:var(--gold);}
+/* PERM TABLE */
+.perm-grid{display:grid;grid-template-columns:1fr repeat(7,auto);gap:0;border:1px solid var(--br);border-radius:8px;overflow:hidden;}
+.pg-hdr{background:rgba(201,168,76,0.06);padding:8px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--tm);border-bottom:1px solid var(--br);border-right:1px solid var(--br);text-align:center;}
+.pg-hdr:first-child{text-align:left;}
+.pg-cell{padding:8px 10px;border-bottom:1px solid rgba(201,168,76,0.06);border-right:1px solid rgba(201,168,76,0.06);display:flex;align-items:center;justify-content:center;font-size:11px;}
+.pg-cell:first-child{justify-content:flex-start;font-weight:600;}
+.pg-cell input[type=checkbox]{accent-color:var(--gold);width:14px;height:14px;cursor:pointer;}
+/* MISC */
+.sp{width:13px;height:13px;border:2px solid rgba(201,168,76,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite;display:inline-block;vertical-align:middle;margin-right:5px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--bgc);border:1px solid var(--br);border-radius:7px;padding:10px 16px;font-size:12px;color:var(--tl);z-index:9000;max-width:280px;transform:translateY(10px);opacity:0;transition:all 0.25s;pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.err{border-left:3px solid var(--red);}
+.toast.ok{border-left:3px solid var(--gp);}
+.denied{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:14px;text-align:center;padding:40px;}
+.denied h1{font-family:'Playfair Display',serif;font-size:26px;color:var(--red);}
+.denied p{font-size:13px;color:var(--tm);max-width:340px;line-height:1.6;}
+@media(max-width:768px){.sidebar{position:relative;width:100%;height:auto;}.main{margin-left:0;padding:16px;}.shell{flex-direction:column;}.chat-layout{grid-template-columns:1fr;height:auto;}.fr{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div id="authWall" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:14px;">
+  <span class="sp"></span><p id="authMsg" style="color:var(--tm);font-size:13px;">Verifying access...</p>
+</div>
+
+<div id="appRoot" style="display:none;">
+<div class="shell">
+<div class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-title">Critically Yours</div>
+    <div class="sb-role">IT Team / Admin</div>
+  </div>
+  <div class="sb-user">
+    <img src="" id="sbImg" alt="">
+    <div><div class="sb-uname" id="sbName"></div><div class="sb-utag" id="sbRoleTag">Administrator</div></div>
+  </div>
+  <nav class="sb-nav">
+    <div class="nav-grp">Overview</div>
+    <button class="nav-btn act" data-p="dashboard"><i class="nav-ico">&#9632;</i> Dashboard</button>
+    <button class="nav-btn" data-p="analytics"><i class="nav-ico">&#9650;</i> Analytics</button>
+    <div class="nav-grp">Management</div>
+    <button class="nav-btn" data-p="users"><i class="nav-ico">&#9632;</i> Users &amp; Roles</button>
+    <button class="nav-btn" data-p="events"><i class="nav-ico">&#9632;</i> Events</button>
+    <button class="nav-btn" data-p="registrations"><i class="nav-ico">&#9632;</i> Registrations</button>
+    <button class="nav-btn" data-p="classes"><i class="nav-ico">&#9632;</i> Classes &amp; Sections</button>
+    <div class="nav-grp">Communication</div>
+    <button class="nav-btn" data-p="announcements"><i class="nav-ico">&#9632;</i> Announcements</button>
+    <button class="nav-btn" data-p="messages"><i class="nav-ico">&#9632;</i> Messages</button>
+    <button class="nav-btn" data-p="tickets"><i class="nav-ico">&#9632;</i> Support Tickets</button>
+    <div class="nav-grp">Configuration</div>
+    <button class="nav-btn" data-p="settings"><i class="nav-ico">&#9632;</i> Global Settings</button>
+    <button class="nav-btn" data-p="permissions"><i class="nav-ico">&#9632;</i> Role Permissions</button>
+    <button class="nav-btn" data-p="msgperms"><i class="nav-ico">&#9632;</i> Messaging Rules</button>
+    <button class="nav-btn" data-p="timeline"><i class="nav-ico">&#9632;</i> Timeline</button>
+    <button class="nav-btn" data-p="rules"><i class="nav-ico">&#9632;</i> Rules &amp; Regs</button>
+    <button class="nav-btn" data-p="logs"><i class="nav-ico">&#9632;</i> Activity Logs</button>
+  </nav>
+  <div class="sb-bot"><button class="lo-btn" id="loBtn">&#x21A6; Sign Out</button></div>
+</div>
+
+<div class="main">
+
+<div class="page act" id="page-dashboard">
+  <div class="ph"><div><div class="pt">Dashboard</div><div class="ps">Full operational overview of Critically Yours.</div></div><button class="bg" onclick="exportAllCSV()">&#x2193; Export All CSV</button></div>
+  <div class="sg" id="statGrid">
+    <div class="sc"><div class="sn" id="st-total">—</div><div class="sl">Total Registrations</div></div>
+    <div class="sc"><div class="sn" id="st-sel">—</div><div class="sl">Selected</div></div>
+    <div class="sc"><div class="sn" id="st-pend">—</div><div class="sl">Pending Audition</div></div>
+    <div class="sc"><div class="sn" id="st-rej">—</div><div class="sl">Rejected</div></div>
+    <div class="sc"><div class="sn" id="st-ev">—</div><div class="sl">Events</div></div>
+    <div class="sc"><div class="sn" id="st-tk">—</div><div class="sl">Open Tickets</div></div>
+  </div>
+  <div class="card"><div class="ct">Event-wise Breakdown</div>
+    <div class="tw"><table><thead><tr><th>Event</th><th>Registered</th><th>Selected</th><th>Pending</th><th>Rejected</th><th>Action</th></tr></thead>
+    <tbody id="evBreak"></tbody></table></div>
+  </div>
+</div>
+
+<div class="page" id="page-analytics">
+  <div class="ph"><div><div class="pt">Analytics</div><div class="ps">Real-time registration data.</div></div></div>
+  <div class="card"><div class="ct">Registration by Status</div><canvas id="statusChart" height="100"></canvas></div>
+  <div class="card"><div class="ct">Registrations by Class</div><canvas id="classChart" height="100"></canvas></div>
+</div>
+
+<div class="page" id="page-users">
+  <div class="ph"><div><div class="pt">Users &amp; Roles</div><div class="ps">Manage all portal members and their access.</div></div><button class="bg" id="addUserBtn">+ Add User</button></div>
+  <div class="card">
+    <div class="tw"><table><thead><tr><th>Name</th><th>Email</th><th>Role(s)</th><th>Event Assigned</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody id="usersBody"></tbody></table></div>
+  </div>
+</div>
+
+<div class="page" id="page-events">
+  <div class="ph"><div><div class="pt">Events</div></div><button class="bg" id="addEvBtn">+ Add Event</button></div>
+  <div class="card" id="evList"></div>
+</div>
+
+<div class="page" id="page-registrations">
+  <div class="ph"><div><div class="pt">Registrations</div></div><button class="bo" onclick="exportAllCSV()">&#x2193; CSV</button></div>
+  <div style="display:flex;gap:9px;margin-bottom:12px;flex-wrap:wrap;">
+    <input type="text" class="fi" id="regSearch" placeholder="Search name, class..." style="max-width:260px;">
+    <select class="fs" id="regStFil" style="max-width:170px;"><option value="">All Status</option><option>Audition Pending</option><option>Auditioning</option><option>Selected</option><option>Rejected</option></select>
+    <select class="fs" id="regEvFil" style="max-width:200px;"><option value="">All Events</option></select>
+  </div>
+  <div class="card"><div class="tw"><table><thead><tr><th>Name</th><th>Class</th><th>Event</th><th>Status</th><th>Registered</th><th>Action</th></tr></thead><tbody id="regBody"></tbody></table></div></div>
+</div>
+
+<div class="page" id="page-classes">
+  <div class="ph"><div><div class="pt">Classes &amp; Sections</div></div><button class="bg" id="addClsBtn">+ Add Class</button></div>
+  <div class="card" id="clsList"></div>
+</div>
+
+<div class="page" id="page-announcements">
+  <div class="ph"><div><div class="pt">Announcements</div></div></div>
+  <div class="card">
+    <div class="ct">Post Announcement</div>
+    <div class="fr"><div class="fg"><label class="fl">Title</label><input type="text" class="fi" id="annTitle"></div>
+    <div class="fg"><label class="fl">Target</label><select class="fs" id="annTarget"><option value="all">All Registered</option><option value="selected">Selected Only</option><option value="eventhead">Event Heads</option><option value="core">Core Team</option><option value="media">Media Team</option><option value="public">Public Website</option></select></div></div>
+    <div class="fg"><label class="fl">Body</label><textarea class="fta" id="annBody" rows="3"></textarea></div>
+    <button class="bg" id="postAnnBtn">Post Announcement</button>
+  </div>
+  <div class="card"><div class="ct">Pending Approvals</div><div id="pendAnn"></div></div>
+  <div class="card"><div class="ct">All Announcements</div><div id="allAnn"></div></div>
+</div>
+
+<div class="page" id="page-messages">
+  <div class="ph"><div><div class="pt">Messages</div><div class="ps">Global messaging — DM or broadcast to any role.</div></div></div>
+  <div class="chat-layout">
+    <div class="conv-panel">
+      <div class="conv-search"><input type="text" id="convSearch" placeholder="Search conversations..."></div>
+      <div class="conv-list" id="convList"></div>
+    </div>
+    <div class="chat-panel">
+      <div class="chat-hdr"><img src="" id="chatHdrImg" class="chat-hdr-img" alt=""><div><div class="chat-hdr-name" id="chatHdrName">Select a conversation</div><div class="chat-hdr-role" id="chatHdrRole"></div></div></div>
+      <div class="chat-msgs" id="chatMsgs"><p style="color:var(--tm);font-size:12px;text-align:center;padding:28px;">Select a conversation to start messaging.</p></div>
+      <div class="reply-bar" id="replyBar"><div class="rp-preview" id="rpPreview"><strong id="rpName"></strong><span id="rpText"></span></div><button class="rp-close" id="rpClose">&#x2715;</button></div>
+      <div class="chat-inp-area"><textarea class="chat-inp" id="chatInp" rows="1" placeholder="Type a message..."></textarea><button class="send-btn" id="sendBtn">Send</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-tickets">
+  <div class="ph"><div><div class="pt">Support Tickets</div></div></div>
+  <div class="tabs">
+    <button class="tb act" data-tf="Open">Open</button>
+    <button class="tb" data-tf="In Progress">In Progress</button>
+    <button class="tb" data-tf="Resolved">Resolved</button>
+    <button class="tb" data-tf="">All</button>
+  </div>
+  <div id="ticketList"></div>
+</div>
+
+<div class="page" id="page-settings">
+  <div class="ph"><div><div class="pt">Global Settings</div></div></div>
+  <div class="card">
+    <div class="ct">Fest Details</div>
+    <div class="fr"><div class="fg"><label class="fl">Fest Subtitle</label><input type="text" class="fi" id="set-sub"></div><div class="fg"><label class="fl">Event Date (ISO)</label><input type="datetime-local" class="fi" id="set-date"></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Venue Name</label><input type="text" class="fi" id="set-vname"></div><div class="fg"><label class="fl">Venue Address</label><input type="text" class="fi" id="set-vaddr"></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Date Display</label><input type="text" class="fi" id="set-vdate" placeholder="e.g. 15 Jan 2026"></div><div class="fg"><label class="fl">Time Display</label><input type="text" class="fi" id="set-vtime" placeholder="e.g. 9:00 AM onwards"></div></div>
+    <div class="fg"><label class="fl">Hero Poster URL / filename</label><input type="text" class="fi" id="set-poster" placeholder="poster.jpg or https://..."></div>
+    <div class="fg"><label class="fl">Poster Caption (optional)</label><input type="text" class="fi" id="set-cap"></div>
+    <div class="fg"><label class="fl">Logo URL / filename</label><input type="text" class="fi" id="set-logo" placeholder="cys_logo.png"></div>
+    <button class="bg" id="saveFest" style="margin-top:4px;">Save Fest Details</button>
+  </div>
+  <div class="card">
+    <div class="ct">Feature Toggles</div>
+    <div class="tog-row"><div class="tog-label"><div class="tog-title">Unofficial Banner</div><div class="tog-desc">Show "not official yet" notice on public page.</div></div><label class="toggle"><input type="checkbox" id="tog-banner"><span class="tslider"></span></label></div>
+    <div class="tog-row"><div class="tog-label"><div class="tog-title">Enrollment Open</div><div class="tog-desc">Allow student registrations.</div></div><label class="toggle"><input type="checkbox" id="tog-enroll"><span class="tslider"></span></label></div>
+    <div class="tog-row"><div class="tog-label"><div class="tog-title">Enrollment Maintenance</div><div class="tog-desc">Show maintenance message on enroll button.</div></div><label class="toggle"><input type="checkbox" id="tog-maint"><span class="tslider"></span></label></div>
+    <div class="tog-row"><div class="tog-label"><div class="tog-title">Allow Non-DPSM Accounts</div><div class="tog-desc">Allow non-@dpsmegacity.in accounts to log in (for special cases).</div></div><label class="toggle"><input type="checkbox" id="tog-nondpsm"><span class="tslider"></span></label></div>
+    <div class="fg" style="margin-top:12px;"><label class="fl">Custom Banner Text</label><input type="text" class="fi" id="set-bannerTxt"></div>
+    <button class="bg" id="saveToggles">Save Toggles</button>
+  </div>
+</div>
+
+<div class="page" id="page-permissions">
+  <div class="ph"><div><div class="pt">Role Permissions</div><div class="ps">Control feature access per role.</div></div><button class="bg" id="savePermsBtn">Save All Permissions</button></div>
+  <div class="card" style="overflow-x:auto;">
+    <div class="perm-grid" id="permGrid"></div>
+  </div>
+</div>
+
+<div class="page" id="page-msgperms">
+  <div class="ph"><div><div class="pt">Messaging Rules</div><div class="ps">Control who can message whom, and whether DMs are allowed.</div></div><button class="bg" id="saveMsgPerms">Save Rules</button></div>
+  <div class="card" style="overflow-x:auto;">
+    <div id="msgPermGrid"></div>
+  </div>
+</div>
+
+<div class="page" id="page-timeline">
+  <div class="ph"><div><div class="pt">Timeline</div></div><button class="bg" id="addTlBtn">+ Add Item</button></div>
+  <div class="card" id="tlList"></div>
+</div>
+
+<div class="page" id="page-rules">
+  <div class="ph"><div><div class="pt">Rules &amp; Regulations</div></div><button class="bg" id="addRuleBtn">+ Add Block</button></div>
+  <div class="card" id="ruleList"></div>
+</div>
+
+<div class="page" id="page-logs">
+  <div class="ph"><div><div class="pt">Activity Logs</div></div></div>
+  <div class="card"><div class="tw"><table><thead><tr><th>Time</th><th>User</th><th>Action</th><th>Details</th></tr></thead><tbody id="logsBody"></tbody></table></div></div>
+</div>
+
+</div></div></div>
+
+<div class="mo" id="userModal">
+  <div class="mc">
+    <button class="mclose" onclick="closeModal('userModal')">&#x2715;</button>
+    <div class="mt">Add / Update User</div>
+    <div class="ms">Assign roles to a Google account email.</div>
+    <div class="fg"><label class="fl">Full Name</label><input type="text" class="fi" id="mu-name"></div>
+    <div class="fg"><label class="fl">Email Address</label><input type="email" class="fi" id="mu-email"></div>
+    <div class="fg"><label class="fl">Roles (select all that apply)</label>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;" id="roleCheckWrap">
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer;"><input type="checkbox" value="IT Team" style="accent-color:var(--gold);"> IT Team</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer;"><input type="checkbox" value="Core Team" style="accent-color:var(--gold);"> Core Team</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer;"><input type="checkbox" value="Teacher-in-Charge" style="accent-color:var(--gold);"> Teacher-in-Charge</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer;"><input type="checkbox" value="Event Head" style="accent-color:var(--gold);"> Event Head</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer;"><input type="checkbox" value="Media Team" style="accent-color:var(--gold);"> Media Team</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer;"><input type="checkbox" value="Security" style="accent-color:var(--gold);"> Security</label>
+      </div>
+    </div>
+    <div class="fg" id="ehEvWrap" style="display:none;"><label class="fl">Assigned Event (Event Head)</label><select class="fs" id="mu-event"><option value="">Select Event</option></select></div>
+    <div class="fg"><label class="fl">Account Status</label><select class="fs" id="mu-status"><option value="active">Active</option><option value="suspended">Suspended</option></select></div>
+    <div class="fg"><label class="fl">Notes (optional)</label><input type="text" class="fi" id="mu-notes" placeholder="Internal note about this user"></div>
+    <input type="hidden" id="mu-editId">
+    <button class="bg" id="saveUserBtn" style="width:100%;margin-top:6px;">Save User</button>
+  </div>
+</div>
+
+<div class="mo" id="evModal">
+  <div class="mc">
+    <button class="mclose" onclick="closeModal('evModal')">&#x2715;</button>
+    <div class="mt" id="evModalTit">Add Event</div>
+    <div class="fg"><label class="fl">Event Name *</label><input type="text" class="fi" id="ev-name"></div>
+    <div class="fg"><label class="fl">Description</label><textarea class="fta" id="ev-desc" rows="2"></textarea></div>
+    <div class="fr"><div class="fg"><label class="fl">Category</label><input type="text" class="fi" id="ev-cat"></div><div class="fg"><label class="fl">Max Participants</label><input type="number" class="fi" id="ev-max" min="1"></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Logo filename (e.g. debate.png)</label><input type="text" class="fi" id="ev-logo"></div><div class="fg"><label class="fl">Display Order</label><input type="number" class="fi" id="ev-order" value="1" min="1"></div></div>
+    <input type="hidden" id="ev-editId">
+    <button class="bg" id="saveEvBtn" style="width:100%;margin-top:6px;">Save Event</button>
+  </div>
+</div>
+
+<div class="mo" id="clsModal">
+  <div class="mc">
+    <button class="mclose" onclick="closeModal('clsModal')">&#x2715;</button>
+    <div class="mt">Add / Edit Class</div>
+    <div class="fg"><label class="fl">Class Name (e.g. IX, X, XI)</label><input type="text" class="fi" id="cls-name"></div>
+    <div class="ct" style="margin-top:10px;">Sections</div>
+    <div id="secList"></div>
+    <button class="bo" id="addSecBtn" style="width:100%;margin-top:8px;">+ Add Section</button>
+    <input type="hidden" id="cls-editId">
+    <button class="bg" id="saveClsBtn" style="width:100%;margin-top:10px;">Save Class</button>
+  </div>
+</div>
+
+<div class="mo" id="tlModal">
+  <div class="mc">
+    <button class="mclose" onclick="closeModal('tlModal')">&#x2715;</button>
+    <div class="mt">Add Timeline Item</div>
+    <div class="fg"><label class="fl">Title</label><input type="text" class="fi" id="tl-title"></div>
+    <div class="fg"><label class="fl">Date Display</label><input type="text" class="fi" id="tl-date" placeholder="e.g. 10 Jan 2026"></div>
+    <div class="fg"><label class="fl">Order</label><input type="number" class="fi" id="tl-order" value="1" min="1"></div>
+    <button class="bg" id="saveTlBtn" style="width:100%;margin-top:6px;">Save</button>
+  </div>
+</div>
+
+<div class="mo" id="ruleModal">
+  <div class="mc">
+    <button class="mclose" onclick="closeModal('ruleModal')">&#x2715;</button>
+    <div class="mt">Add Rules Block</div>
+    <div class="fg"><label class="fl">Block Title</label><input type="text" class="fi" id="rb-title"></div>
+    <div class="fg"><label class="fl">Rules (one per line)</label><textarea class="fta" id="rb-items" rows="6" placeholder="Rule 1&#10;Rule 2&#10;..."></textarea></div>
+    <button class="bg" id="saveRbBtn" style="width:100%;margin-top:6px;">Save Block</button>
+  </div>
+</div>
+
+<div class="mo" id="fwdModal">
+  <div class="mc">
+    <button class="mclose" onclick="closeModal('fwdModal')">&#x2715;</button>
+    <div class="mt">Forward Message</div>
+    <div class="ms">Select conversation to forward to:</div>
+    <div id="fwdTargets" style="max-height:320px;overflow-y:auto;"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getFirestore,doc,getDoc,getDocs,addDoc,updateDoc,deleteDoc,setDoc,collection,onSnapshot,query,where,orderBy,serverTimestamp,limit,writeBatch}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const FB={apiKey:"AIzaSyCogmTX4tW4EZfTqsMunRu3XuuOTBDKN-E",authDomain:"cys-dpsm.firebaseapp.com",projectId:"cys-dpsm",storageBucket:"cys-dpsm.firebasestorage.app",messagingSenderId:"198853363575",appId:"1:198853363575:web:365ff3bcb9b54b760b4372"};
+const app=initializeApp(FB);const db=getFirestore(app);const auth=getAuth(app);
+const ADMIN_EMAIL="aaravhfs@gmail.com";
+const ALLOWED_ROLES=["IT Team"];
+
+let CU=null,allEvents=[],allRegs=[],activeConvId=null,chatUnsub=null,replyTo=null,tempSecs=[],ticketFilter="Open";
+
+function kick(r){sessionStorage.clear();window.location.replace("portal-login.html?err="+(r||"unauthorized"));}
+
+/* ======= RESILIENT AUTH GUARD PIPELINE ======= */
+onAuthStateChanged(auth, async user => {
+  if(!user){
+    kick();
+    return;
+  }
+  
+  const userEmail = user.email ? user.email.toLowerCase().trim() : "";
+  const isAdmin = userEmail === ADMIN_EMAIL;
+  
+  // 1. IMMEDIATE ADMINISTRATIVE PRIVILEGE PATHWAY
+  if (isAdmin) {
+    CU = user;
+    sessionStorage.setItem('userRole', 'Admin');
+    
+    document.getElementById("authWall").style.display = "none";
+    document.getElementById("appRoot").style.display = "block";
+    document.getElementById("sbImg").src = user.photoURL || "";
+    document.getElementById("sbName").textContent = user.displayName || "Admin";
+    document.getElementById("sbRoleTag").textContent = "Administrator";
+    
+    initAll();
+    return; 
+  }
+  
+  // 2. MANAGED VERIFICATION AND TOKEN LIFECYCLE REVALIDATION LOOP
+  try {
+    const safeId = userEmail.replace(/[^a-z0-9]/g, "_");
+    let ud = await getDoc(doc(db, "users", safeId));
+    
+    // Fallback search mechanism matching collection identifiers if clean string safeId fails
+    if (!ud.exists()) {
+      ud = await getDoc(doc(db, "users", user.uid));
+    }
+    
+    if (!ud.exists()) { 
+      document.getElementById("authMsg").textContent = "Access Denied: Unregistered Account.";
+      setTimeout(() => { kick("unregistered"); }, 2000);
+      return; 
+    }
+    
+    const d = ud.data();
+    if (d.status === "suspended") { 
+      kick("suspended"); 
+      return; 
+    }
+    
+    let roles = d.roles || (d.role ? [d.role] : []);
+    const hasITAccess = roles.some(r => ALLOWED_ROLES.includes(r));
+    
+    if (!hasITAccess) { 
+      document.getElementById("authMsg").textContent = "Access Denied: Insufficient Role Permissions.";
+      setTimeout(() => { kick("unauthorized"); }, 2000);
+      return; 
+    }
+    
+    CU = user;
+    sessionStorage.setItem('userRole', 'IT Team');
+    
+    document.getElementById("authWall").style.display = "none";
+    document.getElementById("appRoot").style.display = "block";
+    document.getElementById("sbImg").src = user.photoURL || "";
+    document.getElementById("sbName").textContent = d.name || user.displayName || "IT Team Member";
+    document.getElementById("sbRoleTag").textContent = "IT Team / Specialist";
+    
+    initAll();
+    
+  } catch(e) {
+    console.error("Auth token re-validation handshake bypassed/throttled:", e);
+    // If a session token update triggers a temporary read throttle, do not log the user out!
+    if (CU) {
+      console.log("Preserving existing authenticated dashboard state across re-validation spike.");
+    } else {
+      document.getElementById("authMsg").textContent = "Network synchronization delay. Retrying connection...";
+    }
+  }
+});
+
+function toast(m,t=""){const el=document.getElementById("toast");el.textContent=m;el.className="toast show "+(t==="err"?"err":"ok");setTimeout(()=>el.classList.remove("show"),3200);}
+window.closeModal=id=>document.getElementById(id).classList.remove("open");
+
+/* ======= NAV ======= */
+document.querySelectorAll(".nav-btn[data-p]").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll(".nav-btn").forEach(x=>x.classList.remove("act"));
+    document.querySelectorAll(".page").forEach(x=>x.classList.remove("act"));
+    b.classList.add("act");
+    document.getElementById("page-"+b.dataset.p).classList.add("act");
+  };
+});
+document.getElementById("loBtn").onclick=async()=>{await signOut(auth);sessionStorage.clear();window.location.replace("portal-login.html");};
+
+/* ======= ROBUST DATA SYNC CORRIDORS ======= */
+async function initAll(){
+  const pipelines = [
+    { name: "Events Data", task: loadEventsData },
+    { name: "Dashboard Metric Stats", task: loadDashboard },
+    { name: "Users Sync", task: loadUsers },
+    { name: "Announcements Queue", task: loadAnnouncements },
+    { name: "Global Settings Flags", task: loadSettings },
+    { name: "Conversations Pipeline", task: loadConversations },
+    { name: "Helpdesk Support Tickets", task: loadTickets },
+    { name: "Timeline Component", task: loadTimeline },
+    { name: "Rules & Regs Engine", task: loadRules },
+    { name: "Permissions Config Grid", task: loadPermissions },
+    { name: "Messaging Rule Framework", task: loadMsgPerms },
+    { name: "Activity Logger Stream", task: loadLogs }
+  ];
+
+  const syncResults = await Promise.allSettled(pipelines.map(p => p.task()));
+  
+  syncResults.forEach((res, i) => {
+    if (res.status === "rejected") {
+      console.warn(`Database Sync Throttled [${pipelines[i].name}]:`, res.reason);
+    }
+  });
+}
+
+/* ======= EVENTS DATA ======= */
+async function loadEventsData(){
+  const s=await getDocs(collection(db,"events"));
+  allEvents=[];s.forEach(d=>allEvents.push({id:d.id,...d.data()}));
+  const sel=document.getElementById("regEvFil");
+  if(sel) {
+    sel.innerHTML='<option value="">All Events</option>';
+    allEvents.forEach(ev=>{const o=document.createElement("option");o.value=ev.id;o.textContent=ev.name;sel.appendChild(o);});
+  }
+  const muEv=document.getElementById("mu-event");
+  if(muEv) {
+    muEv.innerHTML='<option value="">Select Event</option>';
+    allEvents.forEach(ev=>{const o=document.createElement("option");o.value=ev.id;o.textContent=ev.name;muEv.appendChild(o);});
+  }
+}
+
+/* ======= DASHBOARD ======= */
+async function loadDashboard(){
+  const[rs,es,ts]=await Promise.all([getDocs(collection(db,"registrations")),getDocs(collection(db,"events")),getDocs(query(collection(db,"tickets"),where("status","==","Open")))]);
+  allRegs=[];const byEv={};let total=0,sel=0,pend=0,rej=0;
+  rs.forEach(d=>{const r={id:d.id,...d.data()};allRegs.push(r);total++;
+    if(r.status==="Selected")sel++;else if(r.status==="Rejected")rej++;else pend++;
+    if(!byEv[r.eventId])byEv[r.eventId]={t:0,s:0,p:0,r:0};
+    byEv[r.eventId].t++;
+    if(r.status==="Selected")byEv[r.eventId].s++;else if(r.status==="Rejected")byEv[r.eventId].r++;else byEv[r.eventId].p++;
+  });
+  ["total","sel","pend","rej"].forEach((k,i)=> {
+    const el = document.getElementById("st-"+k);
+    if(el) el.textContent=[total,sel,pend,rej][i];
+  });
+  const stEv = document.getElementById("st-ev"); if(stEv) stEv.textContent=es.size;
+  const stTk = document.getElementById("st-tk"); if(stTk) stTk.textContent=ts.size;
+  
+  const tb=document.getElementById("evBreak"); 
+  if(tb) {
+    tb.innerHTML="";
+    allEvents.forEach(ev=>{const c=byEv[ev.id]||{t:0,s:0,p:0,r:0};
+      const tr=document.createElement("tr");
+      tr.innerHTML=`<td><strong>${ev.name}</strong></td><td>${c.t}</td><td><span class="bx bx-g">${c.s}</span></td><td><span class="bx bx-o">${c.p}</span></td><td><span class="bx bx-r">${c.r}</span></td><td><button class="bo" style="font-size:10px;padding:4px 10px;" onclick="exportEventCSV('${ev.id}','${ev.name}')">&#x2193; CSV</button></td>`;
+      tb.appendChild(tr);
+    });
+    if(!allEvents.length)tb.innerHTML='<tr><td colspan="6" style="color:var(--tm);">No events yet.</td></tr>';
+  }
+  loadCharts(sel,pend,rej,rs);
+}
+
+function loadCharts(sel,pend,rej,rs){
+  const ctx1=document.getElementById("statusChart");
+  if(!ctx1) return;
+  const co={plugins:{legend:{labels:{color:"#B8B09A"}}},scales:{y:{ticks:{color:"#B8B09A"},grid:{color:"rgba(255,255,255,0.04)"}},x:{ticks:{color:"#B8B09A"},grid:{color:"rgba(255,255,255,0.02)"}}}};
+  if(ctx1._c)ctx1._c.destroy();
+  ctx1._c=new Chart(ctx1,{type:"bar",data:{labels:["Selected","Pending","Rejected"],datasets:[{data:[sel,pend,rej],backgroundColor:["#4E8A28","#C9A84C","#E05555"],borderRadius:5}]},options:{...co,plugins:{legend:{display:false}}}});
+  
+  const classCounts={};rs.forEach(d=>{const cl=d.data().class||"Unknown";classCounts[cl]=(classCounts[cl]||0)+1;});
+  const ctx2=document.getElementById("classChart");
+  if(!ctx2) return;
+  if(ctx2._c)ctx2._c.destroy();
+  ctx2._c=new Chart(ctx2,{type:"bar",data:{labels:Object.keys(classCounts),datasets:[{data:Object.values(classCounts),backgroundColor:"#C9A84C",borderRadius:5}]},options:{...co,plugins:{legend:{display:false}}}});
+}
+
+/* ======= USERS SYSTEM ======= */
+async function loadUsers(){
+  onSnapshot(collection(db,"users"),snap=>{
+    const tb=document.getElementById("usersBody"); if(!tb) return;
+    tb.innerHTML="";
+    if(snap.empty){tb.innerHTML='<tr><td colspan="6" style="color:var(--tm);">No users yet.</td></tr>';return;}
+    snap.forEach(d=>{const u=d.data();
+      const roles=(u.roles||[u.role]).filter(Boolean);
+      const stBx=u.status==="suspended"?'<span class="bx bx-r">Suspended</span>':'<span class="bx bx-g">Active</span>';
+      const tr=document.createElement("tr");
+      tr.innerHTML=`<td style="display:flex;align-items:center;gap:7px;"><img src="${u.profilePic||""}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;" onerror="this.style.display='none'"> ${u.name||"—"}</td><td style="font-size:11px;">${u.email||"—"}</td><td>${roles.map(r=>`<span class="bx bx-b" style="margin:1px;">${r}</span>`).join("")}</td><td style="font-size:11px;">${u.assignedEventName||"—"}</td><td>${stBx}</td><td style="display:flex;gap:5px;"><button class="bo" style="font-size:10px;padding:4px 9px;" onclick="editUser('${d.id}')">Edit</button><button class="bd" style="font-size:10px;" onclick="revokeUser('${d.id}')">Revoke</button></td>`;
+      tb.appendChild(tr);
+    });
+  });
+}
+document.getElementById("addUserBtn").onclick=()=>{
+  document.getElementById("mu-name").value="";document.getElementById("mu-email").value="";
+  document.getElementById("mu-notes").value="";document.getElementById("mu-status").value="active";
+  document.getElementById("mu-editId").value="";
+  document.querySelectorAll("#roleCheckWrap input").forEach(c=>c.checked=false);
+  document.getElementById("ehEvWrap").style.display="none";
+  document.getElementById("userModal").classList.add("open");
+};
+document.querySelectorAll("#roleCheckWrap input").forEach(c=>c.addEventListener("change",()=>{
+  const isEH=[...document.querySelectorAll("#roleCheckWrap input")].some(x=>x.checked&&x.value==="Event Head");
+  document.getElementById("ehEvWrap").style.display=isEH?"block":"none";
+}));
+window.editUser=async uid=>{
+  const ud=await getDoc(doc(db,"users",uid));if(!ud.exists())return;
+  const u=ud.data();
+  document.getElementById("mu-name").value=u.name||"";document.getElementById("mu-email").value=u.email||"";
+  document.getElementById("mu-status").value=u.status||"active";document.getElementById("mu-notes").value=u.notes||"";
+  document.getElementById("mu-editId").value=uid;
+  const roles=u.roles||[u.role];
+  document.querySelectorAll("#roleCheckWrap input").forEach(c=>{c.checked=roles.includes(c.value);});
+  if(roles.includes("Event Head")){document.getElementById("ehEvWrap").style.display="block";document.getElementById("mu-event").value=u.assignedEvent||"";}
+  document.getElementById("userModal").classList.add("open");
+};
+window.revokeUser=async uid=>{if(!confirm("Revoke access?"))return;await updateDoc(doc(db,"users",uid),{status:"suspended"});toast("Access revoked.");};
+document.getElementById("saveUserBtn").onclick=async()=>{
+  const name=document.getElementById("mu-name").value.trim();
+  const email=document.getElementById("mu-email").value.trim().toLowerCase();
+  const status=document.getElementById("mu-status").value;
+  const notes=document.getElementById("mu-notes").value.trim();
+  const roles=[...document.querySelectorAll("#roleCheckWrap input")].filter(c=>c.checked).map(c=>c.value);
+  const assignedEvent=document.getElementById("mu-event").value;
+  const editId=document.getElementById("mu-editId").value;
+  if(!name||!email||!roles.length){toast("Name, email and at least one role required.","err");return;}
+  const data={name,email,roles,role:roles[0],status,notes,updatedAt:serverTimestamp()};
+  if(assignedEvent){data.assignedEvent=assignedEvent;const ed=allEvents.find(e=>e.id===assignedEvent);if(ed)data.assignedEventName=ed.name;}
+  try{
+    if(editId){await updateDoc(doc(db,"users",editId),data);}
+    else{const safeId=email.replace(/[^a-z0-9]/g,"_");await setDoc(doc(db,"users",safeId),{...data,createdAt:serverTimestamp()});}
+    toast("User saved.","ok");closeModal("userModal");
+  }catch(e){toast("Error: "+e.message,"err");}
+};
+
+/* ======= EVENTS DATAENGINE ======= */
+async function loadEventsPage(){
+  const list=document.getElementById("evList"); if(!list) return;
+  onSnapshot(query(collection(db,"events"),orderBy("order","asc")),snap=>{
+    allEvents=[];list.innerHTML="";
+    if(snap.empty){list.innerHTML='<p style="color:var(--tm);font-size:12px;">No events yet.</p>';return;}
+    snap.forEach(d=>{const ev={id:d.id,...d.data()};allEvents.push(ev);
+      const row=document.createElement("div");
+      row.style.cssText="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--br);gap:10px;";
+      row.innerHTML=`<div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;background:var(--gm);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;">${ev.logoFile?`<img src="${ev.logoFile}" style="width:30px;height:30px;object-fit:contain;" onerror="this.parentElement.innerHTML='EV'">`:''}</div><div><strong style="font-size:13px;">${ev.name}</strong><p style="font-size:11px;color:var(--tm);">${ev.category||""} ${ev.maxParticipants?"· Max "+ev.maxParticipants:""}</p></div></div><div style="display:flex;gap:6px;flex-shrink:0;"><button class="bo" style="font-size:10px;padding:4px 9px;" onclick="openEditEv('${d.id}')">Edit</button><button class="bd" style="font-size:10px;" onclick="delEv('${d.id}')">Delete</button></div>`;
+      list.appendChild(row);
+    });
+  });
+}
+document.getElementById("addEvBtn").onclick=()=>{
+  ["ev-name","ev-desc","ev-cat","ev-logo"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("ev-max").value="";document.getElementById("ev-order").value=allEvents.length+1;
+  document.getElementById("ev-editId").value="";document.getElementById("evModalTit").textContent="Add Event";
+  document.getElementById("evModal").classList.add("open");
+};
+window.openEditEv=async id=>{
+  const d=await getDoc(doc(db,"events",id));const ev=d.data();
+  document.getElementById("ev-name").value=ev.name||"";document.getElementById("ev-desc").value=ev.description||"";
+  document.getElementById("ev-cat").value=ev.category||"";document.getElementById("ev-max").value=ev.maxParticipants||"";
+  document.getElementById("ev-logo").value=ev.logoFile||"";document.getElementById("ev-order").value=ev.order||1;
+  document.getElementById("ev-editId").value=id;document.getElementById("evModalTit").textContent="Edit Event";
+  document.getElementById("evModal").classList.add("open");
+};
+window.delEv=async id=>{if(!confirm("Delete event?"))return;await deleteDoc(doc(db,"events",id));toast("Deleted.");};
+document.getElementById("saveEvBtn").onclick=async()=>{
+  const name=document.getElementById("ev-name").value.trim();if(!name){toast("Name required.","err");return;}
+  const data={name,description:document.getElementById("ev-desc").value.trim(),category:document.getElementById("ev-cat").value.trim(),maxParticipants:parseInt(document.getElementById("ev-max").value)||0,logoFile:document.getElementById("ev-logo").value.trim(),order:parseInt(document.getElementById("ev-order").value)||1,updatedAt:serverTimestamp()};
+  const eid=document.getElementById("ev-editId").value;
+  if(eid)await updateDoc(doc(db,"events",eid),data);else await addDoc(collection(db,"events"),{...data,createdAt:serverTimestamp()});
+  toast("Event saved.","ok");closeModal("evModal");await loadEventsData();
+};
+
+/* ======= REGISTRATIONS ======= */
+async function loadRegistrations(){
+  const evMap={};allEvents.forEach(e=>evMap[e.id]=e.name);
+  renderRegs(allRegs,evMap);
+  document.getElementById("regSearch").oninput=()=>filterRegs(evMap);
+  document.getElementById("regStFil").onchange=()=>filterRegs(evMap);
+  document.getElementById("regEvFil").onchange=()=>filterRegs(evMap);
+}
+function filterRegs(evMap){
+  const q=document.getElementById("regSearch").value.toLowerCase();
+  const st=document.getElementById("regStFil").value;
+  const ev=document.getElementById("regEvFil").value;
+  renderRegs(allRegs.filter(r=>(!q||r.name?.toLowerCase().includes(q)||r.class?.toLowerCase().includes(q))&&(!st||r.status===st)&&(!ev||r.eventId===ev)),evMap);
+}
+function renderRegs(regs,evMap){
+  const tb=document.getElementById("regBody"); if(!tb) return;
+  tb.innerHTML="";
+  if(!regs.length){tb.innerHTML='<tr><td colspan="6" style="color:var(--tm);">No results.</td></tr>';return;}
+  regs.forEach(r=>{
+    const bc=r.status==="Selected"?"bx-g":r.status==="Rejected"?"bx-r":"bx-o";
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td style="display:flex;align-items:center;gap:6px;"><img src="${r.profilePic||""}" style="width:22px;height:22px;border-radius:50%;" onerror="this.style.display='none'"> ${r.name}</td><td>${r.class}-${r.section}</td><td>${evMap[r.eventId]||"—"}</td><td><span class="bx ${bc}">${r.status}</span></td><td style="font-size:10px;">${r.createdAt?.toDate?.().toLocaleDateString("en-IN")||"—"}</td><td><button class="bd" style="font-size:10px;padding:3px 8px;" onclick="delReg('${r.id}')">Remove</button></td>`;
+    tb.appendChild(tr);
+  });
+}
+window.delReg=async id=>{if(!confirm("Remove this registration?"))return;await deleteDoc(doc(db,"registrations",id));toast("Removed.");};
+
+/* ======= CLASSES & ACADEMIC GRID ======= */
+async function loadClasses(){
+  onSnapshot(collection(db,"classes"),snap=>{
+    const list=document.getElementById("clsList"); if(!list) return;
+    list.innerHTML="";
+    if(snap.empty){list.innerHTML='<p style="color:var(--tm);font-size:12px;">No classes added.</p>';return;}
+    snap.forEach(d=>{const cls=d.data();
+      const el=document.createElement("div");
+      el.style.cssText="display:flex;align-items:flex-start;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--br);gap:10px;";
+      const secs=(cls.sections||[]).map(s=>`<span class="bx bx-b" style="margin:2px;">${s.name} — ${s.teacher||"No teacher"}</span>`).join("");
+      el.innerHTML=`<div><strong style="color:var(--gold);font-size:14px;">Class ${d.id}</strong><div style="margin-top:5px;">${secs||'<span style="color:var(--tm);font-size:11px;">No sections</span>'}</div></div><div style="display:flex;gap:5px;flex-shrink:0;"><button class="bo" style="font-size:10px;padding:4px 9px;" onclick="editCls('${d.id}')">Edit</button><button class="bd" style="font-size:10px;" onclick="delCls('${d.id}')">Delete</button></div>`;
+      list.appendChild(el);
+    });
+  });
+}
+document.getElementById("addClsBtn").onclick=()=>{
+  document.getElementById("cls-name").value="";document.getElementById("cls-editId").value="";
+  tempSecs=[];renderSecList();document.getElementById("clsModal").classList.add("open");
+};
+window.editCls=async id=>{
+  const d=await getDoc(doc(db,"classes",id));const cls=d.data();
+  document.getElementById("cls-name").value=id;document.getElementById("cls-editId").value=id;
+  tempSecs=JSON.parse(JSON.stringify(cls.sections||[]));renderSecList();
+  document.getElementById("clsModal").classList.add("open");
+};
+window.delCls=async id=>{if(!confirm("Delete class?"))return;await deleteDoc(doc(db,"classes",id));toast("Deleted.");};
+function renderSecList(){
+  const list=document.getElementById("secList"); if(!list) return;
+  list.innerHTML="";
+  tempSecs.forEach((s,i)=>{
+    const row=document.createElement("div");row.style.cssText="display:flex;gap:8px;margin-bottom:6px;align-items:center;";
+    row.innerHTML=`<input type="text" class="fi" value="${s.name}" placeholder="Section (A, B...)" style="flex:1;" data-i="${i}" data-f="name"><input type="text" class="fi" value="${s.teacher||""}" placeholder="Class Teacher name" style="flex:2;" data-i="${i}" data-f="teacher"><button onclick="removeSec(${i})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:16px;line-height:1;">&#x2715;</button>`;
+    row.querySelectorAll("input").forEach(inp=>inp.oninput=()=>{tempSecs[inp.dataset.i][inp.dataset.f]=inp.value;});
+    list.appendChild(row);
+  });
+}
+document.getElementById("addSecBtn").onclick=()=>{tempSecs.push({name:"",teacher:""});renderSecList();};
+window.removeSec=i=>{tempSecs.splice(i,1);renderSecList();};
+document.getElementById("saveClsBtn").onclick=async()=>{
+  const name=document.getElementById("cls-name").value.trim();if(!name){toast("Class name required.","err");return;}
+  const eid=document.getElementById("cls-editId").value;
+  if(eid&&eid!==name)await deleteDoc(doc(db,"classes",eid));
+  await setDoc(doc(db,"classes",name),{sections:tempSecs.filter(s=>s.name.trim())});
+  toast("Class saved.","ok");closeModal("clsModal");
+};
+
+/* ======= ANNOUNCEMENTS CORE ======= */
+function loadAnnouncements(){
+  onSnapshot(query(collection(db,"announcements"),where("approved","==",false)),snap=>{
+    const list=document.getElementById("pendAnn"); if(!list) return;
+    list.innerHTML="";
+    if(snap.empty){list.innerHTML='<p style="color:var(--tm);font-size:12px;">No pending approvals.</p>';return;}
+    snap.forEach(d=>{const a=d.data();
+      const el=document.createElement("div");
+      el.style.cssText="padding:12px;background:rgba(255,255,255,0.025);border:1px solid var(--br);border-radius:7px;margin-bottom:8px;";
+      el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;"><div style="flex:1;"><strong style="font-size:13px;">${a.title}</strong><p style="font-size:12px;color:var(--tm);margin-top:3px;line-height:1.5;">${a.body}</p><p style="font-size:10px;color:var(--gold-d);margin-top:5px;">By: ${a.senderName||""} · ${a.senderRole||""} · ${a.createdAt?.toDate?.().toLocaleDateString("en-IN")||""}</p></div><div style="display:flex;gap:6px;flex-shrink:0;"><button class="bg" style="font-size:10px;padding:5px 11px;" onclick="approveAnn('${d.id}')">Approve</button><button class="bd" style="font-size:10px;" onclick="rejectAnn('${d.id}')">Reject</button></div></div>`;
+      list.appendChild(el);
+    });
+  });
+  onSnapshot(query(collection(db,"announcements"),orderBy("createdAt","desc"),limit(30)),snap=>{
+    const list=document.getElementById("allAnn"); if(!list) return;
+    list.innerHTML="";
+    if(snap.empty){list.innerHTML='<p style="color:var(--tm);font-size:12px;">None yet.</p>';return;}
+    snap.forEach(d=>{const a=d.data();
+      list.innerHTML+=`<div style="padding:11px;background:rgba(255,255,255,0.02);border:1px solid var(--br);border-left:3px solid var(--gold);border-radius:6px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;"><div><strong style="font-size:12px;">${a.title}</strong><p style="font-size:11px;color:var(--tm);margin-top:2px;">${a.body}</p><p style="font-size:10px;color:var(--gold-d);margin-top:4px;">${a.senderRole||""} · ${a.createdAt?.toDate?.().toLocaleDateString("en-IN")||""} · <span style="color:${a.approved?"var(--gp)":"#FFA600"};">${a.approved?"Live":"Pending"}</span></p></div><button class="bd" style="font-size:10px;padding:3px 7px;flex-shrink:0;" onclick="delAnn('${d.id}')">&#x2715;</button></div>`;
+    });
+  });
+  document.getElementById("postAnnBtn").onclick=async()=>{
+    const title=document.getElementById("annTitle").value.trim();
+    const body=document.getElementById("annBody").value.trim();
+    const target=document.getElementById("annTarget").value;
+    if(!title||!body){toast("Title and body required.","err");return;}
+    await addDoc(collection(db,"announcements"),{title,body,targetPublic:target==="public",targetRole:target,senderName:CU.displayName||"System Admin",senderRole:"IT Team",createdBy:CU.uid,approved:true,createdAt:serverTimestamp()});
+    toast("Posted.","ok");document.getElementById("annTitle").value="";document.getElementById("annBody").value="";
+  };
+}
+window.approveAnn=async id=>{await updateDoc(doc(db,"announcements",id),{approved:true,approvedBy:CU.uid,approvedAt:serverTimestamp()});toast("Approved.","ok");};
+window.rejectAnn=async id=>{if(!confirm("Reject & delete?"))return;await deleteDoc(doc(db,"announcements",id));toast("Rejected.");};
+window.delAnn=async id=>{if(!confirm("Delete?"))return;await deleteDoc(doc(db,"announcements",id));};
+
+/* ======= CHAT & MESSAGES PIPELINES ======= */
+async function loadConversations(){
+  const list=document.getElementById("convList"); if(!list) return;
+  list.innerHTML="";
+  const groups=[{id:"broadcast_all",name:"Everyone",role:"All Members",icon:"*"},
+    {id:"broadcast_eh",name:"All Event Heads",role:"Broadcast Group",icon:"E"},
+    {id:"broadcast_core",name:"Core Team",role:"Broadcast Group",icon:"C"},
+    {id:"broadcast_teacher",name:"Teacher-in-Charge",role:"Broadcast Group",icon:"T"},
+    {id:"broadcast_media",name:"Media Team",role:"Broadcast Group",icon:"M"}];
+  groups.forEach(g=>buildConvItem(list,g.id,g.name,g.role,"",g.icon));
+  
+  const usSnap=await getDocs(collection(db,"users"));
+  usSnap.forEach(d=>{const u=d.data();
+    buildConvItem(list,`admin_dm_${d.id}`,u.name||u.email,(u.roles||[u.role]).filter(Boolean).join(", "),u.profilePic||"");
+  });
+  document.getElementById("convSearch").oninput=function(){
+    const q=this.value.toLowerCase();
+    list.querySelectorAll(".ci").forEach(el=>{
+      const nm=el.querySelector(".cn")?.textContent.toLowerCase()||"";
+      el.style.display=nm.includes(q)?"":"none";
+    });
+  };
+}
+function buildConvItem(list,chatId,name,role,img,icon){
+  const item=document.createElement("div");item.className="ci";item.dataset.cid=chatId;
+  const av=document.createElement("div");av.className="ca";
+  if(img){const i=document.createElement("img");i.src=img;i.onerror=()=>{av.textContent=icon||(name[0]||"?");};av.appendChild(i);}
+  else{av.textContent=icon||(name[0]||"?");}
+  item.appendChild(av);
+  const info=document.createElement("div");info.style.flex="1";info.style.overflow="hidden";
+  info.innerHTML=`<div class="cn">${name}</div><div class="cp">${role}</div>`;
+  item.appendChild(info);
+  const meta=document.createElement("div");meta.className="cm";meta.innerHTML=`<div class="ct2" id="conv-time-${chatId}"></div>`;
+  item.appendChild(meta);
+  item.onclick=()=>openChat(chatId,name,role,img,icon);
+  list.appendChild(item);
+  
+  onSnapshot(query(collection(db,"chats",chatId,"messages"),orderBy("sentAt","desc"),limit(1)),snap=>{
+    if(!snap.empty){
+      const m=snap.docs[0].data();
+      const el=document.getElementById("conv-time-"+chatId);
+      if(el)el.textContent=m.sentAt?.toDate?.().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})||"";
+    }
+  });
+}
+function openChat(chatId,name,role,img,icon){
+  document.querySelectorAll(".ci").forEach(c=>c.classList.remove("active-c"));
+  document.querySelectorAll(".ci").forEach(c=>{if(c.dataset.cid===chatId)c.classList.add("active-c");});
+  activeConvId=chatId;
+  document.getElementById("chatHdrName").textContent=name;
+  document.getElementById("chatHdrRole").textContent=role;
+  document.getElementById("chatHdrImg").src=img||"";
+  if(chatUnsub)chatUnsub();
+  setDoc(doc(db,"chats",chatId),{type:"chat",updatedAt:serverTimestamp()},{merge:true});
+  chatUnsub=onSnapshot(query(collection(db,"chats",chatId,"messages"),orderBy("sentAt","asc")),snap=>{
+    const container=document.getElementById("chatMsgs"); if(!container) return;
+    container.innerHTML="";
+    if(snap.empty){container.innerHTML='<p style="color:var(--tm);font-size:12px;text-align:center;padding:24px;">No messages yet.</p>';return;}
+    snap.forEach(d=>renderBubble(container,d.id,d.data(),chatId));
+    container.scrollTop=container.scrollHeight;
+    snap.forEach(d=>{const m=d.data();if(m.senderId!==CU.uid&&!m.seenBy?.includes(CU.uid)){updateDoc(doc(db,"chats",chatId,"messages",d.id),{seenBy:[...(m.seenBy||[]),CU.uid],seen:true});}});
+  });
+}
+function renderBubble(container,msgId,m,chatId){
+  const isOwn=m.senderId===CU.uid;
+  const wrap=document.createElement("div");wrap.className="bw "+(isOwn?"out":"in");
+  let inner="";
+  if(m.forwardedFrom)inner+=`<div class="fwd-tag">&#x21B7; Forwarded from ${m.forwardedFrom}</div>`;
+  if(m.replyTo)inner+=`<div class="reply-box"><strong>${m.replyTo.senderName}</strong>${m.replyTo.text}</div>`;
+  const seenTick=isOwn?(m.seen?"&#10003;&#10003;":(m.delivered?"&#10003;&#10003;":"&#10003;")):"";
+  const seenColor=isOwn&&m.seen?"color:var(--gold-l);":"";
+  const t=m.sentAt?.toDate?.().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})||"";
+  inner+=`<div class="bubble ${isOwn?"out":"in"}">
+    ${!isOwn?`<div class="b-sender">${m.senderName}</div><div class="b-role">${m.senderRole||""}</div>`:""}
+    <div>${m.text}</div>
+    <div class="b-footer ${isOwn?"out":""}"><span>${t}</span>${isOwn?`<span style="${seenColor}">${seenTick}</span>`:""}</div>
+    <div class="msg-ctx">
+      <button class="mc-btn" onclick="replyMsg('${msgId}','${m.senderName?.replace(/'/g,"\\'")||""}','${m.text?.replace(/'/g,"\\'")||""}')">Reply</button>
+      <button class="mc-btn" onclick="openFwd('${msgId}','${m.senderName?.replace(/'/g,"\\'")||""}','${chatId}')">Forward</button>
+      ${isOwn?`<button class="mc-btn" style="color:var(--red);" onclick="delMsg('${chatId}','${msgId}')">Delete</button>`:""}
+    </div>
+  </div>`;
+  wrap.innerHTML=inner;container.appendChild(wrap);
+}
+window.replyMsg=(id,senderName,text)=>{
+  replyTo={id,senderName,text};
+  document.getElementById("rpName").textContent=senderName;
+  document.getElementById("rpText").textContent=text.substring(0,60)+(text.length>60?"...":"");
+  document.getElementById("replyBar").classList.add("show");
+};
+document.getElementById("rpClose").onclick=()=>{replyTo=null;document.getElementById("replyBar").classList.remove("show");};
+window.openFwd=async(msgId,senderName,fromChatId)=>{
+  const msgDoc=await getDoc(doc(db,"chats",fromChatId,"messages",msgId));
+  const msgData=msgDoc.data();
+  const div=document.getElementById("fwdTargets"); if(!div) return;
+  div.innerHTML="";
+  document.getElementById("fwdModal").classList.add("open");
+  const usSnap=await getDocs(collection(db,"users"));
+  usSnap.forEach(d=>{const u=d.data();
+    const btn=document.createElement("button");
+    btn.style.cssText="display:block;width:100%;text-align:left;padding:9px 12px;background:rgba(255,255,255,0.03);border:1px solid var(--br);border-radius:6px;margin-bottom:6px;color:var(--tl);cursor:pointer;font-size:12px;font-family:'Montserrat',sans-serif;";
+    btn.textContent=`${u.name||u.email} (${(u.roles||[u.role]).filter(Boolean).join(", ")})`;
+    btn.onclick=async()=>{
+      const fwdChatId=`admin_dm_${d.id}`;
+      await setDoc(doc(db,"chats",fwdChatId),{type:"chat",updatedAt:serverTimestamp()},{merge:true});
+      await addDoc(collection(db,"chats",fwdChatId,"messages"),{senderId:CU.uid,senderName:CU.displayName||"Admin",senderRole:"IT Team",text:msgData.text,forwardedFrom:senderName,sentAt:serverTimestamp(),delivered:false,seen:false,seenBy:[]});
+      toast("Forwarded.","ok");closeModal("fwdModal");
+    };
+    div.appendChild(btn);
+  });
+};
+window.forwardToGroup=async(text, targetGroup)=>{
+  toast("Forwarding to broadcast dashboard...","ok");
+};
+window.delMsg=async(chatId,msgId)=>{if(!confirm("Delete message?"))return;await deleteDoc(doc(db,"chats",chatId,"messages",msgId));toast("Deleted.");};
+document.getElementById("sendBtn").onclick=sendMsg;
+document.getElementById("chatInp").onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMsg();}};
+async function sendMsg(){
+  if(!activeConvId){toast("Select a conversation.","err");return;}
+  const text=document.getElementById("chatInp").value.trim();if(!text)return;
+  document.getElementById("chatInp").value="";
+  const data={senderId:CU.uid,senderName:CU.displayName||"Admin",senderRole:"IT Team",text,sentAt:serverTimestamp(),delivered:true,seen:false,seenBy:[CU.uid]};
+  if(replyTo){data.replyTo={id:replyTo.id,senderName:replyTo.senderName,text:replyTo.text};replyTo=null;document.getElementById("replyBar").classList.remove("show");}
+  await addDoc(collection(db,"chats",activeConvId,"messages"),data);
+}
+
+/* ======= TICKETS HELPDESK ======= */
+function loadTickets(){
+  document.querySelectorAll(".tb[data-tf]").forEach(b=>{
+    b.onclick=()=>{document.querySelectorAll(".tb[data-tf]").forEach(x=>x.classList.remove("act"));b.classList.add("act");ticketFilter=b.dataset.tf;renderTickets();};
+  });
+  onSnapshot(collection(db,"tickets"),snap=>{renderTickets(snap);});
+}
+let lastTickSnap=null;
+function renderTickets(snap){
+  if(snap)lastTickSnap=snap;
+  if(!lastTickSnap)return;
+  const list=document.getElementById("ticketList"); if(!list) return;
+  list.innerHTML="";
+  let cnt=0;
+  lastTickSnap.forEach(d=>{const t=d.data();
+    if(ticketFilter&&t.status!==ticketFilter)return;cnt++;
+    const bc=t.status==="Open"?"bx-o":t.status==="In Progress"?"bx-b":"bx-g";
+    const el=document.createElement("div");
+    el.style.cssText="padding:13px;background:rgba(255,255,255,0.025);border:1px solid var(--br);border-radius:8px;margin-bottom:8px;";
+    el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px;"><strong style="font-size:13px;">${t.subject}</strong><span class="bx ${bc}">${t.status}</span></div><p style="font-size:11px;color:var(--tm);">${t.userName||""} · ${t.userRole||""} · ${t.userEmail||""}</p><p style="font-size:12px;margin-top:6px;line-height:1.5;">${t.body}</p><div style="display:flex;gap:6px;margin-top:9px;">${t.status!=="Resolved"?`<button class="bg" style="font-size:10px;padding:5px 11px;" onclick="updTk('${d.id}','Resolved')">Resolve</button>`:""}${t.status==="Open"?`<button class="bo" style="font-size:10px;" onclick="updTk('${d.id}','In Progress')">In Progress</button>`:""}</div>`;
+    list.appendChild(el);
+  });
+  if(!cnt)list.innerHTML='<p style="color:var(--tm);font-size:12px;text-align:center;padding:20px;">No tickets in this category.</p>';
+}
+window.updTk=async(id,status)=>{await updateDoc(doc(db,"tickets",id),{status,updatedAt:serverTimestamp()});toast("Updated.","ok");};
+
+/* ======= GLOBAL SYSTEM CONFIGURATION ======= */
+async function loadSettings(){
+  try{const sd=await getDoc(doc(db,"settings","global"));
+    if(sd.exists()){const s=sd.data();
+      ["sub","vname","vaddr","vdate","vtime","poster","cap","logo","bannerTxt"].forEach(k=>{const el=document.getElementById("set-"+k);if(el&&s[{sub:"festSubtitle",vname:"venueName",vaddr:"venueAddress",vdate:"venueDate",vtime:"venueTime",poster:"heroPosterUrl",cap:"heroPosterCaption",logo:"logoUrl",bannerTxt:"unofficialBannerText"}[k]])el.value=s[{sub:"festSubtitle",vname:"venueName",vaddr:"venueAddress",vdate:"venueDate",vtime:"venueTime",poster:"heroPosterUrl",cap:"heroPosterCaption",logo:"logoUrl",bannerTxt:"unofficialBannerText"}[k]];});
+      if(s.eventDate) {
+        const dEl = document.getElementById("set-date");
+        if(dEl) dEl.value=s.eventDate;
+      }
+      const tBan = document.getElementById("tog-banner"); if(tBan) tBan.checked=!!s.unofficialBannerVisible;
+      const tEnr = document.getElementById("tog-enroll"); if(tEnr) tEnr.checked=s.enrollmentStatus!=="closed";
+      const tMnt = document.getElementById("tog-maint"); if(tMnt) tMnt.checked=s.enrollmentStatus==="maintenance";
+      const tNon = document.getElementById("tog-nondpsm"); if(tNon) tNon.checked=!!s.allowNonDpsm;
+    }
+  }catch(e){}
+  document.getElementById("saveFest").onclick=async()=>{
+    await setDoc(doc(db,"settings","global"),{festSubtitle:document.getElementById("set-sub").value,eventDate:document.getElementById("set-date").value,venueName:document.getElementById("set-vname").value,venueAddress:document.getElementById("set-vaddr").value,venueDate:document.getElementById("set-vdate").value,venueTime:document.getElementById("set-vtime").value,heroPosterUrl:document.getElementById("set-poster").value,heroPosterCaption:document.getElementById("set-cap").value,logoUrl:document.getElementById("set-logo").value},{merge:true});
+    toast("Fest details saved.","ok");
+  };
+  document.getElementById("saveToggles").onclick=async()=>{
+    const banner=document.getElementById("tog-banner").checked;
+    const enroll=document.getElementById("tog-enroll").checked;
+    const maint=document.getElementById("tog-maint").checked;
+    const nondpsm=document.getElementById("tog-nondpsm").checked;
+    let es="open";if(maint)es="maintenance";else if(!enroll)es="closed";
+    await setDoc(doc(db,"settings","global"),{unofficialBannerVisible:banner,unofficialBannerText:document.getElementById("set-bannerTxt").value,enrollmentStatus:es,allowNonDpsm:nondpsm},{merge:true});
+    toast("Toggles saved.","ok");
+  };
+}
+
+/* ======= ROLE BASED PERMISSIONS MATRIX ======= */
+const ROLES=["IT Team","Core Team","Teacher-in-Charge","Event Head","Media Team","Security","Participant"];
+const PERMS=["Post Announcements","Manage Events","Manage Users","View Analytics","Export Data","Chat","Global Settings","Approve Announcements","View All Activity"];
+const PERM_KEYS=["postAnn","manageEvents","manageUsers","viewAnalytics","exportData","chat","globalSettings","approveAnn","viewAll"];
+async function loadPermissions(){
+  let saved={};
+  try{const d=await getDoc(doc(db,"rolePermissions","config"));if(d.exists())saved=d.data();}catch(e){}
+  const grid=document.getElementById("permGrid"); if(!grid) return;
+  grid.innerHTML="";
+  grid.style.gridTemplateColumns=`1fr repeat(${PERMS.length},auto)`;
+  const hdr=document.createElement("div");hdr.className="pg-hdr";hdr.textContent="Role";grid.appendChild(hdr);
+  PERMS.forEach(p=>{const h=document.createElement("div");h.className="pg-hdr";h.style.cssText="writing-mode:vertical-rl;transform:rotate(180deg);min-height:80px;";h.textContent=p;grid.appendChild(h);});
+  ROLES.forEach(role=>{
+    const rc=document.createElement("div");rc.className="pg-cell";rc.style.justifyContent="flex-start";rc.innerHTML=`<span class="bx bx-b">${role}</span>`;grid.appendChild(rc);
+    PERM_KEYS.forEach(k=>{
+      const cell=document.createElement("div");cell.className="pg-cell";
+      const cb=document.createElement("input");cb.type="checkbox";cb.id=`perm_${role.replace(/\s/g,"_")}_${k}`;cb.checked=!!(saved[role]?.[k]);cb.style.cssText="accent-color:var(--gold);width:14px;height:14px;cursor:pointer;";
+      cell.appendChild(cb);grid.appendChild(cell);
+    });
+  });
+}
+document.getElementById("savePermsBtn").onclick=async()=>{
+  const data={};
+  ROLES.forEach(role=>{data[role]={};PERM_KEYS.forEach(k=>{data[role][k]=document.getElementById(`perm_${role.replace(/\s/g,"_")}_${k}`)?.checked||false;});});
+  await setDoc(doc(db,"rolePermissions","config"),data);toast("Permissions saved.","ok");
+};
+
+/* ======= COMMUNICATIVE MATRIX & ROUTING ======= */
+async function loadMsgPerms(){
+  let saved={};
+  try{const d=await getDoc(doc(db,"rolePermissions","messaging"));if(d.exists())saved=d.data();}catch(e){}
+  const grid=document.getElementById("msgPermGrid"); if(!grid) return;
+  grid.innerHTML="";
+  const note=document.createElement("p");note.style.cssText="font-size:11px;color:var(--tm);margin-bottom:12px;";note.textContent="Check: sender (row) can message target (column). 'DM' = direct message allowed.";grid.appendChild(note);
+  const tbl=document.createElement("div");tbl.style.cssText="overflow-x:auto;";
+  const table=document.createElement("table");
+  const thead=document.createElement("thead");
+  let hrow=`<tr><th>From \\ To</th>`;
+  ROLES.forEach(r=>hrow+=`<th style="min-width:90px;">${r}<br><span style="font-size:9px;font-weight:400;">(Broadcast)</span></th><th style="min-width:60px;">${r}<br><span style="font-size:9px;font-weight:400;">(DM)</span></th>`);
+  hrow+="</tr>";thead.innerHTML=hrow;table.appendChild(thead);
+  const tbody=document.createElement("tbody");
+  ROLES.forEach(fromRole=>{
+    const tr=document.createElement("tr");
+    let cells=`<td><span class="bx bx-b">${fromRole}</span></td>`;
+    ROLES.forEach(toRole=>{
+      const bk=`${fromRole.replace(/\s/g,"_")}_to_${toRole.replace(/\s/g,"_")}_broadcast`;
+      const dk=`${fromRole.replace(/\s/g,"_")}_to_${toRole.replace(/\s/g,"_")}_dm`;
+      const bChecked=saved[bk]!==false;const dChecked=!!saved[dk];
+      cells+=`<td style="text-align:center;"><input type="checkbox" id="${bk}" ${bChecked?"checked":""} style="accent-color:var(--gold);"></td>`;
+      cells+=`<td style="text-align:center;"><input type="checkbox" id="${dk}" ${dChecked?"checked":""} style="accent-color:var(--gold);"></td>`;
+    });
+    tr.innerHTML=cells;tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);tbl.appendChild(table);grid.appendChild(tbl);
+}
+document.getElementById("saveMsgPerms").onclick=async()=>{
+  const data={};
+  ROLES.forEach(fromRole=>{ROLES.forEach(toRole=>{
+    const bk=`${fromRole.replace(/\s/g,"_")}_to_${toRole.replace(/\s/g,"_")}_broadcast`;
+    const dk=`${fromRole.replace(/\s/g,"_")}_to_${toRole.replace(/\s/g,"_")}_dm`;
+    data[bk]=document.getElementById(bk)?.checked||false;
+    data[dk]=document.getElementById(dk)?.checked||false;
+  });});
+  await setDoc(doc(db,"rolePermissions","messaging"),data);toast("Messaging rules saved.","ok");
+};
+
+/* ======= TIMELINE COMPONENTS ======= */
+function loadTimeline(){
+  onSnapshot(query(collection(db,"settings","global","timeline"),orderBy("order","asc")),snap=>{
+    const list=document.getElementById("tlList"); if(!list) return;
+    list.innerHTML="";
+    if(snap.empty){list.innerHTML='<p style="color:var(--tm);font-size:12px;">No timeline items.</p>';return;}
+    snap.forEach(d=>{const item=d.data();
+      list.innerHTML+=`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--br);"><div><strong style="font-size:13px;">${item.title}</strong><p style="font-size:11px;color:var(--gold);margin-top:2px;">${item.date||""}</p></div><button class="bd" style="font-size:10px;padding:3px 8px;" onclick="delTl('${d.id}')">Delete</button></div>`;
+    });
+  });
+}
+document.getElementById("addTlBtn").onclick=()=>{document.getElementById("tl-title").value="";document.getElementById("tl-date").value="";document.getElementById("tl-order").value="1";document.getElementById("tlModal").classList.add("open");};
+document.getElementById("saveTlBtn").onclick=async()=>{
+  const title=document.getElementById("tl-title").value.trim();if(!title){toast("Title required.","err");return;}
+  await addDoc(collection(db,"settings","global","timeline"),{title,date:document.getElementById("tl-date").value,order:parseInt(document.getElementById("tl-order").value)||1,createdAt:serverTimestamp()});
+  toast("Added.","ok");closeModal("tlModal");
+};
+window.delTl=async id=>{await deleteDoc(doc(db,"settings","global","timeline",id));toast("Deleted.");};
+
+/* ======= COMPLIANCE RULES REGS ENGINE ======= */
+function loadRules(){
+  onSnapshot(collection(db,"settings","global","rules"),snap=>{
+    const list=document.getElementById("ruleList"); if(!list) return;
+    list.innerHTML="";
+    if(snap.empty){list.innerHTML='<p style="color:var(--tm);font-size:12px;">No rules yet.</p>';return;}
+    snap.forEach(d=>{const b=d.data();
+      const items=(b.items||[]).map(r=>`<li style="font-size:11px;color:var(--tm);margin-bottom:3px;padding-left:12px;position:relative;"><span style="position:absolute;left:0;top:6px;width:4px;height:4px;border-radius:50%;background:var(--gold-d);"></span>${r}</li>`).join("");
+      list.innerHTML+=`<div style="padding:12px 0;border-bottom:1px solid var(--br);display:flex;justify-content:space-between;align-items:flex-start;gap:10px;"><div><strong style="color:var(--gold);font-size:13px;">${b.title}</strong><ul style="margin-top:7px;list-style:none;">${items}</ul></div><button class="bd" style="font-size:10px;padding:3px 8px;flex-shrink:0;" onclick="delRb('${d.id}')">Delete</button></div>`;
+    });
+  });
+}
+document.getElementById("addRuleBtn").onclick=()=>{document.getElementById("rb-title").value="";document.getElementById("rb-items").value="";document.getElementById("ruleModal").classList.add("open");};
+document.getElementById("saveRbBtn").onclick=async()=>{
+  const title=document.getElementById("rb-title").value.trim();if(!title){toast("Title required.","err");return;}
+  const items=document.getElementById("rb-items").value.trim().split("\n").map(r=>r.trim()).filter(Boolean);
+  await addDoc(collection(db,"settings","global","rules"),{title,items,createdAt:serverTimestamp()});
+  toast("Saved.","ok");closeModal("ruleModal");
+};
+window.delRb=async id=>{await deleteDoc(doc(db,"settings","global","rules",id));toast("Deleted.");};
+
+/* ======= SYSTEM AUDIT LOGGING STREAM ======= */
+function loadLogs(){
+  onSnapshot(query(collection(db,"logs"),orderBy("timestamp","desc"),limit(60)),snap=>{
+    const tb=document.getElementById("logsBody"); if(!tb) return;
+    tb.innerHTML="";
+    if(snap.empty){tb.innerHTML='<tr><td colspan="4" style="color:var(--tm);">No logs yet.</td></tr>';return;}
+    snap.forEach(d=>{const l=d.data();
+      const t=l.timestamp?.toDate?.().toLocaleTimeString("en-IN")||"";
+      tb.innerHTML+=`<tr><td style="font-size:10px;">${t}</td><td style="font-size:11px;">${l.userName||"—"}</td><td><span class="bx bx-b">${l.action||"—"}</span></td><td style="font-size:11px;color:var(--tm);">${l.details||"—"}</td></tr>`;
+    });
+  });
+}
+
+/* ======= EXPORT CONDUITS ======= */
+window.exportAllCSV=async()=>{
+  const evMap={};allEvents.forEach(e=>evMap[e.id]=e.name);
+  const rows=[["Name","Class","Section","Roll","Email","Event","Status","Call","WhatsApp","Registered"]];
+  allRegs.forEach(r=>rows.push([r.name,r.class,r.section,r.roll,r.email,evMap[r.eventId]||r.eventId,r.status,r.callNo,r.whatsappNo,r.createdAt?.toDate?.().toLocaleDateString("en-IN")||""]));
+  dlCSV(rows,"all_registrations.csv");toast("Exported.","ok");
+};
+window.exportEventCSV=async(eid,ename)=>{
+  const snap=await getDocs(query(collection(db,"registrations"),where("eventId","==",eid)));
+  const rows=[["Name","Class","Section","Roll","Email","Status","Call","WhatsApp","Registered"]];
+  snap.forEach(d=>{const r=d.data();rows.push([r.name,r.class,r.section,r.roll,r.email,r.status,r.callNo,r.whatsappNo,r.createdAt?.toDate?.().toLocaleDateString("en-IN")||""]);});
+  dlCSV(rows,`${ename.replace(/\s/g,"_")}.csv`);toast("Exported.","ok");
+};
+function dlCSV(rows,fname){
+  const csv=rows.map(r=>r.map(c=>`"${String(c||"").replace(/"/g,'""')}"`).join(",")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download=fname;a.click();
+}
+
+/* ======= ON-DEMAND ROUTE INITIALIZATION ======= */
+document.querySelectorAll(".nav-btn[data-p]").forEach(b=>{
+  const orig=b.onclick;
+  b.onclick=async e=>{
+    orig.call(b,e);
+    const p=b.dataset.p;
+    if(p==="events")loadEventsPage();
+    if(p==="registrations"){await loadEventsData();loadRegistrations();}
+    if(p==="classes")loadClasses();
+  };
+});
+</script>
+</body>
+</html>

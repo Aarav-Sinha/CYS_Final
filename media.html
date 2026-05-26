@@ -1,0 +1,175 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Media Team Portal — Critically Yours</title><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"><style>  :root{--gold:#C9A84C;--gold-light:#E8C97A;--gold-dark:#9A7A2E;--green:#2D5016;--green-mid:#3D6B1F;--green-light:#4E8A28;--green-pale:#8FBC5A;--bg-dark:#0D1A06;--bg-card:#111E07;--text-light:#F5F0E8;--text-muted:#B8B09A;--border:rgba(201,168,76,0.25);}  *{margin:0;padding:0;box-sizing:border-box;}  body{background:var(--bg-dark);color:var(--text-light);font-family:'Montserrat',sans-serif;min-height:100vh;}  .shell{display:flex;min-height:100vh;}  .sidebar{width:240px;background:rgba(0,0,0,0.32);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto;}  .sb-logo{padding:22px 20px;border-bottom:1px solid var(--border);}  .sb-logo-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--gold);}  .sb-logo-role{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--green-pale);margin-top:2px;}  .sb-user{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--border);}  .sb-user img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid var(--gold-dark);flex-shrink:0;}  .sb-user-name{font-size:13px;font-weight:600;color:var(--text-light);}  .sb-user-tag{font-size:10px;color:var(--gold);}  .sb-nav{flex:1;padding:12px 0;}  .nav-item{display:flex;align-items:center;gap:11px;padding:11px 20px;color:var(--text-muted);font-size:13px;font-weight:500;cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:'Montserrat',sans-serif;transition:all 0.2s;}  .nav-item:hover{color:var(--text-light);background:rgba(255,255,255,0.03);}  .nav-item.active{color:var(--gold);background:rgba(201,168,76,0.08);border-right:3px solid var(--gold);}  .sb-bottom{padding:14px 20px;border-top:1px solid var(--border);}  .logout-btn{display:flex;align-items:center;gap:9px;color:var(--text-muted);font-size:13px;cursor:pointer;background:none;border:none;font-family:'Montserrat',sans-serif;}  .logout-btn:hover{color:#E05555;}  .main{flex:1;margin-left:240px;padding:28px 32px;min-height:100vh;overflow-x:hidden;}  .page{display:none;}  .page.active{display:block;}  .page-hdr{margin-bottom:24px;}  .page-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--text-light);}  .page-sub{font-size:12px;color:var(--text-muted);margin-top:3px;}  .card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:18px;}  .card-title{font-size:12px;font-weight:600;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;}  .btn-gold{background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--bg-dark);border:none;border-radius:6px;padding:9px 20px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;}  .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}  .b-orange{background:rgba(255,166,0,0.15);color:#FFA600;border:1px solid rgba(255,166,0,0.3);}  .b-green{background:rgba(143,188,90,0.15);color:#8FBC5A;border:1px solid rgba(143,188,90,0.3);}  .table-wrap{overflow-x:auto;}  table{width:100%;border-collapse:collapse;}  th{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);}  td{padding:11px 14px;font-size:13px;color:var(--text-light);border-bottom:1px solid rgba(201,168,76,0.07);}  .ann-item{padding:14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:8px;margin-bottom:10px;}  .ann-title{font-size:14px;font-weight:600;color:var(--text-light);margin-bottom:4px;}  .ann-body{font-size:12px;color:var(--text-muted);line-height:1.6;}  .ann-meta{font-size:11px;color:var(--gold-dark);margin-top:6px;}  .spinner{width:15px;height:15px;border:2px solid rgba(201,168,76,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px;}  @keyframes spin{to{transform:rotate(360deg);}}  .toast{position:fixed;bottom:24px;right:24px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:12px 18px;font-size:12px;color:var(--text-light);z-index:9000;max-width:300px;transform:translateY(10px);opacity:0;transition:all 0.3s;pointer-events:none;}  .toast.show{transform:translateY(0);opacity:1;}  .toast.success{border-left:3px solid var(--green-pale);}  @media(max-width:768px){.sidebar{position:relative;width:100%;height:auto;}.main{margin-left:0;padding:20px 16px;}.shell{flex-direction:column;}}</style></head><body>
+
+<!-- GLOBAL INTERCEPTION BLOCKER -->
+<div id="portalLoader" style="position:fixed;inset:0;background:#0D1A06;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+  <span class="spinner" style="width:32px;height:32px;border-width:3px;"></span>
+  <p style="font-family:'Montserrat',sans-serif;font-size:12px;color:#C9A84C;letter-spacing:1px;text-transform:uppercase;">Authenticating Session...</p>
+</div>
+
+<div class="shell" id="mainShell" style="display:none;">
+  <div class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-name">Critically Yours</div>
+      <div class="sb-logo-role">Media Team</div>
+    </div>
+    <div class="sb-user">
+      <img src="" id="sbImg" alt="">
+      <div><div class="sb-user-name" id="sbName">Loading...</div><div class="sb-user-tag">📸 Media Team</div></div>
+    </div>
+    <nav class="sb-nav">
+      <button class="nav-item active" data-page="dashboard"><span>🏠</span> Dashboard</button>
+      <button class="nav-item" data-page="participants"><span>👥</span> Participants</button>
+      <button class="nav-item" data-page="schedule"><span>📅</span> Schedule</button>
+      <button class="nav-item" data-page="announcements"><span>📢</span> Announcements</button>
+    </nav>
+    <div class="sb-bottom"><button class="logout-btn" id="logoutBtn">🚪 Sign Out</button></div>
+  </div>
+
+  <div class="main">
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-hdr"><h1 class="page-title">Media Dashboard</h1><p class="page-sub">Read-only view of fest information for coverage purposes.</p></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:18px;">
+        <div class="card" style="text-align:center;"><div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--gold);" id="st-events">—</div><div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px;">Events</div></div>
+        <div class="card" style="text-align:center;"><div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--gold);" id="st-total">—</div><div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px;">Participants</div></div>
+        <div class="card" style="text-align:center;"><div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--gold);" id="st-sel">—</div><div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px;">Selected</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Events Overview</div>
+        <div id="evCards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;"></div>
+      </div>
+    </div>
+
+    <!-- PARTICIPANTS -->
+    <div class="page" id="page-participants">
+      <div class="page-hdr"><h1 class="page-title">Selected Participants</h1><p class="page-sub">List of selected participants across all events.</p></div>
+      <div class="card"><div class="table-wrap"><table>
+        <thead><tr><th>Name</th><th>Class</th><th>Event</th><th>Status</th></tr></thead>
+        <tbody id="partTable"><tr><td colspan="4"><span class="spinner"></span></td></tr></tbody>
+      </table></div></div>
+    </div>
+
+    <!-- SCHEDULE -->
+    <div class="page" id="page-schedule">
+      <div class="page-hdr"><h1 class="page-title">Fest Schedule</h1><p class="page-sub">Timeline of events for the day.</p></div>
+      <div class="card" id="scheduleList"><span class="spinner"></span> Loading...</div>
+    </div>
+
+    <!-- ANNOUNCEMENTS -->
+    <div class="page" id="page-announcements">
+      <div class="page-hdr"><h1 class="page-title">Announcements</h1><p class="page-sub">Latest announcements relevant to the media team.</p></div>
+      <div id="annList"><span class="spinner"></span></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore,doc,getDoc,getDocs,collection,onSnapshot,query,where,orderBy,limit }  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth,onAuthStateChanged,signOut }  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const cfg={apiKey:"AIzaSyCogmTX4tW4EZfTqsMunRu3XuuOTBDKN-E",authDomain:"cys-dpsm.firebaseapp.com",projectId:"cys-dpsm",storageBucket:"cys-dpsm.firebasestorage.app",messagingSenderId:"198853363575",appId:"1:198853363575:web:365ff3bcb9b54b760b4372"};
+const app=initializeApp(cfg);const db=getFirestore(app);const auth=getAuth(app);
+let cu=null;
+
+function throwOut() {
+  sessionStorage.clear();
+  window.location.replace('portal-login.html');
+}
+
+onAuthStateChanged(auth,async user=>{
+  if(!user){
+    throwOut();
+    return;
+  }
+  
+  try {
+    // Structural Live Database Authorization handshake
+    const ud = await getDoc(doc(db, 'users', user.uid));
+    if(!ud.exists()) {
+      throwOut();
+      return;
+    }
+    
+    const uData = ud.data();
+    const isMediaTeam = uData.role === 'Media Team' || uData.roles?.includes('Media Team');
+    
+    if(!isMediaTeam) {
+      throwOut();
+      return;
+    }
+    
+    // Explicit clearance granted
+    cu=user;
+    sessionStorage.setItem('userRole', 'Media Team');
+    
+    document.getElementById('sbImg').src=cu.photoURL||'';
+    document.getElementById('sbName').textContent=cu.displayName||'Media Team';
+    
+    await initAll();
+    
+    // Safely remove structural cover screen layout when context checks out cleanly
+    document.getElementById('portalLoader').style.display = 'none';
+    document.getElementById('mainShell').style.display = 'flex';
+    
+  } catch(err) {
+    console.error("Auth security structural failure:", err);
+    throwOut();
+  }
+});
+
+async function initAll(){
+  const evSnap=await getDocs(collection(db,'events'));
+  const allEvents=[];evSnap.forEach(d=>allEvents.push({id:d.id,...d.data()}));
+  document.getElementById('st-events').textContent=allEvents.length;
+  const evMap={};allEvents.forEach(e=>evMap[e.id]=e.name);
+  const regSnap=await getDocs(collection(db,'registrations'));
+  let total=0,sel=0;
+  regSnap.forEach(d=>{total++;if(d.data().status==='Selected')sel++;});
+  document.getElementById('st-total').textContent=total;document.getElementById('st-sel').textContent=sel;
+  
+  // Event cards
+  const evCards=document.getElementById('evCards');evCards.innerHTML='';
+  allEvents.forEach(ev=>{
+    evCards.innerHTML+=`<div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:166px 16px;padding:16px;"><div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--gold);">${ev.name}</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px;">${ev.category||'—'} ${ev.maxParticipants?'· Max '+ev.maxParticipants:''}</div></div>`;
+  });
+  
+  // Participants table — selected only
+  const tb=document.getElementById('partTable');tb.innerHTML='';
+  regSnap.forEach(d=>{const r=d.data();if(r.status!=='Selected')return;
+    tb.innerHTML+=`<tr><td style="display:flex;align-items:center;gap:8px;"><img src="${r.profilePic||''}" style="width:24px;height:24px;border-radius:50%;" onerror="this.style.display='none'"> ${r.name}</td><td>${r.class}-${r.section}</td><td>${evMap[r.eventId]||'—'}</td><td><span class="badge b-green">Selected</span></td></tr>`;
+  });
+  if(!tb.innerHTML)tb.innerHTML='<tr><td colspan="4" style="color:var(--text-muted);">No selected participants yet.</td></tr>';
+  
+  // Schedule (timeline)
+  const tlSnap=await getDocs(query(collection(db,'settings','global','timeline'),orderBy('order','asc')));
+  const sched=document.getElementById('scheduleList');sched.innerHTML='';
+  if(tlSnap.empty){sched.innerHTML='<p style="color:var(--text-muted);font-size:13px;">Timeline not published yet.</p>';return;}
+  tlSnap.forEach(d=>{const item=d.data();
+    sched.innerHTML+=`<div style="display:flex;align-items:flex-start;gap:16px;padding:12px 0;border-bottom:1px solid var(--border);"><div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold);min-width:100px;padding-top:2px;">${item.date||'TBA'}</div><div style="font-size:14px;font-weight:600;">${item.title}</div></div>`;
+  });
+  
+  // Announcements (public or all)
+  onSnapshot(query(collection(db,'announcements'),where('approved','==',true),orderBy('createdAt','desc'),limit(15)),snap=>{
+    const list=document.getElementById('annList');list.innerHTML='';
+    if(snap.empty){list.innerHTML='<p style="color:var(--text-muted);font-size:13px;">No announcements.</p>';return;}
+    snap.forEach(d=>{const a=d.data();
+      list.innerHTML+=`<div class="ann-item"><div class="ann-title">${a.title}</div><div class="ann-body">${a.body}</div><div class="ann-meta">${a.senderName||''} · ${a.senderRole||''} · ${a.createdAt?.toDate?.().toLocaleDateString('en-IN')||''}</div></div>`;
+    });
+  });
+}
+
+document.querySelectorAll('.nav-item[data-page]').forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');document.getElementById('page-'+btn.dataset.page).classList.add('active');
+  };
+});
+
+document.getElementById('logoutBtn').onclick=async()=>{await signOut(auth);sessionStorage.clear();window.location.href='portal-login.html';};
+</script>
+</body>
+</html>

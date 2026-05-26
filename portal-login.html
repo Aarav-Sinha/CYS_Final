@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal Login — Critically Yours</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#C9A84C;--gold-light:#E8C97A;--gold-dark:#9A7A2E;--green:#2D5016;--green-pale:#8FBC5A;--bg:#0D1A06;--card:#111E07;--text:#F5F0E8;--muted:#B8B09A;--border:rgba(201,168,76,0.22);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+  .back{padding:18px 24px;display:flex;align-items:center;gap:8px;color:var(--muted);text-decoration:none;font-size:13px;transition:color .2s;}
+  .back:hover{color:var(--gold);}
+  .wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 16px;position:relative;overflow:hidden;}
+  .bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 40%,rgba(77,138,40,.12) 0%,transparent 70%);}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:48px 40px;width:100%;max-width:440px;position:relative;z-index:2;}
+  .logo-row{text-align:center;margin-bottom:32px;}
+  .logo-row img{height:60px;width:60px;object-fit:contain;margin-bottom:10px;}
+  .login-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--gold);}
+  .login-sub{font-size:12px;color:var(--muted);margin-top:4px;}
+  .divider{height:1px;background:var(--border);margin:24px 0;}
+  .label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:block;}
+  .g-btn{width:100%;background:#fff;color:#333;border:none;border-radius:8px;padding:13px 18px;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:box-shadow .2s,transform .15s;font-family:'Montserrat',sans-serif;}
+  .g-btn:hover{box-shadow:0 6px 20px rgba(255,255,255,.12);transform:translateY(-1px);}
+  .g-btn svg{width:18px;height:18px;flex-shrink:0;}
+  .note{font-size:11px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.6;}
+  .note a{color:var(--gold);text-decoration:none;}
+  .up{display:none;flex;align-items:center;gap:12px;background:rgba(201,168,76,.06);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:18px;}
+  .up.show{display:flex;}
+  .up img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--gold-dark);}
+  .up-name{font-weight:600;font-size:13px;}
+  .up-email{font-size:11px;color:var(--muted);margin-top:1px;}
+  /* Role overlay */
+  .role-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:999;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
+  .role-ov.open{display:flex;}
+  .role-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:36px 32px;max-width:380px;width:90%;text-align:center;}
+  .role-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--text);margin-bottom:6px;}
+  .role-sub{font-size:12px;color:var(--muted);margin-bottom:24px;}
+  .role-btn{display:flex;align-items:center;gap:12px;width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:13px 16px;color:var(--text);font-size:13px;font-weight:500;cursor:pointer;margin-bottom:10px;transition:all .2s;font-family:'Montserrat',sans-serif;}
+  .role-btn:hover{border-color:var(--gold);background:rgba(201,168,76,.07);color:var(--gold);}
+  .role-btn:last-child{margin-bottom:0;}
+  .spinner{width:16px;height:16px;border:2px solid rgba(201,168,76,.2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:12px;color:var(--text);z-index:9000;max-width:290px;transform:translateY(10px);opacity:0;transition:all .3s;pointer-events:none;}
+  .toast.show{transform:translateY(0);opacity:1;}
+  .toast.error{border-left:3px solid #E05555;}
+  @media(max-width:480px){.card{padding:32px 20px;}}
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← Back to Home</a>
+<div class="wrap">
+  <div class="bg"></div>
+  <div class="card">
+    <div class="logo-row">
+      <img src="cys_logo.png" alt="CYS" onerror="this.style.display='none'">
+      <div class="login-title">Critically Yours</div>
+      <div class="login-sub">Staff &amp; Participant Portal</div>
+    </div>
+    <div class="up" id="upRow">
+      <img src="" id="upImg" alt="">
+      <div><div class="up-name" id="upName"></div><div class="up-email" id="upEmail"></div></div>
+    </div>
+    <div class="divider"></div>
+    <span class="label">Sign in with Google</span>
+    <button class="g-btn" id="gBtn">
+      <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      Continue with Google
+    </button>
+    <p class="note">Access is granted to pre-authorised accounts only.<br><a href="index.html">← Return to public site</a></p>
+  </div>
+</div>
+
+<!-- Role selector -->
+<div class="role-ov" id="roleOv">
+  <div class="role-card">
+    <div class="role-title">Multiple Roles Found</div>
+    <p class="role-sub">Select the role you want to log in as:</p>
+    <div id="roleBtns"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script type="module">
+import {initializeApp} from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {getFirestore,doc,getDoc} from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {getAuth,signInWithPopup,GoogleAuthProvider,onAuthStateChanged,signOut} from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const cfg={apiKey:"AIzaSyCogmTX4tW4EZfTqsMunRu3XuuOTBDKN-E",authDomain:"cys-dpsm.firebaseapp.com",projectId:"cys-dpsm",storageBucket:"cys-dpsm.firebasestorage.app",messagingSenderId:"198853363575",appId:"1:198853363575:web:365ff3bcb9b54b760b4372"};
+const app=initializeApp(cfg);const db=getFirestore(app);const auth=getAuth(app);
+const prov=new GoogleAuthProvider();
+
+const ROUTES={'IT Team':'admin.html','Core Team':'core.html','Teacher-in-Charge':'teacher.html','Event Head':'eventhead.html','Participant':'participant.html','Media Team':'media.html','Security':'security.html'};
+const ICONS={'IT Team':'💻','Core Team':'⚙️','Teacher-in-Charge':'👩‍🏫','Event Head':'🎤','Participant':'🎓','Media Team':'📸','Security':'🔒'};
+
+function toast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3500);}
+function resetBtn(){document.getElementById('gBtn').innerHTML=`<svg viewBox="0 0 48 48" style="width:18px;height:18px;flex-shrink:0"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Continue with Google`;document.getElementById('gBtn').disabled=false;}
+
+function redirect(role){sessionStorage.setItem('userRole',role);window.location.href=ROUTES[role]||'participant.html';}
+
+async function handleUser(user){
+  document.getElementById('gBtn').innerHTML='<span class="spinner"></span> Verifying…';
+  document.getElementById('gBtn').disabled=true;
+  document.getElementById('upImg').src=user.photoURL||'';
+  document.getElementById('upName').textContent=user.displayName||'';
+  document.getElementById('upEmail').textContent=user.email;
+  document.getElementById('upRow').classList.add('show');
+  try{
+    if(user.email==='aaravhfs@gmail.com'){redirect('IT Team');return;}
+    const ud=await getDoc(doc(db,'users',user.uid));
+    if(!ud.exists()){
+      if(user.email.endsWith('@dpsmegacity.in')){toast('Not enrolled yet. Please register on the home page.','error');}
+      else{toast('Access denied. Account not authorised.','error');}
+      await signOut(auth);document.getElementById('upRow').classList.remove('show');resetBtn();return;
+    }
+    const data=ud.data();
+    if(data.status==='suspended'){toast('Your access has been suspended. Contact admin.','error');await signOut(auth);document.getElementById('upRow').classList.remove('show');resetBtn();return;}
+    const roles=data.roles||(data.role?[data.role]:[]);
+    if(!roles.length){toast('No role assigned. Contact administrator.','error');await signOut(auth);document.getElementById('upRow').classList.remove('show');resetBtn();return;}
+    if(roles.length===1){redirect(roles[0]);return;}
+    // Multiple roles
+    const container=document.getElementById('roleBtns');container.innerHTML='';
+    roles.forEach(r=>{
+      const b=document.createElement('button');b.className='role-btn';
+      b.innerHTML=`<span style="font-size:18px;">${ICONS[r]||'👤'}</span><span>${r}</span>`;
+      b.onclick=()=>redirect(r);container.appendChild(b);
+    });
+    document.getElementById('roleOv').classList.add('open');resetBtn();
+  }catch(e){toast('Login error. Please try again.','error');await signOut(auth);document.getElementById('upRow').classList.remove('show');resetBtn();}
+}
+
+document.getElementById('gBtn').onclick=async()=>{
+  try{const r=await signInWithPopup(auth,prov);await handleUser(r.user);}
+  catch(e){if(e.code!=='auth/popup-closed-by-user')toast('Sign-in failed. Please try again.','error');}
+};
+
+onAuthStateChanged(auth,async user=>{
+  if(!user)return;
+  const stored=sessionStorage.getItem('userRole');
+  if(stored&&ROUTES[stored]){window.location.href=ROUTES[stored];return;}
+  if(user.email==='aaravhfs@gmail.com'){window.location.href='admin.html';return;}
+});
+</script>
+</body>
+</html>

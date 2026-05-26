@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Portal — Critically Yours</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#C9A84C;--gold-light:#E8C97A;--gold-dark:#9A7A2E;--green:#2D5016;--green-mid:#3D6B1F;--green-light:#4E8A28;--green-pale:#8FBC5A;--bg-dark:#0D1A06;--bg-card:#111E07;--text-light:#F5F0E8;--text-muted:#B8B09A;--border:rgba(201,168,76,0.25);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg-dark);color:var(--text-light);font-family:'Montserrat',sans-serif;min-height:100vh;}
+  .shell{display:flex;min-height:100vh;}
+  .sidebar{width:256px;background:rgba(0,0,0,0.32);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto;flex-shrink:0;}
+  .sb-logo{padding:22px 20px;border-bottom:1px solid var(--border);}
+  .sb-logo-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--gold);}
+  .sb-logo-role{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--green-pale);margin-top:2px;}
+  .sb-user{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--border);}
+  .sb-user img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid var(--gold-dark);flex-shrink:0;}
+  .sb-user-name{font-size:13px;font-weight:600;color:var(--text-light);}
+  .sb-user-tag{font-size:10px;color:var(--gold);}
+  .sb-nav{flex:1;padding:12px 0;}
+  .nav-item{display:flex;align-items:center;gap:11px;padding:11px 20px;color:var(--text-muted);font-size:13px;font-weight:500;cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:'Montserrat',sans-serif;transition:all 0.2s;}
+  .nav-item:hover{color:var(--text-light);background:rgba(255,255,255,0.03);}
+  .nav-item.active{color:var(--gold);background:rgba(201,168,76,0.08);border-right:3px solid var(--gold);}
+  .sb-bottom{padding:14px 20px;border-top:1px solid var(--border);}
+  .logout-btn{display:flex;align-items:center;gap:9px;color:var(--text-muted);font-size:13px;cursor:pointer;background:none;border:none;font-family:'Montserrat',sans-serif;}
+  .logout-btn:hover{color:#E05555;}
+  .main{flex:1;margin-left:256px;padding:28px 32px;min-height:100vh;overflow-x:hidden;}
+  .page{display:none;}
+  .page.active{display:block;}
+  .page-hdr{margin-bottom:24px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  .page-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--text-light);}
+  .page-sub{font-size:12px;color:var(--text-muted);margin-top:3px;}
+  .card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:18px;}
+  .card-title{font-size:12px;font-weight:600;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;}
+  .btn-gold{background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--bg-dark);border:none;border-radius:6px;padding:9px 20px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;}
+  .btn-gold:hover{opacity:0.88;}
+  .btn-outline{background:transparent;color:var(--gold);border:1px solid var(--gold);border-radius:6px;padding:8px 18px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;}
+  .btn-danger{background:rgba(224,85,85,0.1);color:#E05555;border:1px solid rgba(224,85,85,0.3);border-radius:6px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;}
+  .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+  .b-orange{background:rgba(255,166,0,0.15);color:#FFA600;border:1px solid rgba(255,166,0,0.3);}
+  .b-green{background:rgba(143,188,90,0.15);color:#8FBC5A;border:1px solid rgba(143,188,90,0.3);}
+  .b-red{background:rgba(224,85,85,0.15);color:#E05555;border:1px solid rgba(224,85,85,0.3);}
+  .b-blue{background:rgba(100,149,237,0.15);color:#6495ED;border:1px solid rgba(100,149,237,0.3);}
+  .b-gold{background:rgba(201,168,76,0.15);color:var(--gold);border:1px solid rgba(201,168,76,0.3);}
+  .form-group{margin-bottom:14px;}
+  .form-label{display:block;font-size:10px;font-weight:700;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:5px;text-transform:uppercase;}
+  .form-input,.form-select,.form-textarea{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:6px;color:var(--text-light);padding:10px 13px;font-size:13px;font-family:'Montserrat',sans-serif;outline:none;transition:border-color 0.2s;}
+  .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold);}
+  .form-select option{background:var(--bg-dark);}
+  .form-textarea{resize:vertical;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .table-wrap{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;}
+  th{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);}
+  td{padding:11px 14px;font-size:13px;color:var(--text-light);border-bottom:1px solid rgba(201,168,76,0.07);}
+  tr:hover td{background:rgba(255,255,255,0.02);}
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:18px;}
+  .stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:18px;text-align:center;}
+  .stat-num{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--gold);}
+  .stat-lbl{font-size:10px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px;}
+  .chat-wrap{height:460px;display:flex;flex-direction:column;}
+  .chat-area{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;}
+  .bubble-out{align-self:flex-end;background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--bg-dark);max-width:68%;border-radius:12px 12px 2px 12px;padding:10px 14px;font-size:13px;}
+  .bubble-in{align-self:flex-start;background:rgba(255,255,255,0.06);max-width:68%;border-radius:12px 12px 12px 2px;padding:10px 14px;font-size:13px;}
+  .b-sender{font-size:11px;font-weight:600;color:var(--gold);margin-bottom:2px;}
+  .b-role{font-size:10px;color:var(--text-muted);}
+  .b-time{font-size:10px;opacity:0.6;margin-top:3px;}
+  .chat-input-row{display:flex;gap:10px;padding:12px;border-top:1px solid var(--border);}
+  .chat-input{flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:10px 13px;color:var(--text-light);font-size:13px;font-family:'Montserrat',sans-serif;outline:none;}
+  .chat-input:focus{border-color:var(--gold);}
+  .send-btn{background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--bg-dark);border:none;border-radius:8px;padding:10px 16px;cursor:pointer;font-size:13px;font-weight:600;}
+  .ann-item{padding:14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:8px;margin-bottom:10px;}
+  .ann-item-title{font-size:14px;font-weight:600;color:var(--text-light);margin-bottom:4px;}
+  .ann-item-body{font-size:12px;color:var(--text-muted);line-height:1.6;}
+  .ann-item-meta{font-size:11px;color:var(--gold-dark);margin-top:6px;}
+  .spinner{width:15px;height:15px;border:2px solid rgba(201,168,76,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:12px 18px;font-size:12px;color:var(--text-light);z-index:9000;max-width:300px;transform:translateY(10px);opacity:0;transition:all 0.3s;pointer-events:none;}
+  .toast.show{transform:translateY(0);opacity:1;}
+  .toast.error{border-left:3px solid #E05555;}
+  .toast.success{border-left:3px solid var(--green-pale);}
+  @media(max-width:768px){.sidebar{position:relative;width:100%;height:auto;}.main{margin-left:0;padding:20px 16px;}.shell{flex-direction:column;}.form-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div id="portalLoader" style="position:fixed;inset:0;background:#0D1A06;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+  <span class="spinner" style="width:32px;height:32px;border-width:3px;"></span>
+  <p style="font-family:'Montserrat',sans-serif;font-size:12px;color:#C9A84C;letter-spacing:1px;text-transform:uppercase;">Authenticating Session...</p>
+</div>
+
+<div class="shell" id="mainShell" style="display:none;">
+  <div class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-name">Critically Yours</div>
+      <div class="sb-logo-role">Teacher-in-Charge</div>
+    </div>
+    <div class="sb-user">
+      <img src="" id="sbImg" alt="">
+      <div><div class="sb-user-name" id="sbName">Loading...</div><div class="sb-user-tag">👩‍🏫 Teacher</div></div>
+    </div>
+    <nav class="sb-nav">
+      <button class="nav-item active" data-page="overview"><span>📊</span> Overview</button>
+      <button class="nav-item" data-page="registrations"><span>📋</span> All Registrations</button>
+      <button class="nav-item" data-page="approvals"><span>✅</span> Approvals</button>
+      <button class="nav-item" data-page="announcements"><span>📢</span> Announcements</button>
+      <button class="nav-item" data-page="messages"><span>💬</span> Messages</button>
+      <button class="nav-item" data-page="reports"><span>📈</span> Reports</button>
+    </nav>
+    <div class="sb-bottom"><button class="logout-btn" id="logoutBtn">🚪 Sign Out</button></div>
+  </div>
+
+  <div class="main">
+    <div class="page active" id="page-overview">
+      <div class="page-hdr">
+        <div><h1 class="page-title">Overview</h1><p class="page-sub">Full view of all registrations and event status.</p></div>
+        <button class="btn-gold" onclick="exportAll()">⬇ Export CSV</button>
+      </div>
+      <div class="stats-row" id="statsRow">
+        <div class="stat-card"><div class="stat-num" id="st-total">—</div><div class="stat-lbl">Total</div></div>
+        <div class="stat-card"><div class="stat-num" id="st-sel">—</div><div class="stat-lbl">Selected</div></div>
+        <div class="stat-card"><div class="stat-num" id="st-pend">—</div><div class="stat-lbl">Pending</div></div>
+        <div class="stat-card"><div class="stat-num" id="st-rej">—</div><div class="stat-lbl">Rejected</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Event-wise Status</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Event</th><th>Registered</th><th>Selected</th><th>Pending</th><th>Rejected</th></tr></thead>
+          <tbody id="evBreakdown"><tr><td colspan="5"><span class="spinner"></span></td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-registrations">
+      <div class="page-hdr">
+        <div><h1 class="page-title">All Registrations</h1><p class="page-sub">Read-only view of every participant.</p></div>
+        <button class="btn-outline" onclick="exportAll()">⬇ CSV</button>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+        <input type="text" class="form-input" id="regSearch" placeholder="Search name, class…" style="max-width:280px;">
+        <select class="form-select" id="regFilter" style="max-width:180px;">
+          <option value="">All Status</option>
+          <option>Audition Pending</option><option>Auditioning</option><option>Selected</option><option>Rejected</option>
+        </select>
+      </div>
+      <div class="card">
+        <div class="table-wrap"><table>
+          <thead><tr><th>Name</th><th>Class</th><th>Event</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody id="regTable"><tr><td colspan="5"><span class="spinner"></span></td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-approvals">
+      <div class="page-hdr"><div><h1 class="page-title">Approvals</h1><p class="page-sub">Approve or reject Event Head announcements before they go live.</p></div></div>
+      <div class="card">
+        <div class="card-title">Pending Announcement Approvals</div>
+        <div id="pendingApprovals"><span class="spinner"></span> Loading...</div>
+      </div>
+    </div>
+
+    <div class="page" id="page-announcements">
+      <div class="page-hdr"><div><h1 class="page-title">Announcements</h1><p class="page-sub">Post announcements to participants, event heads or all staff.</p></div></div>
+      <div class="card">
+        <div class="card-title">Post Announcement</div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Title</label><input type="text" class="form-input" id="annTitle" placeholder="Title"></div>
+          <div class="form-group"><label class="form-label">Target</label>
+            <select class="form-select" id="annTarget">
+              <option value="all">All Registered Participants</option>
+              <option value="selected">Selected Participants Only</option>
+              <option value="eventhead">Event Heads</option>
+              <option value="public">Public (shown on website)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group"><label class="form-label">Body</label><textarea class="form-textarea" id="annBody" rows="4" placeholder="Announcement text..."></textarea></div>
+        <button class="btn-gold" id="postAnnBtn">Post Announcement</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Posted Announcements</div>
+        <div id="annList"><span class="spinner"></span></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-messages">
+      <div class="page-hdr"><div><h1 class="page-title">Messages</h1><p class="page-sub">Chat with Event Heads, Core Team and IT Team.</p></div></div>
+      <div style="display:grid;grid-template-columns:240px 1fr;gap:18px;height:520px;">
+        <div class="card" style="padding:0;overflow-y:auto;height:520px;">
+          <div style="padding:11px 14px;border-bottom:1px solid var(--border);font-size:11px;font-weight:600;text-transform:uppercase;color:var(--text-muted);">Conversations</div>
+          <div id="convList"></div>
+        </div>
+        <div class="card" style="padding:0;display:flex;flex-direction:column;height:520px;">
+          <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+            <img src="" id="chatHeaderImg" style="width:30px;height:30px;border-radius:50%;border:1px solid var(--border);" alt="">
+            <div><div style="font-size:13px;font-weight:600;" id="chatHeaderName">Select a conversation</div><div style="font-size:11px;color:var(--text-muted);" id="chatHeaderRole"></div></div>
+          </div>
+          <div class="chat-area" id="chatArea"></div>
+          <div class="chat-input-row">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Type a message…" maxlength="500">
+            <button class="send-btn" id="sendBtn">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-reports">
+      <div class="page-hdr"><div><h1 class="page-title">Reports</h1><p class="page-sub">Download detailed reports per event or overall.</p></div></div>
+      <div class="card">
+        <div class="card-title">Download Reports</div>
+        <div id="reportEventsList" style="display:flex;flex-direction:column;gap:12px;">
+          <span class="spinner"></span> Loading events...
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore,doc,getDoc,getDocs,addDoc,updateDoc,deleteDoc,collection,onSnapshot,query,where,orderBy,serverTimestamp,setDoc,limit }  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth,onAuthStateChanged,signOut }  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const cfg={apiKey:"AIzaSyCogmTX4tW4EZfTqsMunRu3XuuOTBDKN-E",authDomain:"cys-dpsm.firebaseapp.com",projectId:"cys-dpsm",storageBucket:"cys-dpsm.firebasestorage.app",messagingSenderId:"198853363575",appId:"1:198853363575:web:365ff3bcb9b54b760b4372"};
+const app=initializeApp(cfg);const db=getFirestore(app);const auth=getAuth(app);
+let cu=null,allRegs=[],allEvents=[],activeChatId=null,chatUnsub=null;
+
+function toast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3500);}
+
+function throwOut() {
+  sessionStorage.clear();
+  window.location.replace('portal-login.html');
+}
+
+onAuthStateChanged(auth,async user=>{
+  if(!user){
+    throwOut();
+    return;
+  }
+  
+  try {
+    // Structural Live Database Authorization handshake
+    const ud = await getDoc(doc(db, 'users', user.uid));
+    if(!ud.exists()) {
+      throwOut();
+      return;
+    }
+    
+    const uData = ud.data();
+    const isTeacher = uData.role === 'Teacher-in-Charge' || uData.roles?.includes('Teacher-in-Charge');
+    
+    if(!isTeacher) {
+      throwOut();
+      return;
+    }
+    
+    // Explicit clearance granted
+    cu=user;
+    sessionStorage.setItem('userRole', 'Teacher-in-Charge');
+    
+    document.getElementById('sbImg').src=cu.photoURL||'';
+    document.getElementById('sbName').textContent=cu.displayName||'Teacher';
+    
+    initAll();
+  } catch(err) {
+    console.error("Auth security structural failure:", err);
+    throwOut();
+  }
+});
+
+async function initAll(){
+  await loadEventsData();
+  loadOverview();
+  loadRegistrationsTab();
+  loadApprovals();
+  loadAnnouncements();
+  loadConversations();
+  loadReports();
+  
+  // Safely remove structural cover screen layout when data handshakes map correctly
+  document.getElementById('portalLoader').style.display = 'none';
+  document.getElementById('mainShell').style.display = 'flex';
+}
+
+async function loadEventsData(){
+  const snap=await getDocs(collection(db,'events'));
+  allEvents=[];snap.forEach(d=>allEvents.push({id:d.id,...d.data()}));
+}
+
+async function loadOverview(){
+  const snap=await getDocs(collection(db,'registrations'));
+  allRegs=[];
+  const byEv={};
+  let total=0,sel=0,pend=0,rej=0;
+  snap.forEach(d=>{
+    const r={id:d.id,...d.data()};allRegs.push(r);total++;
+    if(r.status==='Selected')sel++;else if(r.status==='Rejected')rej++;else pend++;
+    if(!byEv[r.eventId])byEv[r.eventId]={total:0,sel:0,pend:0,rej:0};
+    byEv[r.eventId].total++;
+    if(r.status==='Selected')byEv[r.eventId].sel++;else if(r.status==='Rejected')byEv[r.eventId].rej++;else byEv[r.eventId].pend++;
+  });
+  document.getElementById('st-total').textContent=total;
+  document.getElementById('st-sel').textContent=sel;
+  document.getElementById('st-pend').textContent=pend;
+  document.getElementById('st-rej').textContent=rej;
+  const tb=document.getElementById('evBreakdown');tb.innerHTML='';
+  allEvents.forEach(ev=>{
+    const c=byEv[ev.id]||{total:0,sel:0,pend:0,rej:0};
+    tb.innerHTML+=`<tr><td><strong>${ev.name}</strong></td><td>${c.total}</td><td><span class="badge b-green">${c.sel}</span></td><td><span class="badge b-orange">${c.pend}</span></td><td><span class="badge b-red">${c.rej}</span></td></tr>`;
+  });
+  if(!allEvents.length)tb.innerHTML='<tr><td colspan="5" style="color:var(--text-muted);">No events yet.</td></tr>';
+}
+
+function loadRegistrationsTab(){
+  const evMap={};allEvents.forEach(e=>evMap[e.id]=e.name);
+  renderRegTable(allRegs,evMap);
+  document.getElementById('regSearch').oninput=()=>filterRegs(evMap);
+  document.getElementById('regFilter').onchange=()=>filterRegs(evMap);
+}
+
+function filterRegs(evMap){
+  const q=document.getElementById('regSearch').value.toLowerCase();
+  const st=document.getElementById('regFilter').value;
+  renderRegTable(allRegs.filter(r=>(!q||r.name?.toLowerCase().includes(q)||r.class?.toLowerCase().includes(q))&&(!st||r.status===st)),evMap);
+}
+
+function renderRegTable(regs,evMap){
+  const tb=document.getElementById('regTable');tb.innerHTML='';
+  if(!regs.length){tb.innerHTML='<tr><td colspan="5" style="color:var(--text-muted);">No results.</td></tr>';return;}
+  regs.forEach(r=>{
+    const bc=r.status==='Selected'?'b-green':r.status==='Rejected'?'b-red':'b-orange';
+    const date=r.createdAt?.toDate?.().toLocaleDateString('en-IN')||'—';
+    tb.innerHTML+=`<tr><td style="display:flex;align-items:center;gap:8px;"><img src="${r.profilePic||''}" style="width:24px;height:24px;border-radius:50%;" onerror="this.style.display='none'"> ${r.name}</td><td>${r.class}-${r.section}</td><td>${evMap[r.eventId]||'—'}</td><td><span class="badge ${bc}">${r.status}</span></td><td style="font-size:11px;">${date}</td></tr>`;
+  });
+}
+
+function loadApprovals(){
+  onSnapshot(query(collection(db,'announcements'),where('approved','==',false)),snap=>{
+    const list=document.getElementById('pendingApprovals');list.innerHTML='';
+    if(snap.empty){list.innerHTML='<p style="color:var(--text-muted);font-size:13px;">No pending approvals.</p>';return;}
+    snap.forEach(d=>{
+      const a=d.data();
+      const el=document.createElement('div');
+      el.style.cssText='padding:14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;margin-bottom:10px;';
+      el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;"><div style="flex:1;"><strong style="font-size:14px;">${a.title}</strong><p style="font-size:12px;color:var(--text-muted);margin-top:4px;line-height:1.6;">${a.body}</p><p style="font-size:11px;color:var(--gold-dark);margin-top:6px;">By: ${a.senderName||'Event Head'} — ${a.createdAt?.toDate?.().toLocaleDateString('en-IN')||''}</p></div><div style="display:flex;gap:8px;flex-shrink:0;"><button class="btn-gold" style="font-size:11px;padding:6px 14px;" onclick="approveAnn('${d.id}')">✅ Approve</button><button class="btn-danger" style="font-size:11px;" onclick="rejectAnn('${d.id}')">🗑 Reject</button></div></div>`;
+      list.appendChild(el);
+    });
+  });
+}
+
+window.approveAnn=async id=>{await updateDoc(doc(db,'announcements',id),{approved:true,approvedBy:cu.uid,approvedAt:serverTimestamp()});toast('Announcement approved.','success');};
+window.rejectAnn=async id=>{if(!confirm('Reject and delete this announcement?'))return;await deleteDoc(doc(db,'announcements',id));toast('Rejected.','success');};
+
+function loadAnnouncements(){
+  document.getElementById('postAnnBtn').onclick=async()=>{
+    const title=document.getElementById('annTitle').value.trim();
+    const body=document.getElementById('annBody').value.trim();
+    const target=document.getElementById('annTarget').value;
+    if(!title||!body){toast('Title and body required.','error');return;}
+    await addDoc(collection(db,'announcements'),{title,body,targetPublic:target==='public',targetRole:target,senderName:cu.displayName||'',senderRole:'Teacher-in-Charge',createdBy:cu.uid,approved:true,createdAt:serverTimestamp()});
+    toast('Announcement posted.','success');
+    document.getElementById('annTitle').value='';document.getElementById('annBody').value='';
+  };
+  onSnapshot(query(collection(db,'announcements'),where('createdBy','==',cu?.uid||''),orderBy('createdAt','desc')),snap=>{
+    const list=document.getElementById('annList');list.innerHTML='';
+    if(snap.empty){list.innerHTML='<p style="color:var(--text-muted);font-size:13px;">None yet.</p>';return;}
+    snap.forEach(d=>{
+      const a=d.data();
+      const el=document.createElement('div');el.className='ann-item';
+      el.innerHTML=`<div class="ann-item-title">${a.title}</div><div class="ann-item-body">${a.body}</div><div class="ann-item-meta">${a.createdAt?.toDate?.().toLocaleDateString('en-IN')||''}</div>`;
+      list.appendChild(el);
+    });
+  });
+}
+
+async function loadConversations(){
+  const convList=document.getElementById('convList');convList.innerHTML='';
+  // Management group
+  const groups=[{id:'teacher_core_it',name:'Management Group',role:'Core + IT + Teacher',img:''},
+    {id:'management_eventhead',name:'All Event Heads',role:'Group Chat',img:''}];
+  groups.forEach(g=>{
+    const item=document.createElement('div');
+    item.style.cssText='display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;border-bottom:1px solid var(--border);';
+    item.innerHTML=`<div style="width:30px;height:30px;border-radius:50%;background:var(--green-mid);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">👥</div><div><div style="font-size:13px;font-weight:600;">${g.name}</div><div style="font-size:11px;color:var(--text-muted);">${g.role}</div></div>`;
+    item.onclick=()=>openChat(g.id,g.name,g.role,'');
+    convList.appendChild(item);
+  });
+  // Individual event heads
+  const ehSnap=await getDocs(query(collection(db,'users'),where('role','==','Event Head')));
+  ehSnap.forEach(d=>{
+    const u=d.data();
+    const item=document.createElement('div');
+    item.style.cssText='display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;border-bottom:1px solid var(--border);';
+    item.innerHTML=`<img src="${u.profilePic||''}" style="width:30px;height:30px;border-radius:50%;border:1px solid var(--border);object-fit:cover;" onerror="this.src=''" alt=""><div><div style="font-size:13px;font-weight:600;">${u.name||u.email}</div><div style="font-size:11px;color:var(--text-muted);">Event Head · ${u.assignedEventName||''}</div></div>`;
+    item.onclick=()=>openChat(`teacher_eh_${d.id}`,u.name||u.email,'Event Head',u.profilePic||'');
+    convList.appendChild(item);
+  });
+}
+
+function openChat(chatId,name,role,img){
+  activeChatId=chatId;
+  document.getElementById('chatHeaderName').textContent=name;
+  document.getElementById('chatHeaderRole').textContent=role;
+  document.getElementById('chatHeaderImg').src=img;
+  if(chatUnsub)chatUnsub();
+  setDoc(doc(db,'chats',chatId),{type:'teacher_chat',members:[cu.uid]},{merge:true});
+  chatUnsub=onSnapshot(query(collection(db,'chats',chatId,'messages'),orderBy('sentAt','asc')),snap=>{
+    const area=document.getElementById('chatArea');area.innerHTML='';
+    if(snap.empty){area.innerHTML='<p style="color:var(--text-muted);font-size:13px;text-align:center;padding:28px;">No messages yet.</p>';return;}
+    snap.forEach(d=>{
+      const m=d.data();const isOwn=m.senderId===cu.uid;
+      const b=document.createElement('div');b.className=isOwn?'bubble-out':'bubble-in';
+      const t=m.sentAt?.toDate?.().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})||'';
+      b.innerHTML=`${!isOwn?`<div class="b-sender">${m.senderName}</div><div class="b-role">${m.senderRole||''}</div>`:''}<div>${m.text}</div><div class="b-time">${t}</div>`;
+      area.appendChild(b);
+    });
+    area.scrollTop=area.scrollHeight;
+  });
+}
+
+document.getElementById('sendBtn').onclick=sendMsg;
+document.getElementById('chatInput').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey)sendMsg();};
+
+async function sendMsg(){
+  if(!activeChatId){toast('Select a conversation.','error');return;}
+  const input=document.getElementById('chatInput');const text=input.value.trim();
+  if(!text)return;input.value='';
+  await addDoc(collection(db,'chats',activeChatId,'messages'),{senderId:cu.uid,senderName:cu.displayName||'',senderRole:'Teacher-in-Charge',text,sentAt:serverTimestamp()});
+}
+
+function loadReports(){
+  const list=document.getElementById('reportEventsList');list.innerHTML='';
+  allEvents.forEach(ev=>{
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;';
+    row.innerHTML=`<div><strong style="font-size:14px;">${ev.name}</strong><p style="font-size:12px;color:var(--text-muted);">${ev.category||''}</p></div><button class="btn-outline" onclick="exportEvent('${ev.id}','${ev.name}')">⬇ Export CSV</button>`;
+    list.appendChild(row);
+  });
+  if(!allEvents.length)list.innerHTML='<p style="color:var(--text-muted);">No events found.</p>';
+}
+
+window.exportAll=async()=>{
+  const evMap={};allEvents.forEach(e=>evMap[e.id]=e.name);
+  const rows=[['Name','Class','Section','Roll','Email','Event','Status','Call','Registered']];
+  allRegs.forEach(r=>rows.push([r.name,r.class,r.section,r.roll,r.email,evMap[r.eventId]||r.eventId,r.status,r.callNo,r.createdAt?.toDate?.().toLocaleDateString('en-IN')||'']));
+  dlCSV(rows,'all_registrations.csv');toast('Downloaded.','success');
+};
+
+window.exportEvent=async(eid,ename)=>{
+  const snap=await getDocs(query(collection(db,'registrations'),where('eventId','==',eid)));
+  const rows=[['Name','Class','Section','Roll','Email','Status','Call','Registered']];
+  snap.forEach(d=>{const r=d.data();rows.push([r.name,r.class,r.section,r.roll,r.email,r.status,r.callNo,r.createdAt?.toDate?.().toLocaleDateString('en-IN')||'']);});
+  dlCSV(rows,`${ename.replace(/\s/g,'_')}.csv`);toast('Downloaded.','success');
+};
+
+function dlCSV(rows,fname){
+  const csv=rows.map(r=>r.map(c=>`"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=fname;a.click();
+}
+
+document.querySelectorAll('.nav-item[data-page]').forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('page-'+btn.dataset.page).classList.add('active');
+  };
+});
+
+document.getElementById('logoutBtn').onclick=async()=>{await signOut(auth);sessionStorage.clear();window.location.href='portal-login.html';};
+</script>
+</body>
+</html>
