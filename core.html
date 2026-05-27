@@ -1,450 +1,488 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Core Team Portal — Critically Yours</title><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"><style>  :root{--gold:#C9A84C;--gold-light:#E8C97A;--gold-dark:#9A7A2E;--green:#2D5016;--green-mid:#3D6B1F;--green-light:#4E8A28;--green-pale:#8FBC5A;--bg-dark:#0D1A06;--bg-card:#111E07;--text-light:#F5F0E8;--text-muted:#B8B09A;--border:rgba(201,168,76,0.25);}  *{margin:0;padding:0;box-sizing:border-box;}  body{background:var(--bg-dark);color:var(--text-light);font-family:'Montserrat',sans-serif;min-height:100vh;}  .shell{display:flex;min-height:100vh;}  .sidebar{width:256px;background:rgba(0,0,0,0.32);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto;}  .sb-logo{padding:22px 20px;border-bottom:1px solid var(--border);}  .sb-logo-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--gold);}  .sb-logo-role{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--green-pale);margin-top:2px;}  .sb-user{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--border);}  .sb-user img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid var(--gold-dark);flex-shrink:0;}  .sb-user-name{font-size:13px;font-weight:600;color:var(--text-light);}  .sb-user-tag{font-size:10px;color:var(--gold);}  .sb-nav{flex:1;padding:12px 0;}  .nav-item{display:flex;align-items:center;gap:11px;padding:11px 20px;color:var(--text-muted);font-size:13px;font-weight:500;cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:'Montserrat',sans-serif;transition:all 0.2s;}  .nav-item:hover{color:var(--text-light);background:rgba(255,255,255,0.03);}  .nav-item.active{color:var(--gold);background:rgba(201,168,76,0.08);border-right:3px solid var(--gold);}  .sb-bottom{padding:14px 20px;border-top:1px solid var(--border);}  .logout-btn{display:flex;align-items:center;gap:9px;color:var(--text-muted);font-size:13px;cursor:pointer;background:none;border:none;font-family:'Montserrat',sans-serif;}  .logout-btn:hover{color:#E05555;}  .main{flex:1;margin-left:256px;padding:28px 32px;min-height:100vh;overflow-x:hidden;}  .page{display:none;}  .page.active{display:block;}  .page-hdr{margin-bottom:24px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;}  .page-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--text-light);}  .page-sub{font-size:12px;color:var(--text-muted);margin-top:3px;}  .card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:18px;}  .card-title{font-size:12px;font-weight:600;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;}  .btn-gold{background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--bg-dark);border:none;border-radius:6px;padding:9px 20px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;}  .btn-gold:hover{opacity:0.88;}  .btn-outline{background:transparent;color:var(--gold);border:1px solid var(--gold);border-radius:6px;padding:8px 18px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;}  .btn-danger{background:rgba(224,85,85,0.1);color:#E05555;border:1px solid rgba(224,85,85,0.3);border-radius:6px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;}  .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}  .b-orange{background:rgba(255,166,0,0.15);color:#FFA600;border:1px solid rgba(255,166,0,0.3);}  .b-green{background:rgba(143,188,90,0.15);color:#8FBC5A;border:1px solid rgba(143,188,90,0.3);}  .b-red{background:rgba(224,85,85,0.15);color:#E05555;border:1px solid rgba(224,85,85,0.3);}  .b-gold{background:rgba(201,168,76,0.15);color:var(--gold);border:1px solid rgba(201,168,76,0.3);}  .form-group{margin-bottom:14px;}  .form-label{display:block;font-size:10px;font-weight:700;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:5px;text-transform:uppercase;}  .form-input,.form-select,.form-textarea{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:6px;color:var(--text-light);padding:10px 13px;font-size:13px;font-family:'Montserrat',sans-serif;outline:none;transition:border-color 0.2s;}  .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold);}  .form-select option{background:var(--bg-dark);}  .form-textarea{resize:vertical;}  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}  .stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:18px;}  .stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:18px;text-align:center;}  .stat-num{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--gold);}  .stat-lbl{font-size:10px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px;}  .table-wrap{overflow-x:auto;}  table{width:100%;border-collapse:collapse;}  th{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);}  td{padding:11px 14px;font-size:13px;color:var(--text-light);border-bottom:1px solid rgba(201,168,76,0.07);}  .chat-wrap{height:460px;display:flex;flex-direction:column;}  .chat-area{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;}  .bubble-out{align-self:flex-end;background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--bg-dark);max-width:68%;border-radius:12px 12px 2px 12px;padding:10px 14px;font-size:13px;}  .bubble-in{align-self:flex-start;background:rgba(255,255,255,0.06);max-width:68%;border-radius:12px 12px 12px 2px;padding:10px 14px;font-size:13px;}  .b-sender{font-size:11px;font-weight:600;color:var(--gold);margin-bottom:2px;}  .b-time{font-size:10px;opacity:0.6;margin-top:3px;}  .chat-input-row{display:flex;gap:10px;padding:12px;border-top:1px solid var(--border);}  .chat-input{flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:10px 13px;color:var(--text-light);font-size:13px;font-family:'Montserrat',sans-serif;outline:none;}  .chat-input:focus{border-color:var(--gold);}  .send-btn{background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--bg-dark);border:none;border-radius:8px;padding:10px 16px;cursor:pointer;font-size:13px;font-weight:600;}  .spinner{width:15px;height:15px;border:2px solid rgba(201,168,76,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px;}  @keyframes spin{to{transform:rotate(360deg);}}  .toast{position:fixed;bottom:24px;right:24px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:12px 18px;font-size:12px;color:var(--text-light);z-index:9000;max-width:300px;transform:translateY(10px);opacity:0;transition:all 0.3s;pointer-events:none;}  .toast.show{transform:translateY(0);opacity:1;}  .toast.error{border-left:3px solid #E05555;}  .toast.success{border-left:3px solid var(--green-pale);}  @media(max-width:768px){.sidebar{position:relative;width:100%;height:auto;}.main{margin-left:0;padding:20px 16px;}.shell{flex-direction:column;}.form-row{grid-template-columns:1fr;}}</style></head><body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Core Team — Critically Yours</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Josefin+Sans:wght@200;300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<style>
+:root{--gold:#C9A84C;--gold-dim:#8B6914;--green:#4A7C59;--green-light:#6BAA7D;--red:#C0392B;--red-light:#e74c3c;--bg-dark:#080A06;--bg-sidebar:#0D0F0B;--bg-card:rgba(255,255,255,0.04);--bg-card-hover:rgba(255,255,255,0.07);--glass:rgba(201,168,76,0.08);--text-primary:#F5EDD6;--text-secondary:#A89060;--border:rgba(201,168,76,0.15);}
+[data-theme="light"]{--bg-dark:#F0EBE0;--bg-sidebar:#E8E0D0;--bg-card:rgba(0,0,0,0.04);--bg-card-hover:rgba(0,0,0,0.07);--glass:rgba(201,168,76,0.1);--text-primary:#1A1208;--text-secondary:#6B5020;--border:rgba(201,168,76,0.25);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(--text-primary);min-height:100vh;display:flex;transition:background 0.3s,color 0.3s;}
+.sidebar{width:230px;flex-shrink:0;background:var(--bg-sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;position:sticky;top:0;overflow-y:auto;}
+.sb-logo{padding:22px 18px;border-bottom:1px solid var(--border);font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--gold);letter-spacing:2px;}
+.sb-logo span{display:block;font-size:0.55rem;letter-spacing:3px;color:var(--text-secondary);margin-top:2px;font-family:'Josefin Sans',sans-serif;}
+.sb-user{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.sb-avatar{width:36px;height:36px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;flex-shrink:0;}
+.sb-name{font-size:0.75rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sb-role{font-size:0.58rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
+.sb-nav{flex:1;padding:10px 0;}
+.sb-section{font-size:0.52rem;letter-spacing:3px;color:var(--text-secondary);text-transform:uppercase;padding:10px 18px 5px;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:10px 18px;font-size:0.7rem;letter-spacing:1px;color:var(--text-secondary);cursor:pointer;transition:all 0.2s;border:none;background:none;width:100%;text-align:left;}
+.sb-item:hover,.sb-item.active{color:var(--gold);background:var(--glass);}
+.sb-item.active{border-left:2px solid var(--gold);}
+.sb-bottom{padding:14px 18px;border-top:1px solid var(--border);}
+.sb-signout{width:100%;padding:8px;border-radius:6px;background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.3);color:var(--red-light);font-family:'Josefin Sans',sans-serif;font-size:0.62rem;letter-spacing:2px;cursor:pointer;}
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column;}
+.topbar{padding:14px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg-dark);position:sticky;top:0;z-index:10;}
+.topbar-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--text-primary);}
+.theme-toggle{width:32px;height:32px;border-radius:50%;background:var(--bg-card);border:1px solid var(--border);color:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.content{padding:24px;flex:1;}
+.panel{display:none;}.panel.active{display:block;animation:fadeUp 0.4s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 
-<div id="portalLoader" style="position:fixed;inset:0;background:#0D1A06;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
-  <span class="spinner" style="width:32px;height:32px;border-width:3px;"></span>
-  <p style="font-family:'Montserrat',sans-serif;font-size:12px;color:#C9A84C;letter-spacing:1px;text-transform:uppercase;">Authenticating Session...</p>
-</div>
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:24px;}
+.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:18px;}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;color:var(--gold);line-height:1;}
+.stat-label{font-size:0.58rem;letter-spacing:2px;color:var(--text-secondary);text-transform:uppercase;margin-top:6px;}
 
-<div class="shell" id="mainShell" style="display:none;">
-  <div class="sidebar">
-    <div class="sb-logo">
-      <div class="sb-logo-name">Critically Yours</div>
-      <div class="sb-logo-role">Core Team Portal</div>
-    </div>
-    <div class="sb-user">
-      <img src="" id="sbImg" alt="">
-      <div><div class="sb-user-name" id="sbName">Loading...</div><div class="sb-user-tag">⚙️ Core Team</div></div>
-    </div>
-    <nav class="sb-nav">
-      <button class="nav-item active" data-page="dashboard"><span>📊</span> Dashboard</button>
-      <button class="nav-item" data-page="events"><span>🎭</span> Events</button>
-      <button class="nav-item" data-page="registrations"><span>📋</span> Registrations</button>
-      <button class="nav-item" data-page="announcements"><span>📢</span> Announcements</button>
-      <button class="nav-item" data-page="messages"><span>💬</span> Messages</button>
-      <button class="nav-item" data-page="settings"><span>⚙️</span> Settings</button>
-    </nav>
-    <div class="sb-bottom"><button class="logout-btn" id="logoutBtn">🚪 Sign Out</button></div>
-  </div>
+.table-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px;}
+.table-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.table-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--text-primary);}
+.search-box{padding:7px 11px;border-radius:6px;background:var(--bg-dark);border:1px solid var(--border);color:var(--text-primary);font-family:'Josefin Sans',sans-serif;font-size:0.72rem;outline:none;width:180px;}
+.search-box:focus{border-color:var(--gold);}
+table{width:100%;border-collapse:collapse;}
+th{font-size:0.58rem;letter-spacing:2px;color:var(--text-secondary);text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);}
+td{font-size:0.76rem;padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text-primary);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg-card-hover);}
+.badge{display:inline-block;padding:2px 9px;border-radius:10px;font-size:0.57rem;letter-spacing:1px;text-transform:uppercase;}
+.badge-pending{background:rgba(201,168,76,0.15);color:var(--gold);border:1px solid rgba(201,168,76,0.3);}
+.badge-selected{background:rgba(74,124,89,0.15);color:var(--green-light);border:1px solid rgba(74,124,89,0.3);}
+.badge-rejected{background:rgba(192,57,43,0.15);color:var(--red-light);border:1px solid rgba(192,57,43,0.3);}
 
-  <div class="main">
-    <div class="page active" id="page-dashboard">
-      <div class="page-hdr">
-        <div><h1 class="page-title">Dashboard</h1><p class="page-sub">Core team overview of the fest.</p></div>
-        <button class="btn-outline" onclick="exportAll()">⬇ Export All</button>
-      </div>
-      <div class="stats-row">
-        <div class="stat-card"><div class="stat-num" id="st-total">—</div><div class="stat-lbl">Registrations</div></div>
-        <div class="stat-card"><div class="stat-num" id="st-sel">—</div><div class="stat-lbl">Selected</div></div>
-        <div class="stat-card"><div class="stat-num" id="st-pend">—</div><div class="stat-lbl">Pending</div></div>
-        <div class="stat-card"><div class="stat-num" id="st-events">—</div><div class="stat-lbl">Events</div></div>
-      </div>
-      <div class="card">
-        <div class="card-title">Event-wise Summary</div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>Event</th><th>Category</th><th>Registered</th><th>Selected</th><th>Pending</th></tr></thead>
-          <tbody id="evSummary"><tr><td colspan="5"><span class="spinner"></span></td></tr></tbody>
-        </table></div>
-      </div>
-    </div>
+.form-section{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:22px;margin-bottom:20px;}
+.form-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--text-primary);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.fg{margin-bottom:14px;}
+.fg label{display:block;font-size:0.6rem;letter-spacing:2px;color:var(--text-secondary);text-transform:uppercase;margin-bottom:6px;}
+.fg input,.fg select,.fg textarea{width:100%;padding:10px 12px;border-radius:6px;background:var(--bg-dark);border:1px solid var(--border);color:var(--text-primary);font-family:'Josefin Sans',sans-serif;font-size:0.82rem;outline:none;transition:border 0.2s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);}
+.fg select option{background:var(--bg-dark);}
+.fg textarea{resize:vertical;min-height:70px;background:var(--bg-dark);}
+.btn-primary{padding:10px 24px;border-radius:6px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:#0A0C08;font-family:'Josefin Sans',sans-serif;font-size:0.7rem;font-weight:600;letter-spacing:2px;border:none;cursor:pointer;transition:all 0.2s;}
+.btn-primary:hover{opacity:0.9;}
+.msg{padding:10px 14px;border-radius:6px;font-size:0.76rem;margin-top:10px;display:none;}
+.msg.success{background:rgba(74,124,89,0.15);border:1px solid rgba(74,124,89,0.3);color:var(--green-light);display:block;}
+.msg.error{background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.3);color:var(--red-light);display:block;}
 
-    <div class="page" id="page-events">
-      <div class="page-hdr">
-        <div><h1 class="page-title">Events</h1><p class="page-sub">Manage fest events.</p></div>
-        <button class="btn-gold" id="addEvBtn">+ Add Event</button>
-      </div>
-      <div class="card" id="evList"><span class="spinner"></span></div>
-    </div>
+.ann-card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:10px;}
+.ann-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.ann-from{font-size:0.6rem;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase;}
+.ann-time{font-size:0.6rem;color:var(--text-secondary);}
+.ann-title-t{font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;}
+.ann-body-t{font-family:'Cormorant Garamond',serif;font-size:0.95rem;color:var(--text-secondary);line-height:1.6;}
 
-    <div class="page" id="page-registrations">
-      <div class="page-hdr"><div><h1 class="page-title">Registrations</h1></div><button class="btn-outline" onclick="exportAll()">⬇ CSV</button></div>
-      <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
-        <input type="text" class="form-input" id="regSearch" placeholder="Search…" style="max-width:260px;">
-        <select class="form-select" id="regEvFilter" style="max-width:200px;"><option value="">All Events</option></select>
-        <select class="form-select" id="regStFilter" style="max-width:180px;"><option value="">All Status</option><option>Audition Pending</option><option>Selected</option><option>Rejected</option></select>
-      </div>
-      <div class="card"><div class="table-wrap"><table>
-        <thead><tr><th>Name</th><th>Class</th><th>Event</th><th>Status</th><th>Date</th></tr></thead>
-        <tbody id="regTable"><tr><td colspan="5"><span class="spinner"></span></td></tr></tbody>
-      </table></div></div>
-    </div>
+.ev-breakdown{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:20px;}
+.ev-stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:16px;}
+.ev-stat-name{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--text-primary);margin-bottom:10px;}
+.ev-stat-row{display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-secondary);margin-bottom:4px;}
+.ev-stat-row b{color:var(--gold);}
 
-    <div class="page" id="page-announcements">
-      <div class="page-hdr"><div><h1 class="page-title">Announcements</h1></div></div>
-      <div class="card">
-        <div class="card-title">Post Announcement</div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Title</label><input type="text" class="form-input" id="annTitle" placeholder="Title"></div>
-          <div class="form-group"><label class="form-label">Target</label>
-            <select class="form-select" id="annTarget">
-              <option value="all">All Registered</option>
-              <option value="selected">Selected Only</option>
-              <option value="eventhead">Event Heads</option>
-              <option value="public">Public Website</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group"><label class="form-label">Body</label><textarea class="form-textarea" id="annBody" rows="4"></textarea></div>
-        <button class="btn-gold" id="postAnnBtn">Post</button>
-      </div>
-      <div class="card"><div class="card-title">Recent Announcements</div><div id="annList"><span class="spinner"></span></div></div>
-    </div>
+.qr-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:28px;text-align:center;max-width:280px;margin:0 auto;}
 
-    <div class="page" id="page-messages">
-      <div class="page-hdr"><div><h1 class="page-title">Messages</h1></div></div>
-      <div style="display:grid;grid-template-columns:240px 1fr;gap:18px;height:520px;">
-        <div class="card" style="padding:0;overflow-y:auto;height:520px;">
-          <div style="padding:11px 14px;border-bottom:1px solid var(--border);font-size:11px;font-weight:600;text-transform:uppercase;color:var(--text-muted);">Conversations</div>
-          <div id="convList"></div>
-        </div>
-        <div class="card" style="padding:0;display:flex;flex-direction:column;height:520px;">
-          <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
-            <img src="" id="chatHdrImg" style="width:30px;height:30px;border-radius:50%;border:1px solid var(--border);" alt="">
-            <div><div style="font-size:13px;font-weight:600;" id="chatHdrName">Select a conversation</div><div style="font-size:11px;color:var(--text-muted);" id="chatHdrRole"></div></div>
-          </div>
-          <div class="chat-area" id="chatArea"></div>
-          <div class="chat-input-row">
-            <input type="text" class="chat-input" id="chatInput" placeholder="Type a message…" maxlength="500">
-            <button class="send-btn" id="sendBtn">Send</button>
-          </div>
-        </div>
-      </div>
-    </div>
+.ticket-card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:10px;}
+.ticket-cat{font-size:0.58rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
+.ticket-body-t{font-size:0.78rem;color:var(--text-secondary);line-height:1.6;margin:6px 0;}
 
-    <div class="page" id="page-settings">
-      <div class="page-hdr"><div><h1 class="page-title">Fest Settings</h1><p class="page-sub">Manage global fest details, poster and toggles.</p></div></div>
-      <div class="card">
-        <div class="card-title">Fest Details</div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Fest Subtitle</label><input type="text" class="form-input" id="set-subtitle" placeholder="The Intraschool Humanities Fest"></div>
-          <div class="form-group"><label class="form-label">Event Date (ISO)</label><input type="datetime-local" class="form-input" id="set-date"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Venue Name</label><input type="text" class="form-input" id="set-venue"></div>
-          <div class="form-group"><label class="form-label">Venue Address</label><input type="text" class="form-input" id="set-addr"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Date Display</label><input type="text" class="form-input" id="set-dateDisp" placeholder="e.g. 15 January 2026"></div>
-          <div class="form-group"><label class="form-label">Time Display</label><input type="text" class="form-input" id="set-time" placeholder="e.g. 9:00 AM onwards"></div>
-        </div>
-        <div class="form-group"><label class="form-label">Hero Poster URL (any image URL or relative path)</label><input type="text" class="form-input" id="set-poster" placeholder="https://… or poster.jpg"></div>
-        <div class="form-group"><label class="form-label">Poster Caption</label><input type="text" class="form-input" id="set-caption" placeholder="Optional caption below poster"></div>
-        <div class="form-group"><label class="form-label">Logo URL</label><input type="text" class="form-input" id="set-logo" placeholder="https://… or logo.png"></div>
-        <button class="btn-gold" id="saveFestBtn">Save Fest Details</button>
-      </div>
-      <div class="card">
-        <div class="card-title">Toggles</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);">
-          <div><div style="font-size:14px;font-weight:600;">Unofficial Banner</div><div style="font-size:12px;color:var(--text-muted);">Show "not official website" notice on public page.</div></div>
-          <label style="position:relative;width:44px;height:24px;flex-shrink:0;"><input type="checkbox" id="tog-banner" style="opacity:0;width:0;height:0;"><span id="tog-banner-slider" style="position:absolute;inset:0;background:rgba(255,255,255,0.1);border-radius:12px;cursor:pointer;transition:background 0.2s;"><span id="tog-banner-dot" style="position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform 0.2s;"></span></span></label>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
-          <div><div style="font-size:14px;font-weight:600;">Enrollment Open</div><div style="font-size:12px;color:var(--text-muted);">Allow students to register for events.</div></div>
-          <label style="position:relative;width:44px;height:24px;flex-shrink:0;"><input type="checkbox" id="tog-enroll" checked style="opacity:0;width:0;height:0;"><span id="tog-enroll-slider" style="position:absolute;inset:0;background:rgba(255,255,255,0.1);border-radius:12px;cursor:pointer;transition:background 0.2s;"><span id="tog-enroll-dot" style="position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform 0.2s;"></span></span></label>
-        </div>
-        <div class="form-group" style="margin-top:10px;"><label class="form-label">Custom Banner Text</label><input type="text" class="form-input" id="set-bannerText"></div>
-        <button class="btn-gold" id="saveTogglesBtn">Save Toggles</button>
-      </div>
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);}
+.toggle-row:last-child{border-bottom:none;}
+.toggle-switch{position:relative;width:44px;height:24px;flex-shrink:0;}
+.toggle-switch input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:var(--border);border-radius:24px;transition:0.3s;}
+.toggle-slider:before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#888;border-radius:50%;transition:0.3s;}
+.toggle-switch input:checked + .toggle-slider{background:var(--green);}
+.toggle-switch input:checked + .toggle-slider:before{transform:translateX(20px);background:white;}
+
+.empty-state{text-align:center;padding:40px;color:var(--text-secondary);font-size:0.8rem;}
+
+@media(max-width:640px){
+  body{flex-direction:column;}
+  .sidebar{width:100%;height:56px;flex-direction:row;align-items:center;padding:0 16px;overflow:visible;position:sticky;top:0;z-index:100;}
+  .sb-logo{padding:0;border:none;flex:1;}
+  .sb-nav,.sb-user,.sb-section,.sb-bottom{display:none;}
+  .sidebar.open .sb-nav,.sidebar.open .sb-bottom,.sidebar.open .sb-user{display:flex;flex-direction:column;position:fixed;top:56px;left:0;right:0;background:var(--bg-sidebar);border-bottom:1px solid var(--border);z-index:99;max-height:80vh;overflow-y:auto;}
+  .sidebar.open .sb-nav,.sidebar.open .sb-bottom{display:block;}
+  .mobile-btn{display:flex;}
+}
+.mobile-btn{display:none;width:34px;height:34px;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--gold);cursor:pointer;font-size:17px;}
+</style>
+</head>
+<body>
+
+<div class="sidebar" id="sidebar">
+  <div class="sb-logo">Critically Yours<span>Core Team Portal</span></div>
+  <div class="sb-user">
+    <img class="sb-avatar" id="sbAvatar" src="" alt="">
+    <div style="flex:1;min-width:0;">
+      <div class="sb-name" id="sbName">Loading...</div>
+      <div class="sb-role">Core Team</div>
     </div>
   </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Overview</div>
+    <button class="sb-item active" onclick="showPanel('dashboard',this)">&#9670; Dashboard</button>
+    <button class="sb-item" onclick="showPanel('analytics',this)">&#9636; Analytics</button>
+    <div class="sb-section">Management</div>
+    <button class="sb-item" onclick="showPanel('registrations',this)">&#9673; Registrations</button>
+    <button class="sb-item" onclick="showPanel('announcements',this)">&#9670; Announcements</button>
+    <button class="sb-item" onclick="showPanel('events',this)">&#9672; Events</button>
+    <button class="sb-item" onclick="showPanel('tickets',this)">&#9873; Tickets</button>
+    <div class="sb-section">Operations</div>
+    <button class="sb-item" onclick="showPanel('settings',this)">&#9881; Settings</button>
+    <button class="sb-item" onclick="showPanel('export',this)">&#8659; Export</button>
+    <button class="sb-item" onclick="showPanel('qr',this)">&#9632; My QR / ID</button>
+  </nav>
+  <div class="sb-bottom">
+    <button class="sb-signout" onclick="doSignOut()">Sign Out</button>
+  </div>
+  <button class="mobile-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">&#9776;</button>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbarTitle">Dashboard</div>
+    <button class="theme-toggle" id="themeToggle">&#9790;</button>
+  </div>
+  <div class="content">
 
-<div id="evModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:2000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px);">
-  <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:36px;max-width:500px;width:100%;position:relative;max-height:90vh;overflow-y:auto;">
-    <button onclick="document.getElementById('evModal').style.display='none'" style="position:absolute;top:14px;right:16px;background:none;border:none;color:var(--text-muted);font-size:22px;cursor:pointer;">×</button>
-    <h2 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--text-light);margin-bottom:20px;" id="evModalTitle">Add Event</h2>
-    <div class="form-group"><label class="form-label">Name *</label><input type="text" class="form-input" id="ev-name"></div>
-    <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="ev-desc" rows="3"></textarea></div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Category</label><input type="text" class="form-input" id="ev-cat"></div>
-      <div class="form-group"><label class="form-label">Max Participants</label><input type="number" class="form-input" id="ev-max" min="1"></div>
+    <!-- DASHBOARD -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="stat-grid" id="statGrid"></div>
+      <div class="table-wrap">
+        <div class="table-header"><div class="table-title">Recent Registrations</div></div>
+        <table><thead><tr><th>Name</th><th>Event</th><th>Class</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody id="recentBody"><tr><td colspan="5" style="text-align:center;color:var(--text-secondary);padding:24px;">Loading...</td></tr></tbody></table>
+      </div>
     </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Logo File/URL</label><input type="text" class="form-input" id="ev-logo"></div>
-      <div class="form-group"><label class="form-label">Order</label><input type="number" class="form-input" id="ev-order" value="1" min="1"></div>
+
+    <!-- ANALYTICS -->
+    <div class="panel" id="panel-analytics">
+      <div class="ev-breakdown" id="evBreakdown"></div>
     </div>
-    <input type="hidden" id="ev-editId">
-    <button class="btn-gold" id="saveEvBtn" style="width:100%;margin-top:6px;">Save Event</button>
+
+    <!-- REGISTRATIONS -->
+    <div class="panel" id="panel-registrations">
+      <div class="table-wrap">
+        <div class="table-header">
+          <div class="table-title">All Registrations</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <select id="regEventFilter" onchange="loadAllRegs()" style="padding:7px 10px;border-radius:6px;background:var(--bg-dark);border:1px solid var(--border);color:var(--text-primary);font-size:0.72rem;outline:none;"><option value="">All Events</option></select>
+            <input class="search-box" placeholder="Search..." oninput="filterTable('allRegsBody',this.value)">
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table><thead><tr><th>Name</th><th>Event</th><th>Class</th><th>Roll</th><th>Status</th><th>Registered</th></tr></thead>
+          <tbody id="allRegsBody"><tr><td colspan="6" style="text-align:center;color:var(--text-secondary);padding:20px;">Loading...</td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANNOUNCEMENTS -->
+    <div class="panel" id="panel-announcements">
+      <div class="form-section">
+        <div class="form-title">Post Announcement</div>
+        <div class="fg"><label>Title</label><input type="text" id="annTitle" placeholder="Announcement title"></div>
+        <div class="fg"><label>Body</label><textarea id="annBody" placeholder="Content..."></textarea></div>
+        <div class="fg">
+          <label>Target Audience</label>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;" id="targetCheckboxes">
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--text-secondary);cursor:pointer;"><input type="checkbox" value="public" style="accent-color:var(--gold);"> Public</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--text-secondary);cursor:pointer;"><input type="checkbox" value="participant" style="accent-color:var(--gold);"> Participants</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--text-secondary);cursor:pointer;"><input type="checkbox" value="event_head" style="accent-color:var(--gold);"> Event Heads</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--text-secondary);cursor:pointer;"><input type="checkbox" value="volunteer" style="accent-color:var(--gold);"> Volunteers</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--text-secondary);cursor:pointer;"><input type="checkbox" value="media" style="accent-color:var(--gold);"> Media Team</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--text-secondary);cursor:pointer;"><input type="checkbox" value="all" style="accent-color:var(--gold);"> All</label>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="postAnnouncement()">Post Announcement</button>
+        <div class="msg" id="annMsg"></div>
+      </div>
+      <div id="annList"></div>
+    </div>
+
+    <!-- EVENTS -->
+    <div class="panel" id="panel-events">
+      <div class="form-section">
+        <div class="form-title">Add / Edit Event</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:14px;">
+          <div class="fg"><label>Event Name</label><input type="text" id="evName" placeholder="Poetry Slam"></div>
+          <div class="fg"><label>Category</label><input type="text" id="evCategory" placeholder="Literary"></div>
+          <div class="fg"><label>Logo File</label><input type="text" id="evLogo" placeholder="poetry_logo.png"></div>
+          <div class="fg"><label>Venue</label><input type="text" id="evVenue" placeholder="Auditorium"></div>
+          <div class="fg"><label>Max Participants</label><input type="number" id="evMax" placeholder="20"></div>
+          <div class="fg"><label>Order</label><input type="number" id="evOrder" placeholder="1"></div>
+        </div>
+        <div class="fg" style="margin-bottom:14px;"><label>Description</label><textarea id="evDesc"></textarea></div>
+        <input type="hidden" id="evEditId">
+        <button class="btn-primary" onclick="saveEvent()">Save Event</button>
+        <div class="msg" id="evMsg"></div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-header"><div class="table-title">Events</div></div>
+        <table><thead><tr><th>Order</th><th>Name</th><th>Category</th><th>Venue</th><th>Actions</th></tr></thead>
+        <tbody id="eventsBody"></tbody></table>
+      </div>
+    </div>
+
+    <!-- TICKETS -->
+    <div class="panel" id="panel-tickets">
+      <div id="ticketsList"><div class="empty-state">Loading tickets...</div></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="panel" id="panel-settings">
+      <div class="form-section">
+        <div class="form-title">Feature Toggles</div>
+        <div class="toggle-row">
+          <div><div style="font-size:0.82rem;font-weight:600;">Enrollment Open</div><div style="font-size:0.68rem;color:var(--text-secondary);">Allow new enrollments</div></div>
+          <label class="toggle-switch"><input type="checkbox" id="toggleEnrollment" onchange="saveToggle('enrollmentOpen',this.checked)"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div><div style="font-size:0.82rem;font-weight:600;">Participant Portal</div><div style="font-size:0.68rem;color:var(--text-secondary);">Toggle participant portal access</div></div>
+          <label class="toggle-switch"><input type="checkbox" id="toggleParticipant" onchange="saveToggle('participantPortalOpen',this.checked)"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div><div style="font-size:0.82rem;font-weight:600;">Volunteer Portal</div><div style="font-size:0.68rem;color:var(--text-secondary);">Toggle volunteer portal access</div></div>
+          <label class="toggle-switch"><input type="checkbox" id="toggleVolunteer" onchange="saveToggle('volunteerPortalOpen',this.checked)"><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPORT -->
+    <div class="panel" id="panel-export">
+      <div class="form-section">
+        <div class="form-title">Export Data</div>
+        <div class="fg"><label>Filter by Event</label><select id="exportEvent"><option value="">All Events</option></select></div>
+        <div class="fg"><label>Filter by Status</label><select id="exportStatus"><option value="">All Status</option><option value="selected">Selected</option><option value="audition_pending">Audition Pending</option><option value="rejected">Rejected</option></select></div>
+        <button class="btn-primary" onclick="exportCSV()">Export CSV</button>
+      </div>
+    </div>
+
+    <!-- QR -->
+    <div class="panel" id="panel-qr">
+      <div class="qr-wrap">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--text-primary);margin-bottom:4px;">Identity Card</div>
+        <div style="font-size:0.65rem;color:var(--text-secondary);">Core Team — Critically Yours</div>
+        <canvas id="qrCanvas"></canvas>
+        <div style="font-size:0.68rem;color:var(--gold);letter-spacing:2px;" id="qrIdLabel"></div>
+        <div style="font-size:0.75rem;color:var(--text-secondary);margin-top:6px;" id="qrNameLabel"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore,doc,getDoc,getDocs,addDoc,updateDoc,deleteDoc,setDoc,collection,onSnapshot,query,where,orderBy,serverTimestamp,limit }  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import {getAuth,onAuthStateChanged,signOut} from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, collection, query, where, getDocs, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-const cfg={apiKey:"AIzaSyCogmTX4tW4EZfTqsMunRu3XuuOTBDKN-E",authDomain:"cys-dpsm.firebaseapp.com",projectId:"cys-dpsm",storageBucket:"cys-dpsm.firebasestorage.app",messagingSenderId:"198853363575",appId:"1:198853363575:web:365ff3bcb9b54b760b4372"};
-const app=initializeApp(cfg);const db=getFirestore(app);const auth=getAuth(app);
-let cu=null,allRegs=[],allEvents=[],activeChatId=null,chatUnsub=null;
+const firebaseConfig = {apiKey:"AIzaSyBKeQxNTRaGsry7vpHZOBOD6CCuvZhBpU0",authDomain:"critically-yours-v5.firebaseapp.com",projectId:"critically-yours-v5",storageBucket:"critically-yours-v5.firebasestorage.app",messagingSenderId:"436240015995",appId:"1:436240015995:web:e646abe16d80d7eab9f8de"};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
-function toast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3500);}
+const themeToggle = document.getElementById('themeToggle');
+const saved = localStorage.getItem('cy_theme')||'dark';
+document.documentElement.setAttribute('data-theme',saved);
+themeToggle.textContent=saved==='dark'?'☀':'☾';
+themeToggle.addEventListener('click',()=>{const t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',t);localStorage.setItem('cy_theme',t);themeToggle.textContent=t==='dark'?'☀':'☾';});
 
-function throwOut() {
-  sessionStorage.clear();
-  window.location.replace('portal-login.html');
-}
+let authUser = null;
+let eventsCache = [];
 
 onAuthStateChanged(auth, async user => {
-  if (!user) {
-    throwOut();
-    return;
+  if (!user) { window.location.href='login.html'; return; }
+  const usersSnap = await getDocs(query(collection(db,'users'), where('email','==',user.email)));
+  const isAdmin = user.email === 'aaravhfs@gmail.com';
+  if (!isAdmin && usersSnap.empty) { alert('Access denied.'); window.location.href='login.html'; return; }
+  let allowed = isAdmin;
+  if (!allowed && !usersSnap.empty) {
+    const roles = usersSnap.docs[0].data().roles||[usersSnap.docs[0].data().role];
+    allowed = roles.some(r=>['core','admin','it_team'].includes(r));
   }
-  
-  try {
-    // Structural Live Database Authorization handshake
-    const ud = await getDoc(doc(db, 'users', user.uid));
-    if (!ud.exists()) {
-      throwOut();
-      return;
-    }
-    
-    const uData = ud.data();
-    const isCoreTeam = uData.role === 'Core Team' || uData.roles?.includes('Core Team');
-    
-    if (!isCoreTeam) {
-      throwOut();
-      return;
-    }
-    
-    // Explicit clearance granted
-    cu = user;
-    sessionStorage.setItem('userRole', 'Core Team');
-    
-    document.getElementById('sbImg').src = cu.photoURL || '';
-    document.getElementById('sbName').textContent = cu.displayName || 'Core Team';
-    
-    initAll();
-  } catch (err) {
-    console.error("Auth security structural failure:", err);
-    throwOut();
-  }
+  if (!allowed) { alert('Access denied: Core Team role required.'); window.location.href='login.html'; return; }
+  authUser = user;
+  document.getElementById('sbAvatar').src = user.photoURL||'';
+  document.getElementById('sbName').textContent = user.displayName||user.email;
+  initCore();
 });
 
-async function initAll(){
-  await loadEventsData();
+async function initCore() {
+  await loadSettings();
+  await loadEvents();
   loadDashboard();
-  loadRegistrationsTab();
+  loadAllRegs();
   loadAnnouncements();
-  loadConversations();
-  loadSettings();
-  
-  // Safely remove structural cover screen layout when data handshakes map correctly
-  document.getElementById('portalLoader').style.display = 'none';
-  document.getElementById('mainShell').style.display = 'flex';
+  loadTickets();
+  loadAnalytics();
+  loadQR();
 }
 
-async function loadEventsData(){
-  const snap=await getDocs(collection(db,'events'));
-  allEvents=[];snap.forEach(d=>allEvents.push({id:d.id,...d.data()}));
-  renderEventsList();
-  const regEvSel=document.getElementById('regEvFilter');
-  regEvSel.innerHTML='<option value="">All Events</option>';
-  allEvents.forEach(e=>{const o=document.createElement('option');o.value=e.id;o.textContent=e.name;regEvSel.appendChild(o);});
-}
+function statusBadge(s){if(s==='selected')return'<span class="badge badge-selected">Selected</span>';if(s==='rejected')return'<span class="badge badge-rejected">Rejected</span>';return'<span class="badge badge-pending">Pending</span>';}
 
-function renderEventsList(){
-  const list=document.getElementById('evList');list.innerHTML='';
-  if(!allEvents.length){list.innerHTML='<p style="color:var(--text-muted);font-size:13px;">No events yet.</p>';return;}
-  allEvents.forEach(ev=>{
-    const row=document.createElement('div');
-    row.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);gap:12px;';
-    row.innerHTML=`<div><strong style="font-size:14px;">${ev.name}</strong><p style="font-size:12px;color:var(--text-muted);">${ev.category||''} ${ev.maxParticipants?'· Max '+ev.maxParticipants:''}</p></div><div style="display:flex;gap:8px;flex-shrink:0;"><button class="btn-outline" style="font-size:11px;padding:5px 12px;" onclick="editEv('${ev.id}')">Edit</button><button class="btn-danger" style="font-size:11px;" onclick="delEv('${ev.id}')">Delete</button></div>`;
-    list.appendChild(row);
+async function loadDashboard() {
+  const regSnap = await getDocs(collection(db,'registrations'));
+  let total=0,pending=0,selected=0,rejected=0;
+  const recent=[];
+  regSnap.forEach(d=>{const r=d.data();total++;if(r.status==='audition_pending')pending++;if(r.status==='selected')selected++;if(r.status==='rejected')rejected++;recent.push({id:d.id,...r});});
+  document.getElementById('statGrid').innerHTML=`
+    <div class="stat-card"><div class="stat-val">${total}</div><div class="stat-label">Total Registered</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--gold);">${pending}</div><div class="stat-label">Audition Pending</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--green-light);">${selected}</div><div class="stat-label">Selected</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--red-light);">${rejected}</div><div class="stat-label">Rejected</div></div>`;
+  recent.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+  const tbody=document.getElementById('recentBody');tbody.innerHTML='';
+  recent.slice(0,10).forEach(r=>{
+    const evName=eventsCache.find(e=>e.id===r.eventId)?.name||'--';
+    const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';
+    tbody.innerHTML+=`<tr><td>${r.name||''}</td><td>${evName}</td><td>${r.class||''} ${r.section||''}</td><td>${statusBadge(r.status)}</td><td>${date}</td></tr>`;
   });
 }
 
-document.getElementById('addEvBtn').onclick=()=>{
-  ['ev-name','ev-desc','ev-cat','ev-logo'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('ev-max').value='';document.getElementById('ev-order').value=allEvents.length+1;
-  document.getElementById('ev-editId').value='';document.getElementById('evModalTitle').textContent='Add Event';
-  document.getElementById('evModal').style.display='flex';
+async function loadAllRegs() {
+  const tbody=document.getElementById('allRegsBody');
+  const evFilter=document.getElementById('regEventFilter').value;
+  tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text-secondary);padding:20px;">Loading...</td></tr>';
+  const snap=await getDocs(query(collection(db,'registrations'),orderBy('createdAt','desc')));
+  tbody.innerHTML='';
+  let found=0;
+  snap.forEach(d=>{
+    const r=d.data();
+    if(evFilter&&r.eventId!==evFilter)return;
+    found++;
+    const evName=eventsCache.find(e=>e.id===r.eventId)?.name||'--';
+    const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';
+    tbody.innerHTML+=`<tr><td>${r.name||''}</td><td>${evName}</td><td>${r.class||''} ${r.section||''}</td><td>${r.rollNumber||''}</td><td>${statusBadge(r.status)}</td><td>${date}</td></tr>`;
+  });
+  if(!found)tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text-secondary);padding:20px;">No registrations found.</td></tr>';
+}
+window.loadAllRegs = loadAllRegs;
+
+async function loadAnalytics() {
+  const regSnap=await getDocs(collection(db,'registrations'));
+  const byEvent={};
+  regSnap.forEach(d=>{const r=d.data();if(!byEvent[r.eventId])byEvent[r.eventId]={total:0,pending:0,selected:0,rejected:0};byEvent[r.eventId].total++;if(r.status==='audition_pending')byEvent[r.eventId].pending++;if(r.status==='selected')byEvent[r.eventId].selected++;if(r.status==='rejected')byEvent[r.eventId].rejected++;});
+  const container=document.getElementById('evBreakdown');
+  container.innerHTML='';
+  Object.entries(byEvent).forEach(([evId,counts])=>{
+    const evName=eventsCache.find(e=>e.id===evId)?.name||evId;
+    container.innerHTML+=`<div class="ev-stat-card"><div class="ev-stat-name">${evName}</div>
+      <div class="ev-stat-row">Total <b>${counts.total}</b></div>
+      <div class="ev-stat-row">Pending <b>${counts.pending}</b></div>
+      <div class="ev-stat-row">Selected <b style="color:var(--green-light);">${counts.selected}</b></div>
+      <div class="ev-stat-row">Rejected <b style="color:var(--red-light);">${counts.rejected}</b></div>
+    </div>`;
+  });
+  if(!Object.keys(byEvent).length)container.innerHTML='<div class="empty-state">No data yet.</div>';
+}
+
+async function loadEvents() {
+  const tbody=document.getElementById('eventsBody');
+  const snap=await getDocs(query(collection(db,'events'),orderBy('order','asc')));
+  eventsCache=[];snap.forEach(d=>eventsCache.push({id:d.id,...d.data()}));
+  tbody.innerHTML='';
+  if(snap.empty){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--text-secondary);padding:20px;">No events.</td></tr>';return;}
+  snap.forEach(d=>{
+    const ev=d.data();
+    tbody.innerHTML+=`<tr><td>${ev.order||''}</td><td>${ev.name||''}</td><td>${ev.category||''}</td><td>${ev.venue||''}</td>
+      <td><button style="padding:5px 12px;border-radius:4px;font-family:'Josefin Sans',sans-serif;font-size:0.6rem;cursor:pointer;border:1px solid var(--gold);background:transparent;color:var(--gold);" onclick="editEvent('${d.id}')">Edit</button>
+      <button style="margin-left:6px;padding:5px 12px;border-radius:4px;font-family:'Josefin Sans',sans-serif;font-size:0.6rem;cursor:pointer;background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.3);color:var(--red-light);" onclick="deleteEvent('${d.id}')">Delete</button></td></tr>`;
+  });
+  ['regEventFilter','exportEvent'].forEach(id=>{
+    const sel=document.getElementById(id);if(!sel)return;
+    sel.innerHTML='<option value="">All Events</option>';
+    eventsCache.forEach(ev=>sel.innerHTML+=`<option value="${ev.id}">${ev.name}</option>`);
+  });
+}
+window.saveEvent = async () => {
+  const editId=document.getElementById('evEditId').value;
+  const data={name:document.getElementById('evName').value.trim(),category:document.getElementById('evCategory').value.trim(),logoFile:document.getElementById('evLogo').value.trim(),venue:document.getElementById('evVenue').value.trim(),maxParticipants:parseInt(document.getElementById('evMax').value)||null,description:document.getElementById('evDesc').value.trim(),order:parseInt(document.getElementById('evOrder').value)||99,updatedAt:serverTimestamp()};
+  if(!data.name){showMsg('evMsg','Event name required.','error');return;}
+  if(editId){await updateDoc(doc(db,'events',editId),data);}else{await addDoc(collection(db,'events'),{...data,createdAt:serverTimestamp()});}
+  showMsg('evMsg','Event saved.','success');
+  document.getElementById('evEditId').value='';
+  ['evName','evCategory','evLogo','evVenue','evMax','evDesc','evOrder'].forEach(id=>document.getElementById(id).value='');
+  loadEvents();
+};
+window.editEvent=(id)=>{const ev=eventsCache.find(e=>e.id===id);if(!ev)return;document.getElementById('evEditId').value=id;document.getElementById('evName').value=ev.name||'';document.getElementById('evCategory').value=ev.category||'';document.getElementById('evLogo').value=ev.logoFile||'';document.getElementById('evVenue').value=ev.venue||'';document.getElementById('evMax').value=ev.maxParticipants||'';document.getElementById('evDesc').value=ev.description||'';document.getElementById('evOrder').value=ev.order||'';showPanel('events',null);};
+window.deleteEvent=async(id)=>{if(!confirm('Delete?'))return;await deleteDoc(doc(db,'events',id));loadEvents();};
+
+window.postAnnouncement = async () => {
+  const title=document.getElementById('annTitle').value.trim();
+  const body=document.getElementById('annBody').value.trim();
+  const targets=[...document.querySelectorAll('#targetCheckboxes [type=checkbox]:checked')].map(c=>c.value);
+  if(!title||!body){showMsg('annMsg','Title and body required.','error');return;}
+  if(!targets.length){showMsg('annMsg','Select target audience.','error');return;}
+  await addDoc(collection(db,'announcements'),{title,body,targets,status:'approved',postedBy:authUser.displayName||authUser.email,postedByEmail:authUser.email,createdAt:serverTimestamp()});
+  showMsg('annMsg','Announcement posted.','success');
+  document.getElementById('annTitle').value='';document.getElementById('annBody').value='';
+  document.querySelectorAll('#targetCheckboxes [type=checkbox]:checked').forEach(c=>c.checked=false);
+  loadAnnouncements();
 };
 
-window.editEv=async id=>{
-  const d=await getDoc(doc(db,'events',id));const ev=d.data();
-  document.getElementById('ev-name').value=ev.name||'';document.getElementById('ev-desc').value=ev.description||'';
-  document.getElementById('ev-cat').value=ev.category||'';document.getElementById('ev-max').value=ev.maxParticipants||'';
-  document.getElementById('ev-logo').value=ev.logoFile||'';document.getElementById('ev-order').value=ev.order||1;
-  document.getElementById('ev-editId').value=id;document.getElementById('evModalTitle').textContent='Edit Event';
-  document.getElementById('evModal').style.display='flex';
-};
+async function loadAnnouncements() {
+  const container=document.getElementById('annList');
+  const snap=await getDocs(query(collection(db,'announcements'),orderBy('createdAt','desc')));
+  container.innerHTML='';
+  snap.forEach(d=>{
+    const a=d.data();
+    const time=a.createdAt?.toDate?a.createdAt.toDate().toLocaleString('en-IN'):'';
+    container.innerHTML+=`<div class="ann-card"><div class="ann-meta"><span class="ann-from">${a.postedBy||''}</span><span class="ann-time">${time}</span></div><div class="ann-title-t">${a.title||''}</div><div class="ann-body-t">${a.body||''}</div></div>`;
+  });
+}
 
-window.delEv=async id=>{if(!confirm('Delete event?'))return;await deleteDoc(doc(db,'events',id));toast('Deleted.','success');await loadEventsData();};
+async function loadTickets() {
+  const container=document.getElementById('ticketsList');
+  const snap=await getDocs(query(collection(db,'tickets'),orderBy('createdAt','desc')));
+  if(snap.empty){container.innerHTML='<div class="empty-state">No tickets.</div>';return;}
+  container.innerHTML='';
+  snap.forEach(d=>{
+    const t=d.data();
+    const date=t.createdAt?.toDate?t.createdAt.toDate().toLocaleString('en-IN'):'';
+    container.innerHTML+=`<div class="ticket-card"><div class="ticket-cat">${t.category||''}</div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin:4px 0;">From: ${t.name||''}</div><div class="ticket-body-t">${t.description||''}</div><div style="font-size:0.65rem;color:var(--text-secondary);">${date}</div>
+      <div style="margin-top:10px;display:flex;gap:8px;">
+        <button style="padding:5px 12px;border-radius:4px;font-family:'Josefin Sans',sans-serif;font-size:0.6rem;cursor:pointer;background:rgba(74,124,89,0.15);border:1px solid rgba(74,124,89,0.3);color:var(--green-light);" onclick="resolveTicket('${d.id}')">Resolve</button>
+      </div>
+    </div>`;
+  });
+}
+window.resolveTicket=async(id)=>{await updateDoc(doc(db,'tickets',id),{status:'resolved'});loadTickets();};
 
-document.getElementById('saveEvBtn').onclick=async()=>{
-  const name=document.getElementById('ev-name').value.trim();
-  if(!name){toast('Name required.','error');return;}
-  const data={name,description:document.getElementById('ev-desc').value.trim(),category:document.getElementById('ev-cat').value.trim(),maxParticipants:parseInt(document.getElementById('ev-max').value)||0,logoFile:document.getElementById('ev-logo').value.trim(),order:parseInt(document.getElementById('ev-order').value)||1,updatedAt:serverTimestamp()};
-  const editId=document.getElementById('ev-editId').value;
-  if(editId)await updateDoc(doc(db,'events',editId),data);
-  else await addDoc(collection(db,'events'),{...data,createdAt:serverTimestamp()});
-  toast('Saved.','success');document.getElementById('evModal').style.display='none';
-  await loadEventsData();
-};
+async function loadSettings() {
+  const snap=await getDoc(doc(db,'settings','global'));
+  if(!snap.exists())return;
+  const d=snap.data();
+  if(document.getElementById('toggleEnrollment'))document.getElementById('toggleEnrollment').checked=d.enrollmentOpen!==false;
+  if(document.getElementById('toggleParticipant'))document.getElementById('toggleParticipant').checked=d.participantPortalOpen!==false;
+  if(document.getElementById('toggleVolunteer'))document.getElementById('toggleVolunteer').checked=d.volunteerPortalOpen!==false;
+}
+window.saveToggle=async(key,val)=>{await setDoc(doc(db,'settings','global'),{[key]:val},{merge:true});};
 
-async function loadDashboard(){
+window.exportCSV=async()=>{
+  const evFilter=document.getElementById('exportEvent').value;
+  const statusFilter=document.getElementById('exportStatus').value;
   const snap=await getDocs(collection(db,'registrations'));
-  allRegs=[];const byEv={};let total=0,sel=0,pend=0;
-  snap.forEach(d=>{const r={id:d.id,...d.data()};allRegs.push(r);total++;
-    if(r.status==='Selected')sel++;else pend++;
-    if(!byEv[r.eventId])byEv[r.eventId]={total:0,sel:0,pend:0};
-    byEv[r.eventId].total++;if(r.status==='Selected')byEv[r.eventId].sel++;else byEv[r.eventId].pend++;
-  });
-  document.getElementById('st-total').textContent=total;document.getElementById('st-sel').textContent=sel;
-  document.getElementById('st-pend').textContent=pend;document.getElementById('st-events').textContent=allEvents.length;
-  const tb=document.getElementById('evSummary');tb.innerHTML='';
-  allEvents.forEach(ev=>{const c=byEv[ev.id]||{total:0,sel:0,pend:0};    tb.innerHTML+=`<tr><td><strong>${ev.name}</strong></td><td style="font-size:12px;color:var(--text-muted);">${ev.category||'—'}</td><td>${c.total}</td><td><span class="badge b-green">${c.sel}</span></td><td><span class="badge b-orange">${c.pend}</span></td></tr>`;  });
-  if(!allEvents.length)tb.innerHTML='<tr><td colspan="5" style="color:var(--text-muted);">No events.</td></tr>';
-}
-
-function loadRegistrationsTab(){
-  const evMap={};allEvents.forEach(e=>evMap[e.id]=e.name);
-  renderRegTable(allRegs,evMap);
-  document.getElementById('regSearch').oninput=()=>filterRegs(evMap);
-  document.getElementById('regEvFilter').onchange=()=>filterRegs(evMap);
-  document.getElementById('regStFilter').onchange=()=>filterRegs(evMap);
-}
-
-function filterRegs(evMap){
-  const q=document.getElementById('regSearch').value.toLowerCase();
-  const ev=document.getElementById('regEvFilter').value;
-  const st=document.getElementById('regStFilter').value;
-  renderRegTable(allRegs.filter(r=>(!q||r.name?.toLowerCase().includes(q))&&(!ev||r.eventId===ev)&&(!st||r.status===st)),evMap);
-}
-
-function renderRegTable(regs,evMap){
-  const tb=document.getElementById('regTable');tb.innerHTML='';
-  if(!regs.length){tb.innerHTML='<tr><td colspan="5" style="color:var(--text-muted);">No results.</td></tr>';return;}
-  regs.forEach(r=>{
-    const bc=r.status==='Selected'?'b-green':r.status==='Rejected'?'b-red':'b-orange';
-    tb.innerHTML+=`<tr><td>${r.name}</td><td>${r.class}-${r.section}</td><td>${evMap[r.eventId]||'—'}</td><td><span class="badge ${bc}">${r.status}</span></td><td style="font-size:11px;">${r.createdAt?.toDate?.().toLocaleDateString('en-IN')||'—'}</td></tr>`;
-  });
-}
-
-function loadAnnouncements(){
-  document.getElementById('postAnnBtn').onclick=async()=>{
-    const title=document.getElementById('annTitle').value.trim();
-    const body=document.getElementById('annBody').value.trim();
-    const target=document.getElementById('annTarget').value;
-    if(!title||!body){toast('Fill all fields.','error');return;}
-    await addDoc(collection(db,'announcements'),{title,body,targetPublic:target==='public',targetRole:target,senderName:cu.displayName||'',senderRole:'Core Team',createdBy:cu.uid,approved:true,createdAt:serverTimestamp()});
-    toast('Posted.','success');document.getElementById('annTitle').value='';document.getElementById('annBody').value='';
-  };
-  onSnapshot(query(collection(db,'announcements'),orderBy('createdAt','desc'),limit(20)),snap=>{
-    const list=document.getElementById('annList');list.innerHTML='';
-    if(snap.empty){list.innerHTML='<p style="color:var(--text-muted);font-size:13px;">None yet.</p>';return;}
-    snap.forEach(d=>{const a=d.data();
-      list.innerHTML+=`<div style="padding:12px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:8px;margin-bottom:8px;"><div style="font-weight:600;font-size:13px;">${a.title}</div><div style="font-size:12px;color:var(--text-muted);margin-top:3px;">${a.body}</div><div style="font-size:11px;color:var(--gold-dark);margin-top:5px;">${a.senderRole||''} · ${a.createdAt?.toDate?.().toLocaleDateString('en-IN')||''} · ${a.approved?'✅ Live':'⏳ Pending'}</div></div>`;
-    });
-  });
-}
-
-async function loadConversations(){
-  const list=document.getElementById('convList');list.innerHTML='';
-  const groups=[{id:'teacher_core_it',name:'Management Group',role:'Teacher + IT + Core'},{id:'management_eventhead',name:'All Event Heads',role:'Group Chat'}];
-  groups.forEach(g=>{
-    const item=document.createElement('div');
-    item.style.cssText='display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;border-bottom:1px solid var(--border);';
-    item.innerHTML=`<div style="width:30px;height:30px;border-radius:50%;background:var(--green-mid);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">👥</div><div><div style="font-size:13px;font-weight:600;">${g.name}</div><div style="font-size:11px;color:var(--text-muted);">${g.role}</div></div>`;
-    item.onclick=()=>openChat(g.id,g.name,g.role,'');
-    list.appendChild(item);
-  });
-  const ehSnap=await getDocs(query(collection(db,'users'),where('role','==','Event Head')));
-  ehSnap.forEach(d=>{const u=d.data();
-    const item=document.createElement('div');item.style.cssText='display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;border-bottom:1px solid var(--border);';
-    item.innerHTML=`<img src="${u.profilePic||''}" style="width:30px;height:30px;border-radius:50%;border:1px solid var(--border);object-fit:cover;" onerror="this.src=''" alt=""><div><div style="font-size:13px;font-weight:600;">${u.name||u.email}</div><div style="font-size:11px;color:var(--text-muted);">Event Head</div></div>`;
-    item.onclick=()=>openChat(`core_eh_${d.id}`,u.name||u.email,'Event Head',u.profilePic||'');
-    list.appendChild(item);
-  });
-}
-
-function openChat(chatId,name,role,img){
-  activeChatId=chatId;
-  document.getElementById('chatHdrName').textContent=name;document.getElementById('chatHdrRole').textContent=role;document.getElementById('chatHdrImg').src=img;
-  if(chatUnsub)chatUnsub();
-  setDoc(doc(db,'chats',chatId),{type:'core_chat',members:[cu.uid]},{merge:true});
-  chatUnsub=onSnapshot(query(collection(db,'chats',chatId,'messages'),orderBy('sentAt','asc')),snap=>{
-    const area=document.getElementById('chatArea');area.innerHTML='';
-    if(snap.empty){area.innerHTML='<p style="color:var(--text-muted);font-size:13px;text-align:center;padding:28px;">No messages yet.</p>';return;}
-    snap.forEach(d=>{const m=d.data();const isOwn=m.senderId===cu.uid;
-      const b=document.createElement('div');b.className=isOwn?'bubble-out':'bubble-in';
-      const t=m.sentAt?.toDate?.().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})||'';
-      b.innerHTML=`${!isOwn?`<div class="b-sender">${m.senderName} · ${m.senderRole||''}</div>`:''}<div>${m.text}</div><div class="b-time">${t}</div>`;
-      area.appendChild(b);
-    });
-    area.scrollTop=area.scrollHeight;
-  });
-}
-
-document.getElementById('sendBtn').onclick=sendMsg;
-document.getElementById('chatInput').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey)sendMsg();};
-
-async function sendMsg(){
-  if(!activeChatId){toast('Select a conversation.','error');return;}
-  const input=document.getElementById('chatInput');const text=input.value.trim();if(!text)return;input.value='';
-  await addDoc(collection(db,'chats',activeChatId,'messages'),{senderId:cu.uid,senderName:cu.displayName||'',senderRole:'Core Team',text,sentAt:serverTimestamp()});
-}
-
-async function loadSettings(){
-  try{const sd=await getDoc(doc(db,'settings','global'));
-    if(sd.exists()){const s=sd.data();
-      if(s.festSubtitle)document.getElementById('set-subtitle').value=s.festSubtitle;
-      if(s.eventDate)document.getElementById('set-date').value=s.eventDate;
-      if(s.venueName)document.getElementById('set-venue').value=s.venueName;
-      if(s.venueAddress)document.getElementById('set-addr').value=s.venueAddress;
-      if(s.venueDate)document.getElementById('set-dateDisp').value=s.venueDate;
-      if(s.venueTime)document.getElementById('set-time').value=s.venueTime;
-      if(s.heroPosterUrl)document.getElementById('set-poster').value=s.heroPosterUrl;
-      if(s.heroPosterCaption)document.getElementById('set-caption').value=s.heroPosterCaption;
-      if(s.logoUrl)document.getElementById('set-logo').value=s.logoUrl;
-      if(s.unofficialBannerText)document.getElementById('set-bannerText').value=s.unofficialBannerText;
-      syncToggle('tog-banner',!!s.unofficialBannerVisible);syncToggle('tog-enroll',s.enrollmentStatus!=='closed');
-    }
-  }catch(e){}
-  document.getElementById('saveFestBtn').onclick=async()=>{
-    await setDoc(doc(db,'settings','global'),{festSubtitle:document.getElementById('set-subtitle').value,eventDate:document.getElementById('set-date').value,venueName:document.getElementById('set-venue').value,venueAddress:document.getElementById('set-addr').value,venueDate:document.getElementById('set-dateDisp').value,venueTime:document.getElementById('set-time').value,heroPosterUrl:document.getElementById('set-poster').value,heroPosterCaption:document.getElementById('set-caption').value,logoUrl:document.getElementById('set-logo').value},{merge:true});
-    toast('Saved!','success');
-  };
-  document.getElementById('saveTogglesBtn').onclick=async()=>{
-    const banner=document.getElementById('tog-banner').checked;const enroll=document.getElementById('tog-enroll').checked;
-    await setDoc(doc(db,'settings','global'),{unofficialBannerVisible:banner,unofficialBannerText:document.getElementById('set-bannerText').value,enrollmentStatus:enroll?'open':'closed'},{merge:true});
-    toast('Saved!','success');
-  };
-  // Toggle UI
-  ['tog-banner','tog-enroll'].forEach(id=>{
-    document.getElementById(id).addEventListener('change',function(){
-      syncToggle(id,this.checked);
-    });
-  });
-}
-
-function syncToggle(id,checked){
-  document.getElementById(id).checked=checked;
-  const slider=document.getElementById(id+'-slider');
-  const dot=document.getElementById(id+'-dot');
-  if(slider)slider.style.background=checked?'var(--gold)':'rgba(255,255,255,0.1)';
-  if(dot)dot.style.transform=checked?'translateX(20px)':'translateX(0)';
-}
-
-window.exportAll=async()=>{
-  const evMap={};allEvents.forEach(e=>evMap[e.id]=e.name);
-  const rows=[['Name','Class','Section','Roll','Email','Event','Status','Call','Registered']];
-  allRegs.forEach(r=>rows.push([r.name,r.class,r.section,r.roll,r.email,evMap[r.eventId]||r.eventId,r.status,r.callNo,r.createdAt?.toDate?.().toLocaleDateString('en-IN')||'']));
-  const csv=rows.map(r=>r.map(c=>`"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='registrations.csv';a.click();
-  toast('Downloaded.','success');
+  const rows=[['Name','Email','Reg No','Class','Section','Roll','Event','Status','Calling','WhatsApp']];
+  snap.forEach(d=>{const r=d.data();if(evFilter&&r.eventId!==evFilter)return;if(statusFilter&&r.status!==statusFilter)return;const evName=eventsCache.find(e=>e.id===r.eventId)?.name||r.eventId||'';rows.push([r.name,r.email,r.registrationNumber,r.class,r.section,r.rollNumber,evName,r.status,r.callingNumber,r.whatsappNumber]);});
+  const csv=rows.map(r=>r.map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`cy_core_export_${Date.now()}.csv`;a.click();
 };
 
-document.querySelectorAll('.nav-item[data-page]').forEach(btn=>{
-  btn.onclick=()=>{
-    document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    btn.classList.add('active');document.getElementById('page-'+btn.dataset.page).classList.add('active');
-  };
-});
+function loadQR() {
+  const canvas=document.getElementById('qrCanvas');
+  QRCode.toCanvas(canvas,authUser.uid,{width:160,margin:2,color:{dark:'#C9A84C',light:'#00000000'}},()=>{});
+  document.getElementById('qrIdLabel').textContent='ID: '+authUser.uid.slice(0,12);
+  document.getElementById('qrNameLabel').textContent=authUser.displayName||authUser.email;
+}
 
-document.getElementById('logoutBtn').onclick=async()=>{await signOut(auth);sessionStorage.clear();window.location.href='portal-login.html';};
+function showMsg(id,msg,type){const el=document.getElementById(id);el.textContent=msg;el.className='msg '+type;setTimeout(()=>{el.className='msg';},4000);}
+window.filterTable=(tbodyId,val)=>{document.querySelectorAll('#'+tbodyId+' tr').forEach(row=>{row.style.display=row.textContent.toLowerCase().includes(val.toLowerCase())?'':'none';});};
+window.showPanel=(id,btn)=>{document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));document.getElementById('panel-'+id).classList.add('active');if(btn)btn.classList.add('active');document.getElementById('topbarTitle').textContent=btn?btn.textContent.trim():id;if(id==='analytics')loadAnalytics();};
+window.doSignOut=async()=>{await signOut(auth);window.location.href='login.html';};
 </script>
 </body>
 </html>

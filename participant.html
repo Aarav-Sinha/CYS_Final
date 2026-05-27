@@ -4,401 +4,438 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Participant Portal — Critically Yours</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Josefin+Sans:wght@200;300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <style>
-:root{--gold:#C9A84C;--gold-light:#E8C97A;--gold-dark:#9A7A2E;--green:#2D5016;--green-pale:#8FBC5A;--bg:#0D1A06;--card:#111E07;--text:#F5F0E8;--muted:#B8B09A;--border:rgba(201,168,76,0.22);--red:#E05555;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;}
-/* ── LAYOUT ── */
-.shell{display:flex;min-height:100vh;}
-.sidebar{width:240px;background:rgba(0,0,0,.3);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto;}
-.sb-logo{padding:20px 18px;border-bottom:1px solid var(--border);}
-.sb-logo-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--gold);}
-.sb-logo-role{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green-pale);margin-top:2px;}
-.sb-user{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--border);}
-.sb-user img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid var(--gold-dark);flex-shrink:0;}
-.sb-user-name{font-size:12px;font-weight:600;color:var(--text);word-break:break-word;}
-.sb-user-tag{font-size:10px;color:var(--muted);}
-.sb-nav{flex:1;padding:12px 0;}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px 18px;color:var(--muted);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;border:none;background:none;width:100%;text-align:left;font-family:'Montserrat',sans-serif;}
-.nav-item:hover{color:var(--text);background:rgba(255,255,255,.03);}
-.nav-item.active{color:var(--gold);background:rgba(201,168,76,.08);border-right:3px solid var(--gold);}
-.nav-item .ni{font-size:15px;width:18px;text-align:center;}
-.sb-bottom{padding:14px 18px;border-top:1px solid var(--border);}
-.logout-btn{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px;cursor:pointer;background:none;border:none;font-family:'Montserrat',sans-serif;padding:6px 0;}
-.logout-btn:hover{color:var(--red);}
-.main{flex:1;margin-left:240px;padding:28px 28px;min-height:100vh;}
-.page{display:none;}
-.page.active{display:block;animation:fi .25s ease;}
-@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.page-hdr{margin-bottom:22px;}
-.page-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--text);}
-.page-sub{font-size:12px;color:var(--muted);margin-top:3px;}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px;}
-.card-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
-/* ── STATUS ── */
-.status-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;}
-.s-pending{background:rgba(255,166,0,.14);color:#FFA600;border:1px solid rgba(255,166,0,.3);}
-.s-selected{background:rgba(143,188,90,.14);color:#8FBC5A;border:1px solid rgba(143,188,90,.3);}
-.s-rejected{background:rgba(224,85,85,.14);color:var(--red);border:1px solid rgba(224,85,85,.3);}
-.s-auditioning{background:rgba(100,149,237,.14);color:#6495ED;border:1px solid rgba(100,149,237,.3);}
-.rejected-banner{background:rgba(224,85,85,.08);border:1px solid rgba(224,85,85,.25);border-radius:10px;padding:16px 18px;margin-bottom:16px;display:none;gap:12px;align-items:flex-start;}
-.rejected-banner.show{display:flex;}
-.rejected-banner-text{font-size:12px;color:#E08080;line-height:1.6;}
-/* ── INFO GRID ── */
-.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.info-item p:first-child{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
-.info-item p:last-child{font-size:13px;font-weight:600;color:var(--text);}
-/* ── CHAT ── */
-.chat-wrap{display:flex;flex-direction:column;height:480px;}
-.chat-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;}
-.bubble{max-width:72%;border-radius:12px;padding:10px 13px;font-size:12px;line-height:1.5;}
-.bubble-out{background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--bg);align-self:flex-end;border-radius:12px 12px 2px 12px;}
-.bubble-in{background:rgba(255,255,255,.06);color:var(--text);align-self:flex-start;border-radius:12px 12px 12px 2px;}
-.bubble-sender{font-size:10px;font-weight:700;color:var(--gold);margin-bottom:2px;}
-.bubble-role-tag{font-size:9px;color:var(--muted);}
-.bubble-time{font-size:9px;opacity:.6;margin-top:3px;}
-.chat-input-row{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--border);}
-.chat-input{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:12px;font-family:'Montserrat',sans-serif;outline:none;}
-.chat-input:focus{border-color:var(--gold);}
-.send-btn{background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--bg);border:none;border-radius:8px;padding:9px 16px;cursor:pointer;font-size:12px;font-weight:700;}
-/* ── ANN ── */
-.ann-item{display:flex;gap:12px;padding:14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:8px;margin-bottom:10px;}
-.ann-icon{font-size:16px;flex-shrink:0;}
-.ann-title{font-size:13px;font-weight:600;margin-bottom:3px;}
-.ann-body{font-size:11px;color:var(--muted);line-height:1.6;}
-.ann-meta{font-size:10px;color:var(--gold-dark);margin-top:5px;font-style:italic;}
-/* ── QR ── */
-.qr-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;padding:20px;}
-#qrDiv{border:4px solid var(--gold-dark);border-radius:8px;overflow:hidden;display:inline-block;}
-.qr-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);}
-.qr-id{font-size:11px;color:var(--muted);letter-spacing:1px;}
-/* ── TICKET ── */
-.ticket-fab{position:fixed;bottom:20px;right:20px;background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--bg);width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 18px rgba(201,168,76,.4);z-index:900;transition:transform .2s;}
-.ticket-fab:hover{transform:scale(1.1);}
-.spinner{width:14px;height:14px;border:2px solid rgba(201,168,76,.2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:5px;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.toast{position:fixed;bottom:74px;right:20px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:11px 15px;font-size:12px;color:var(--text);z-index:9000;max-width:280px;transform:translateY(8px);opacity:0;transition:all .3s;pointer-events:none;}
-.toast.show{transform:translateY(0);opacity:1;}
-.toast.error{border-left:3px solid var(--red);}
-.toast.success{border-left:3px solid var(--green-pale);}
-.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:2000;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px);}
-.modal-ov.open{display:flex;}
-.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 24px;max-width:480px;width:100%;position:relative;max-height:90vh;overflow-y:auto;}
-.m-close{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;}
-.m-close:hover{color:var(--text);}
-.m-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:4px;}
-.m-sub{font-size:12px;color:var(--muted);margin-bottom:20px;}
-.f-label{display:block;font-size:10px;font-weight:700;letter-spacing:.5px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;}
-.f-input,.f-ta{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:9px 12px;font-size:12px;font-family:'Montserrat',sans-serif;outline:none;margin-bottom:12px;}
-.f-input:focus,.f-ta:focus{border-color:var(--gold);}
-.f-ta{resize:vertical;}
-.btn-gold{background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--bg);border:none;border-radius:6px;padding:10px 20px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;width:100%;}
-/* ── RESPONSIVE ── */
-@media(max-width:768px){
-  .sidebar{width:100%;height:auto;position:relative;flex-direction:row;flex-wrap:wrap;}
-  .sb-logo{flex:1;padding:14px 16px;}
-  .sb-user{padding:10px 16px;}
-  .sb-nav{width:100%;padding:8px 0;display:flex;flex-wrap:wrap;border-top:1px solid var(--border);}
-  .nav-item{flex:1;min-width:120px;justify-content:center;flex-direction:column;gap:3px;padding:8px 6px;font-size:10px;text-align:center;}
-  .nav-item .ni{width:auto;}
-  .sb-bottom{padding:10px 16px;}
-  .main{margin-left:0;padding:16px;}
-  .info-grid{grid-template-columns:1fr;}
+:root{
+  --gold:#C9A84C;--gold-dim:#8B6914;--green:#4A7C59;--green-light:#6BAA7D;
+  --red:#C0392B;--red-light:#e74c3c;
+  --bg-dark:#080A06;--bg-sidebar:#0D0F0B;
+  --bg-card:rgba(255,255,255,0.04);--bg-card-hover:rgba(255,255,255,0.07);
+  --glass:rgba(201,168,76,0.08);
+  --text-primary:#F5EDD6;--text-secondary:#A89060;
+  --border:rgba(201,168,76,0.15);
 }
+[data-theme="light"]{
+  --bg-dark:#F0EBE0;--bg-sidebar:#E8E0D0;
+  --bg-card:rgba(0,0,0,0.04);--bg-card-hover:rgba(0,0,0,0.07);
+  --glass:rgba(201,168,76,0.1);
+  --text-primary:#1A1208;--text-secondary:#6B5020;
+  --border:rgba(201,168,76,0.25);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(--text-primary);min-height:100vh;display:flex;transition:background 0.3s,color 0.3s;}
+.sidebar{width:230px;flex-shrink:0;background:var(--bg-sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;position:sticky;top:0;overflow-y:auto;}
+.sb-logo{padding:22px 18px;border-bottom:1px solid var(--border);font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--gold);letter-spacing:2px;}
+.sb-logo span{display:block;font-size:0.55rem;letter-spacing:3px;color:var(--text-secondary);margin-top:2px;font-family:'Josefin Sans',sans-serif;}
+.sb-user{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.sb-avatar{width:36px;height:36px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;flex-shrink:0;}
+.sb-user-info{flex:1;min-width:0;}
+.sb-name{font-size:0.75rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sb-role{font-size:0.58rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
+.sb-nav{flex:1;padding:10px 0;}
+.sb-section{font-size:0.52rem;letter-spacing:3px;color:var(--text-secondary);text-transform:uppercase;padding:10px 18px 5px;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:10px 18px;font-size:0.7rem;letter-spacing:1px;color:var(--text-secondary);cursor:pointer;transition:all 0.2s;border:none;background:none;width:100%;text-align:left;}
+.sb-item:hover,.sb-item.active{color:var(--gold);background:var(--glass);}
+.sb-item.active{border-left:2px solid var(--gold);}
+.sb-bottom{padding:14px 18px;border-top:1px solid var(--border);}
+.sb-signout{width:100%;padding:8px;border-radius:6px;background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.3);color:var(--red-light);font-family:'Josefin Sans',sans-serif;font-size:0.62rem;letter-spacing:2px;cursor:pointer;transition:all 0.2s;}
+.sb-signout:hover{background:rgba(192,57,43,0.2);}
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column;}
+.topbar{padding:14px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg-dark);position:sticky;top:0;z-index:10;}
+.topbar-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--text-primary);}
+.theme-toggle{width:32px;height:32px;border-radius:50%;background:var(--bg-card);border:1px solid var(--border);color:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.content{padding:24px;flex:1;}
+.panel{display:none;}.panel.active{display:block;animation:fadeUp 0.4s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/* STATUS BANNER */
+.status-banner{border-radius:10px;padding:20px 24px;margin-bottom:24px;border:1px solid var(--border);}
+.status-banner.pending{background:rgba(201,168,76,0.08);border-color:rgba(201,168,76,0.3);}
+.status-banner.selected{background:rgba(74,124,89,0.1);border-color:rgba(74,124,89,0.35);}
+.status-banner.rejected{background:rgba(192,57,43,0.08);border-color:rgba(192,57,43,0.3);}
+.sb-icon{font-size:1.8rem;margin-bottom:8px;}
+.sb-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;}
+.sb-title.pending{color:var(--gold);}
+.sb-title.selected{color:var(--green-light);}
+.sb-title.rejected{color:var(--red-light);}
+.sb-desc{font-size:0.78rem;color:var(--text-secondary);margin-top:6px;line-height:1.7;}
+
+/* CARDS */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:24px;}
+.info-card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:16px;}
+.info-label{font-size:0.58rem;letter-spacing:2px;color:var(--text-secondary);text-transform:uppercase;margin-bottom:6px;}
+.info-val{font-size:0.9rem;color:var(--text-primary);font-weight:600;}
+
+/* ANNOUNCEMENTS */
+.ann-list{display:flex;flex-direction:column;gap:10px;}
+.ann-card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:16px 20px;transition:all 0.2s;}
+.ann-card:hover{background:var(--bg-card-hover);}
+.ann-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.ann-from{font-size:0.6rem;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase;}
+.ann-time{font-size:0.6rem;color:var(--text-secondary);}
+.ann-title{font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;}
+.ann-body{font-family:'Cormorant Garamond',serif;font-size:0.95rem;color:var(--text-secondary);line-height:1.6;}
+
+/* TASKS */
+.task-list{display:flex;flex-direction:column;gap:10px;}
+.task-card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:16px 20px;}
+.task-title{font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;}
+.task-body{font-size:0.8rem;color:var(--text-secondary);line-height:1.6;}
+.task-badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:0.58rem;letter-spacing:1px;text-transform:uppercase;background:var(--glass);border:1px solid var(--border);color:var(--gold);}
+
+/* QR CODE */
+.qr-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:32px;text-align:center;max-width:300px;margin:0 auto;}
+.qr-wrap canvas{border-radius:8px;margin:16px auto;display:block;}
+.qr-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--text-primary);margin-bottom:4px;}
+.qr-sub{font-size:0.68rem;letter-spacing:1px;color:var(--text-secondary);}
+.qr-id{font-size:0.7rem;color:var(--gold);margin-top:10px;letter-spacing:2px;}
+
+/* TICKET FLOATING */
+.ticket-fab{position:fixed;bottom:24px;right:24px;z-index:50;padding:12px 20px;border-radius:28px;background:linear-gradient(135deg,var(--green),#2C4A35);color:var(--text-primary);font-family:'Josefin Sans',sans-serif;font-size:0.68rem;letter-spacing:2px;font-weight:600;border:none;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(74,124,89,0.4);transition:all 0.3s;}
+.ticket-fab:hover{transform:translateY(-2px);}
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:16px;}
+.modal-overlay.active{display:flex;}
+.modal{background:var(--bg-dark);border:1px solid var(--border);border-radius:12px;padding:28px;width:100%;max-width:440px;animation:fadeUp 0.3s ease;}
+.modal h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--gold);margin-bottom:6px;}
+.modal p{font-size:0.75rem;color:var(--text-secondary);margin-bottom:20px;}
+.fg{margin-bottom:14px;}
+.fg label{display:block;font-size:0.6rem;letter-spacing:2px;color:var(--text-secondary);text-transform:uppercase;margin-bottom:6px;}
+.fg input,.fg select,.fg textarea{width:100%;padding:10px 12px;border-radius:6px;background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);font-family:'Josefin Sans',sans-serif;font-size:0.82rem;outline:none;transition:border 0.2s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);}
+.fg textarea{resize:vertical;min-height:70px;}
+.fg select option{background:var(--bg-dark);}
+.modal-actions{display:flex;gap:10px;margin-top:16px;}
+.btn-primary{padding:10px 24px;border-radius:6px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:#0A0C08;font-family:'Josefin Sans',sans-serif;font-size:0.7rem;font-weight:600;letter-spacing:2px;border:none;cursor:pointer;transition:all 0.2s;}
+.btn-cancel{padding:10px 16px;border-radius:6px;background:transparent;border:1px solid var(--border);color:var(--text-secondary);font-family:'Josefin Sans',sans-serif;font-size:0.7rem;cursor:pointer;}
+.btn-cancel:hover{border-color:var(--gold);color:var(--gold);}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:48px 20px;color:var(--text-secondary);}
+.empty-state .es-icon{font-size:2.5rem;margin-bottom:12px;color:var(--border);}
+.empty-state p{font-size:0.8rem;letter-spacing:1px;}
+
+/* REJECTED MSG */
+.rejected-msg{background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.3);border-radius:10px;padding:20px 24px;margin-bottom:20px;}
+.rejected-msg p{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--text-secondary);line-height:1.7;}
+
+@media(max-width:640px){
+  body{flex-direction:column;}
+  .sidebar{width:100%;height:auto;position:sticky;top:0;z-index:100;flex-direction:row;align-items:center;padding:0 16px;overflow:visible;}
+  .sb-logo{padding:14px 0;border:none;flex:1;}
+  .sb-nav,.sb-user,.sb-section,.sb-bottom{display:none;}
+  .sidebar.open .sb-nav,.sidebar.open .sb-bottom,.sidebar.open .sb-user{display:flex;flex-direction:column;position:fixed;top:56px;left:0;right:0;background:var(--bg-sidebar);border-bottom:1px solid var(--border);z-index:99;max-height:80vh;overflow-y:auto;}
+  .sidebar.open .sb-nav,.sidebar.open .sb-bottom{display:block;}
+  .mobile-btn{display:flex;width:34px;height:34px;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--gold);cursor:pointer;font-size:17px;}
+}
+.mobile-btn{display:none;}
 </style>
 </head>
 <body>
 
-<div id="portalLoader" style="position:fixed;inset:0;background:#0D1A06;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
-  <span class="spinner" style="width:32px;height:32px;border-width:3px;"></span>
-  <p style="font-family:'Montserrat',sans-serif;font-size:12px;color:#C9A84C;letter-spacing:1px;text-transform:uppercase;">Authenticating Session...</p>
-</div>
-
-<div class="shell" id="mainShell" style="display:none;">
-  <div class="sidebar">
-    <div class="sb-logo">
-      <div class="sb-logo-name">Critically Yours</div>
-      <div class="sb-logo-role">Participant Portal</div>
-    </div>
-    <div class="sb-user">
-      <img src="" id="sbImg" alt="">
-      <div><div class="sb-user-name" id="sbName">—</div><div class="sb-user-tag">Participant</div></div>
-    </div>
-    <nav class="sb-nav">
-      <button class="nav-item active" data-page="dashboard"><span class="ni">🏠</span> Dashboard</button>
-      <button class="nav-item" data-page="announcements"><span class="ni">📢</span> Announcements</button>
-      <button class="nav-item" data-page="messages"><span class="ni">💬</span> Messages</button>
-      <button class="nav-item" data-page="identity"><span class="ni">🎫</span> My QR</button>
-    </nav>
-    <div class="sb-bottom">
-      <button class="logout-btn" id="logoutBtn">🚪 Sign Out</button>
+<div class="sidebar" id="sidebar">
+  <div class="sb-logo">Critically Yours<span>Participant Portal</span></div>
+  <div class="sb-user">
+    <img class="sb-avatar" id="sbAvatar" src="" alt="">
+    <div class="sb-user-info">
+      <div class="sb-name" id="sbName">Loading...</div>
+      <div class="sb-role">Participant</div>
     </div>
   </div>
+  <nav class="sb-nav">
+    <div class="sb-section">My Portal</div>
+    <button class="sb-item active" onclick="showPanel('home',this)">&#9670; My Status</button>
+    <button class="sb-item" onclick="showPanel('announcements',this)">&#9670; Announcements</button>
+    <button class="sb-item" onclick="showPanel('tasks',this)">&#9670; Tasks</button>
+    <button class="sb-item" onclick="showPanel('qr',this)">&#9632; My QR / ID</button>
+    <button class="sb-item" onclick="showPanel('profile',this)">&#9671; My Profile</button>
+  </nav>
+  <div class="sb-bottom">
+    <button class="sb-signout" onclick="doSignOut()">Sign Out</button>
+  </div>
+  <button class="mobile-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">&#9776;</button>
+</div>
 
-  <div class="main">
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbarTitle">My Status</div>
+    <button class="theme-toggle" id="themeToggle">&#9790;</button>
+  </div>
+  <div class="content">
 
-    <div class="page active" id="page-dashboard">
-      <div class="page-hdr"><h1 class="page-title">My Dashboard</h1><p class="page-sub">Your registration and event status.</p></div>
-      <div class="rejected-banner" id="rejBanner">
-        <span style="font-size:22px;flex-shrink:0;">❌</span>
-        <div class="rejected-banner-text" id="rejMsg"></div>
-      </div>
-      <div class="card">
-        <div class="card-title">Registration Status</div>
-        <div id="regStatusContent"><span class="spinner"></span> Loading…</div>
-      </div>
-      <div class="card">
-        <div class="card-title">Event Details</div>
-        <div id="eventDetailsContent"><span class="spinner"></span> Loading…</div>
+    <!-- HOME / STATUS -->
+    <div class="panel active" id="panel-home">
+      <div id="statusBanner"></div>
+      <div class="info-grid" id="infoGrid"></div>
+    </div>
+
+    <!-- ANNOUNCEMENTS -->
+    <div class="panel" id="panel-announcements">
+      <div class="ann-list" id="annList">
+        <div class="empty-state"><div class="es-icon">&#9670;</div><p>Loading announcements...</p></div>
       </div>
     </div>
 
-    <div class="page" id="page-announcements">
-      <div class="page-hdr"><h1 class="page-title">Announcements</h1><p class="page-sub">Messages from your Event Heads, Core Team and Teachers.</p></div>
-      <div id="annListContainer"><span class="spinner"></span> Loading…</div>
+    <!-- TASKS -->
+    <div class="panel" id="panel-tasks">
+      <div class="task-list" id="taskList">
+        <div class="empty-state"><div class="es-icon">&#9636;</div><p>Loading tasks...</p></div>
+      </div>
     </div>
 
-    <div class="page" id="page-messages">
-      <div class="page-hdr"><h1 class="page-title">Messages</h1><p class="page-sub">Chat with your Event Heads.</p></div>
-      <div class="card" style="padding:0;">
-        <div class="chat-wrap">
-          <div class="chat-msgs" id="chatMsgs"><p style="color:var(--muted);font-size:12px;text-align:center;padding:32px;">Loading messages…</p></div>
-          <div class="chat-input-row">
-            <input type="text" class="chat-input" id="chatInput" placeholder="Message your Event Head…" maxlength="500">
-            <button class="send-btn" id="chatSendBtn">Send</button>
+    <!-- QR CODE -->
+    <div class="panel" id="panel-qr">
+      <div class="qr-wrap">
+        <div class="qr-title">Identity Card</div>
+        <div class="qr-sub">Scan at event entry for attendance</div>
+        <canvas id="qrCanvas"></canvas>
+        <div class="qr-id" id="qrIdLabel"></div>
+        <div style="margin-top:12px;font-size:0.75rem;color:var(--text-secondary);" id="qrNameLabel"></div>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="panel" id="panel-profile">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:24px;max-width:500px;">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;">
+          <img id="profileAvatar" src="" style="width:64px;height:64px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;" alt="">
+          <div>
+            <div id="profileName" style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--text-primary);"></div>
+            <div id="profileEmail" style="font-size:0.7rem;color:var(--gold);margin-top:2px;"></div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div class="page" id="page-identity">
-      <div class="page-hdr"><h1 class="page-title">My Identity QR</h1><p class="page-sub">Show this to security for entry on the day of the fest.</p></div>
-      <div class="card">
-        <div class="qr-wrap">
-          <div id="qrDiv"></div>
-          <div class="qr-name" id="qrName">—</div>
-          <div class="qr-id" id="qrId">—</div>
-          <p style="font-size:11px;color:var(--muted);text-align:center;max-width:280px;line-height:1.6;">This QR is unique to you. Do not share it. Security will scan it for attendance.</p>
-        </div>
+        <div id="profileDetails"></div>
       </div>
     </div>
 
   </div>
 </div>
 
-<button class="ticket-fab" id="ticketFab" title="Raise Ticket">🎫</button>
-<div class="toast" id="toast"></div>
+<!-- TICKET FAB -->
+<button class="ticket-fab" onclick="document.getElementById('ticketModal').classList.add('active')">&#9873; Raise Ticket</button>
 
-<div class="modal-ov" id="ticketMod">
+<div class="modal-overlay" id="ticketModal">
   <div class="modal">
-    <button class="m-close" id="ticketClose">×</button>
-    <h2 class="m-title">Raise a Ticket</h2>
-    <p class="m-sub">Report any issue to IT or Core Team.</p>
-    <label class="f-label">Subject</label>
-    <input type="text" class="f-input" id="tkSub" placeholder="Brief issue description">
-    <label class="f-label">Details</label>
-    <textarea class="f-ta" id="tkBody" rows="4" placeholder="Describe the issue…"></textarea>
-    <button class="btn-gold" id="tkSubmit">Submit Ticket</button>
+    <h3>Raise a Ticket</h3>
+    <p>Report any issue you are facing.</p>
+    <div class="fg"><label>Category</label><select id="tCat"><option value="technical">Technical Issue</option><option value="conduct">Conduct / Abuse</option><option value="event">Event Issue</option><option value="other">Other</option></select></div>
+    <div class="fg"><label>Description</label><textarea id="tDesc" placeholder="Describe your issue..."></textarea></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="document.getElementById('ticketModal').classList.remove('active')">Cancel</button>
+      <button class="btn-primary" onclick="submitTicket()">Submit</button>
+    </div>
   </div>
 </div>
 
 <script type="module">
-import {initializeApp} from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {getFirestore,doc,getDoc,addDoc,setDoc,collection,onSnapshot,query,where,orderBy,serverTimestamp} from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import {getAuth,onAuthStateChanged,signOut} from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, collection, query, where, getDocs, addDoc, serverTimestamp, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-const cfg={apiKey:"AIzaSyCogmTX4tW4EZfTqsMunRu3XuuOTBDKN-E",authDomain:"cys-dpsm.firebaseapp.com",projectId:"cys-dpsm",storageBucket:"cys-dpsm.firebasestorage.app",messagingSenderId:"198853363575",appId:"1:198853363575:web:365ff3bcb9b54b760b4372"};
-const app=initializeApp(cfg);const db=getFirestore(app);const auth=getAuth(app);
-let CU=null,regData=null,chatId=null;
+const firebaseConfig = {
+  apiKey:"AIzaSyBKeQxNTRaGsry7vpHZOBOD6CCuvZhBpU0",
+  authDomain:"critically-yours-v5.firebaseapp.com",
+  projectId:"critically-yours-v5",
+  storageBucket:"critically-yours-v5.firebasestorage.app",
+  messagingSenderId:"436240015995",
+  appId:"1:436240015995:web:e646abe16d80d7eab9f8de"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
-function toast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3500);}
+// THEME
+const themeToggle = document.getElementById('themeToggle');
+const saved = localStorage.getItem('cy_theme')||'dark';
+document.documentElement.setAttribute('data-theme',saved);
+themeToggle.textContent = saved==='dark'?'☀':'☾';
+themeToggle.addEventListener('click',()=>{
+  const t = document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem('cy_theme',t);
+  themeToggle.textContent=t==='dark'?'☀':'☾';
+});
 
-// Centralized injection cleanup handler
-function throwOut() {
-  sessionStorage.clear();
-  window.location.replace('portal-login.html');
-}
+let myReg = null;
+let myUser = null;
 
+// AUTH GUARD
 onAuthStateChanged(auth, async user => {
-  if (!user) {
-    throwOut();
+  if (!user) { window.location.href='login.html'; return; }
+
+  // Check portal open
+  const settingsSnap = await getDoc(doc(db,'settings','global'));
+  if (settingsSnap.exists() && settingsSnap.data().participantPortalOpen === false) {
+    document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:40px;">
+      <div><div style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold);margin-bottom:12px;">Portal Under Maintenance</div>
+      <p style="color:var(--text-secondary);">The participant portal is currently unavailable. Please check back later.</p></div></div>`;
     return;
   }
 
+  myUser = user;
+  document.getElementById('sbAvatar').src = user.photoURL||'';
+  document.getElementById('sbName').textContent = user.displayName||user.email;
+
+  // Load registration
+  const regSnap = await getDocs(query(collection(db,'registrations'), where('email','==',user.email)));
+  if (regSnap.empty) {
+    document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:40px;">
+      <div><div style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold);margin-bottom:12px;">No Registration Found</div>
+      <p style="color:var(--text-secondary);margin-bottom:20px;">You have not enrolled yet.</p>
+      <a href="enroll.html" style="padding:12px 28px;border-radius:6px;background:linear-gradient(135deg,#C9A84C,#8B6914);color:#0A0C08;font-size:0.75rem;font-weight:600;letter-spacing:2px;text-decoration:none;">Enroll Now</a></div></div>`;
+    return;
+  }
+
+  myReg = { id: regSnap.docs[0].id, ...regSnap.docs[0].data() };
+  initParticipant();
+});
+
+async function initParticipant() {
+  loadStatus();
+  loadAnnouncements();
+  loadTasks();
+  loadQR();
+  loadProfile();
+}
+
+function loadStatus() {
+  const banner = document.getElementById('statusBanner');
+  const grid = document.getElementById('infoGrid');
+  const status = myReg.status || 'audition_pending';
+
+  const statusMap = {
+    audition_pending: { cls:'pending', icon:'&#9670;', title:'Audition Pending', desc:'Your enrollment has been received. The Event Head will review your application after auditions. You will be notified of the result.' },
+    selected: { cls:'selected', icon:'&#10003;', title:'Selected!', desc:'Congratulations! You have been selected for the event. Welcome to the team. Check announcements and tasks from your Event Head.' },
+    rejected: { cls:'rejected', icon:'&#10007;', title:'Not Selected', desc:'We regret to inform you that you have not been selected for this event. Thank you for participating. Better luck next time!' }
+  };
+  const s = statusMap[status] || statusMap.audition_pending;
+  banner.innerHTML = `<div class="status-banner ${s.cls}"><div class="sb-icon">${s.icon}</div><div class="sb-title ${s.cls}">${s.title}</div><div class="sb-desc">${s.desc}</div></div>`;
+
+  if (status === 'rejected') {
+    banner.innerHTML += `<div class="rejected-msg"><p>We appreciate your enthusiasm and hard work. We encourage you to keep pursuing your passion. Critically Yours wishes you all the best in your future endeavours.</p></div>`;
+  }
+
+  // Info cards
+  const eventName = myReg.eventId || '--';
+  grid.innerHTML = `
+    <div class="info-card"><div class="info-label">Event</div><div class="info-val" id="eventNameCard">Loading...</div></div>
+    <div class="info-card"><div class="info-label">Class</div><div class="info-val">${myReg.class||''} &ndash; ${myReg.section||''}</div></div>
+    <div class="info-card"><div class="info-label">Roll Number</div><div class="info-val">${myReg.rollNumber||''}</div></div>
+    <div class="info-card"><div class="info-label">Registered On</div><div class="info-val">${myReg.createdAt?.toDate?myReg.createdAt.toDate().toLocaleDateString('en-IN'):''}</div></div>
+  `;
+  // Fetch event name
+  getDoc(doc(db,'events',myReg.eventId)).then(snap => {
+    if (snap.exists()) document.getElementById('eventNameCard').textContent = snap.data().name||'--';
+  }).catch(()=>{});
+}
+
+async function loadAnnouncements() {
+  const list = document.getElementById('annList');
   try {
-    // Structural Server Verification: bypass client storage data entirely to verify roles
-    const ud = await getDoc(doc(db, 'users', user.uid));
-    
-    if (!ud.exists()) {
-      throwOut();
-      return;
-    }
+    const status = myReg.status;
+    const snap = await getDocs(query(collection(db,'announcements'), orderBy('createdAt','desc')));
+    const relevant = [];
+    snap.forEach(d => {
+      const a = d.data();
+      const t = a.targets || [];
+      const isPublic = t.includes('public') || t.includes('all');
+      const isParticipant = t.includes('participant') && status === 'selected';
+      const isEventSpecific = a.eventId === myReg.eventId;
+      if (isPublic || isParticipant || (isEventSpecific && status === 'selected')) relevant.push(a);
+    });
+    if (!relevant.length) { list.innerHTML = '<div class="empty-state"><div class="es-icon">&#9670;</div><p>No announcements yet.</p></div>'; return; }
+    list.innerHTML = '';
+    relevant.forEach(a => {
+      const time = a.createdAt?.toDate ? a.createdAt.toDate().toLocaleString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
+      list.innerHTML += `<div class="ann-card">
+        <div class="ann-meta"><span class="ann-from">${a.postedBy||'Team'}</span><span class="ann-time">${time}</span></div>
+        <div class="ann-title">${a.title||''}</div>
+        <div class="ann-body">${a.body||''}</div>
+      </div>`;
+    });
+  } catch(e) { list.innerHTML = '<div class="empty-state"><p>Failed to load.</p></div>'; }
+}
 
-    const userData = ud.data();
-    const isParticipant = userData.role === 'Participant' || userData.roles?.includes('Participant');
-
-    if (!isParticipant) {
-      throwOut();
-      return;
-    }
-
-    // Explicit confirmation — sync current valid roles context safely
-    CU = user;
-    sessionStorage.setItem('userRole', 'Participant');
-    
-    document.getElementById('sbImg').src = CU.photoURL || '';
-    document.getElementById('sbName').textContent = CU.displayName || '';
-    
-    const rd = await getDoc(doc(db, 'registrations', CU.uid));
-    if (rd.exists()) {
-      regData = rd.data();
-      renderDash();
-      loadAnn();
-      setupChat();
-    } else {
-      document.getElementById('regStatusContent').innerHTML = '<p style="color:var(--muted);font-size:13px;">No registration found.</p>';
-    }
-    
-    genQR();
-
-    // Tear down loader wall safely only when user checks out cleanly
-    document.getElementById('portalLoader').style.display = 'none';
-    document.getElementById('mainShell').style.display = 'flex';
-
-  } catch (err) {
-    console.error("Auth rule execution framework fault:", err);
-    throwOut();
+async function loadTasks() {
+  const list = document.getElementById('taskList');
+  if (myReg.status !== 'selected') {
+    list.innerHTML = '<div class="empty-state"><div class="es-icon">&#9636;</div><p>Tasks are visible only to selected participants.</p></div>';
+    return;
   }
-});
+  try {
+    const snap = await getDocs(query(collection(db,'tasks'), where('participantId','==',myReg.id)));
+    if (snap.empty) { list.innerHTML = '<div class="empty-state"><div class="es-icon">&#9636;</div><p>No tasks assigned yet.</p></div>'; return; }
+    list.innerHTML = '';
+    snap.forEach(d => {
+      const t = d.data();
+      list.innerHTML += `<div class="task-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <div class="task-title">${t.title||''}</div>
+          <span class="task-badge">${t.status||'pending'}</span>
+        </div>
+        <div class="task-body">${t.description||''}</div>
+        ${t.assignedBy?`<div style="font-size:0.65rem;color:var(--gold);margin-top:8px;">Assigned by: ${t.assignedBy}</div>`:''}
+      </div>`;
+    });
+  } catch(e) { list.innerHTML = '<div class="empty-state"><p>Failed to load tasks.</p></div>'; }
+}
 
-function renderDash(){
-  const st=regData.status||'Audition Pending';
-  if(st==='Rejected'){
-    document.getElementById('rejBanner').classList.add('show');
-    document.getElementById('rejMsg').innerHTML=`<strong style="color:var(--red);">Your audition was not successful.</strong><br>Thank you for your interest in Critically Yours. Unfortunately, you were not selected. We encourage you to keep exploring your interests and try again. — Event Head Team`;
-  }
-  const bCls=st==='Audition Pending'?'s-pending':st==='Selected'?'s-selected':st==='Rejected'?'s-rejected':'s-auditioning';
-  document.getElementById('regStatusContent').innerHTML=`
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
-      <span class="status-badge ${bCls}">${st==='Audition Pending'?'⏳ ':st==='Selected'?'✅ ':st==='Rejected'?'❌ ':'🎬 '}${st}</span>
-    </div>
-    <div class="info-grid">
-      <div class="info-item"><p>Name</p><p>${regData.name}</p></div>
-      <div class="info-item"><p>Class &amp; Section</p><p>${regData.class} — ${regData.section}</p></div>
-      <div class="info-item"><p>Roll No.</p><p>${regData.roll}</p></div>
-      <div class="info-item"><p>Class Teacher</p><p>${regData.classTeacher||'—'}</p></div>
-      <div class="info-item"><p>Calling No.</p><p>${regData.callNo}</p></div>
-      <div class="info-item"><p>Registered On</p><p>${regData.createdAt?.toDate?.().toLocaleDateString('en-IN')||'—'}</p></div>
+function loadQR() {
+  const canvas = document.getElementById('qrCanvas');
+  const qrId = myReg.qrId || myReg.id;
+  QRCode.toCanvas(canvas, qrId, { width: 180, margin: 2, color: { dark: '#C9A84C', light: '#00000000' } }, err => {
+    if (err) { canvas.parentElement.innerHTML += '<p style="color:var(--red-light);font-size:0.75rem;">QR generation failed.</p>'; }
+  });
+  document.getElementById('qrIdLabel').textContent = 'ID: ' + qrId;
+  document.getElementById('qrNameLabel').textContent = myReg.name || '';
+}
+
+function loadProfile() {
+  document.getElementById('profileAvatar').src = myReg.photoURL || myUser.photoURL || '';
+  document.getElementById('profileName').textContent = myReg.name || '';
+  document.getElementById('profileEmail').textContent = myReg.email || '';
+  document.getElementById('profileDetails').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      ${infoRow('Registration No.', myReg.registrationNumber)}
+      ${infoRow('Class', (myReg.class||'') + ' \u2013 ' + (myReg.section||''))}
+      ${infoRow('Roll Number', myReg.rollNumber)}
+      ${infoRow('Class Teacher', myReg.classTeacher)}
+      ${infoRow('Calling No.', myReg.callingNumber)}
+      ${infoRow('WhatsApp', myReg.whatsappNumber)}
     </div>`;
-  if(regData.eventId){
-    getDoc(doc(db,'events',regData.eventId)).then(ed=>{
-      if(ed.exists()){
-        const ev=ed.data();
-        document.getElementById('eventDetailsContent').innerHTML=`
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-            ${ev.logoFile?`<img src="${ev.logoFile}" style="width:44px;height:44px;object-fit:contain;" onerror="this.style.display='none'">`:''}
-            <div>
-              <div style="font-size:16px;font-weight:700;font-family:'Playfair Display',serif;color:var(--gold);">${ev.name}</div>
-              <div style="font-size:11px;color:var(--muted);">${ev.category||''}</div>
-            </div>
-          </div>
-          <p style="font-size:12px;color:var(--muted);line-height:1.6;">${ev.description||''}</p>`;
-      }
-    });
-  }
+}
+function infoRow(label, val) {
+  return `<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:12px;">
+    <div style="font-size:0.58rem;letter-spacing:2px;color:var(--text-secondary);text-transform:uppercase;margin-bottom:4px;">${label}</div>
+    <div style="font-size:0.85rem;color:var(--text-primary);">${val||'&mdash;'}</div>
+  </div>`;
 }
 
-function loadAnn(){
-  if(!regData)return;
-  const list=document.getElementById('annListContainer');
-  const q=query(collection(db,'announcements'),
-    where('approved','==',true),
-    orderBy('createdAt','desc'));
-  onSnapshot(q,snap=>{
-    list.innerHTML='';
-    const items=[];
-    snap.forEach(d=>{
-      const a=d.data();
-      const forEvent=a.targetEventId===regData.eventId||a.targetEventId==='*'||a.targetPublic===true;
-      const selectedFilter=a.selectedOnly&&regData.status!=='Selected';
-      if(!forEvent||selectedFilter)return;
-      items.push(a);
-    });
-    if(!items.length){list.innerHTML='<p style="color:var(--muted);font-size:12px;font-style:italic;">No announcements yet.</p>';return;}
-    items.forEach(a=>{
-      const el=document.createElement('div');el.className='ann-item';
-      const date=a.createdAt?.toDate?.().toLocaleDateString('en-IN')||'';
-      el.innerHTML=`<div class="ann-icon">📢</div><div><div class="ann-title">${a.title}</div><div class="ann-body">${a.body}</div><div class="ann-meta">${a.senderName||''} ${a.senderRole?'· '+a.senderRole:''} ${date?'· '+date:''}</div></div>`;
-      list.appendChild(el);
-    });
-  });
-}
-
-function setupChat(){
-  if(!regData?.eventId)return;
-  chatId=`participant_${CU.uid}_event_${regData.eventId}`;
-  setDoc(doc(db,'chats',chatId),{participants:[CU.uid],type:'participant_eventhead',eventId:regData.eventId,participantId:CU.uid},{merge:true});
-  onSnapshot(query(collection(db,'chats',chatId,'messages'),orderBy('sentAt','asc')),snap=>{
-    const c=document.getElementById('chatMsgs');c.innerHTML='';
-    if(snap.empty){c.innerHTML='<p style="color:var(--muted);font-size:12px;text-align:center;padding:32px;">No messages yet. Start a conversation with your Event Head.</p>';return;}
-    snap.forEach(d=>{
-      const m=d.data();const own=m.senderId===CU.uid;
-      const b=document.createElement('div');b.className='bubble '+(own?'bubble-out':'bubble-in');
-      const t=m.sentAt?.toDate?.().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})||'';
-      b.innerHTML=`${!own?`<div class="bubble-sender">${m.senderName}</div><div class="bubble-role-tag">${m.senderRole||''}</div>`:''}<div>${m.text}</div><div class="bubble-time">${t} ${own?(m.seen?'✓✓':m.delivered?'✓✓':'✓'):''}</div>`;
-      c.appendChild(b);
-    });
-    c.scrollTop=c.scrollHeight;
-  });
-  document.getElementById('chatSendBtn').onclick=sendMsg;
-  document.getElementById('chatInput').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey)sendMsg();};
-}
-
-async function sendMsg(){
-  const inp=document.getElementById('chatInput');
-  const text=inp.value.trim();if(!text)return;inp.value='';
-  try{await addDoc(collection(db,'chats',chatId,'messages'),{senderId:CU.uid,senderName:CU.displayName||'',senderRole:'Participant',text,sentAt:serverTimestamp(),delivered:false,seen:false});}
-  catch(e){toast('Failed to send.','error');inp.value=text;}
-}
-
-function genQR(){
-  const s=document.createElement('script');
-  s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
-  s.onload=()=>{
-    const data=JSON.stringify({uid:CU.uid,name:CU.displayName,email:CU.email,role:'Participant',ts:Date.now()});
-    new QRCode(document.getElementById('qrDiv'),{text:data,width:200,height:200,colorDark:'#2D5016',colorLight:'#FFFDE7',correctLevel:QRCode.CorrectLevel.H});
-  };
-  document.head.appendChild(s);
-  document.getElementById('qrName').textContent=CU.displayName||'';
-  document.getElementById('qrId').textContent='ID: '+(CU.uid||'').slice(0,12).toUpperCase();
-}
-
-// NAV
-document.querySelectorAll('.nav-item[data-page]').forEach(b=>{
-  b.onclick=()=>{
-    document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    b.classList.add('active');
-    document.getElementById('page-'+b.dataset.page).classList.add('active');
-  };
-});
-
-document.getElementById('logoutBtn').onclick=async()=>{await signOut(auth);sessionStorage.clear();window.location.href='portal-login.html';};
-
-// TICKET
-document.getElementById('ticketFab').onclick=()=>document.getElementById('ticketMod').classList.add('open');
-document.getElementById('ticketClose').onclick=()=>document.getElementById('ticketMod').classList.remove('open');
-document.getElementById('ticketMod').onclick=e=>{if(e.target===document.getElementById('ticketMod'))document.getElementById('ticketMod').classList.remove('open');};
-document.getElementById('tkSubmit').onclick=async()=>{
-  const sub=document.getElementById('tkSub').value.trim();
-  const body=document.getElementById('tkBody').value.trim();
-  if(!sub||!body){toast('Fill all fields.','error');return;}
-  await addDoc(collection(db,'tickets'),{userId:CU.uid,userName:CU.displayName||'',userEmail:CU.email,userRole:'Participant',subject:sub,body,status:'Open',createdAt:serverTimestamp()});
-  toast('Ticket submitted!','success');
-  document.getElementById('ticketMod').classList.remove('open');
-  document.getElementById('tkSub').value='';document.getElementById('tkBody').value='';
+window.showPanel = (id, btn) => {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  document.getElementById('topbarTitle').textContent = btn ? btn.textContent.trim() : id;
 };
+
+window.submitTicket = async () => {
+  const cat = document.getElementById('tCat').value;
+  const desc = document.getElementById('tDesc').value.trim();
+  if (!desc) { alert('Please describe the issue.'); return; }
+  try {
+    await addDoc(collection(db,'tickets'), {
+      name: myReg.name, email: myReg.email,
+      category: cat, description: desc,
+      status:'open', createdAt: serverTimestamp()
+    });
+    document.getElementById('ticketModal').classList.remove('active');
+    document.getElementById('tDesc').value='';
+    alert('Ticket submitted successfully.');
+  } catch(e) { alert('Failed to submit: '+e.message); }
+};
+
+window.doSignOut = async () => { await signOut(auth); window.location.href='login.html'; };
 </script>
 </body>
 </html>

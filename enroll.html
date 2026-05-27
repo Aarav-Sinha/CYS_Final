@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enroll — Critically Yours</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Josefin+Sans:wght@200;300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#C9A84C;--gold-dim:#8B6914;--green:#4A7C59;--green-light:#6BAA7D;
+  --bg-dark:#0A0C08;--bg-card:rgba(255,255,255,0.04);
+  --glass:rgba(201,168,76,0.08);
+  --text-primary:#F5EDD6;--text-secondary:#A89060;
+  --border:rgba(201,168,76,0.2);--shadow-gold:0 0 40px rgba(201,168,76,0.15);
+  --red:#C0392B;
+}
+[data-theme="light"]{
+  --bg-dark:#F5F0E8;--bg-card:rgba(0,0,0,0.04);
+  --glass:rgba(201,168,76,0.1);
+  --text-primary:#1A1208;--text-secondary:#6B5020;
+  --border:rgba(201,168,76,0.3);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Josefin Sans',sans-serif;
+  background:var(--bg-dark);color:var(--text-primary);
+  min-height:100vh;padding:0;
+  transition:background 0.3s,color 0.3s;
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse 60% 50% at 20% 30%, rgba(201,168,76,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 80% 70%, rgba(74,124,89,0.07) 0%, transparent 70%);
+  pointer-events:none;z-index:0;
+}
+.top-bar{
+  position:sticky;top:0;z-index:100;padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(10,12,8,0.7);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+[data-theme="light"] .top-bar{background:rgba(245,240,232,0.8);}
+.top-logo{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--gold);letter-spacing:2px;text-decoration:none;}
+.top-right{display:flex;gap:12px;align-items:center;}
+.theme-toggle{width:34px;height:34px;border-radius:50%;background:var(--bg-card);border:1px solid var(--border);color:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all 0.2s;}
+.back-link{font-size:0.7rem;letter-spacing:2px;color:var(--text-secondary);text-decoration:none;text-transform:uppercase;transition:color 0.2s;}
+.back-link:hover{color:var(--gold);}
+
+/* MAIN */
+.main{
+  max-width:600px;margin:0 auto;padding:40px 24px 60px;
+  position:relative;z-index:1;
+}
+.page-header{text-align:center;margin-bottom:40px;}
+.page-badge{font-size:0.6rem;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:300;color:var(--text-primary);margin-bottom:8px;}
+.page-title em{color:var(--gold);font-style:italic;}
+.page-sub{font-size:0.78rem;color:var(--text-secondary);letter-spacing:1px;}
+
+/* GOOGLE AUTH CARD */
+.auth-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:12px;padding:28px;margin-bottom:24px;
+  backdrop-filter:blur(8px);
+}
+.auth-card h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--text-primary);margin-bottom:6px;}
+.auth-card p{font-size:0.75rem;color:var(--text-secondary);margin-bottom:20px;line-height:1.7;}
+
+.google-btn{
+  width:100%;padding:13px;border-radius:8px;
+  border:1px solid var(--border);background:var(--bg-card);
+  color:var(--text-primary);font-family:'Josefin Sans',sans-serif;
+  font-size:0.8rem;letter-spacing:1.5px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  transition:all 0.3s;
+}
+.google-btn:hover{border-color:var(--gold);background:var(--glass);}
+.google-btn svg{width:20px;height:20px;flex-shrink:0;}
+
+.user-confirmed{
+  display:none;
+  align-items:center;gap:12px;
+  padding:12px 16px;
+  background:var(--glass);border:1px solid var(--border);border-radius:8px;
+}
+.user-confirmed.visible{display:flex;}
+.uc-avatar{width:40px;height:40px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;}
+.uc-info{flex:1;}
+.uc-name{font-size:0.9rem;font-weight:600;color:var(--text-primary);}
+.uc-email{font-size:0.65rem;color:var(--text-secondary);}
+.uc-reg{font-size:0.65rem;color:var(--gold);margin-top:2px;}
+.btn-change{font-size:0.65rem;color:var(--text-secondary);text-decoration:underline;cursor:pointer;background:none;border:none;flex-shrink:0;}
+.btn-change:hover{color:var(--red);}
+
+/* FORM */
+.form-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:12px;padding:28px;margin-bottom:24px;
+  backdrop-filter:blur(8px);display:none;
+}
+.form-card.visible{display:block;}
+.form-section-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1rem;color:var(--text-primary);margin-bottom:20px;
+  padding-bottom:10px;border-bottom:1px solid var(--border);
+}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+@media(max-width:480px){.form-row{grid-template-columns:1fr;}}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-size:0.62rem;letter-spacing:2px;color:var(--text-secondary);text-transform:uppercase;margin-bottom:8px;}
+.form-group label span{color:var(--red);}
+.form-group input,.form-group select{
+  width:100%;padding:11px 14px;border-radius:6px;
+  background:var(--bg-card);border:1px solid var(--border);
+  color:var(--text-primary);font-family:'Josefin Sans',sans-serif;
+  font-size:0.85rem;outline:none;transition:border 0.2s;
+}
+.form-group input:focus,.form-group select:focus{border-color:var(--gold);}
+.form-group input[readonly]{opacity:0.6;cursor:not-allowed;}
+.form-group select option{background:var(--bg-dark);color:var(--text-primary);}
+.form-group .hint{font-size:0.62rem;color:var(--text-secondary);margin-top:5px;display:block;}
+.same-as-call{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:0.72rem;color:var(--text-secondary);cursor:pointer;}
+.same-as-call input[type="checkbox"]{width:16px;height:16px;cursor:pointer;accent-color:var(--gold);}
+
+/* EVENT SELECT */
+.event-select-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:12px;padding:28px;margin-bottom:24px;
+  display:none;
+}
+.event-select-card.visible{display:block;}
+.events-list{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
+.event-option{
+  padding:14px 16px;border-radius:8px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--text-primary);font-family:'Josefin Sans',sans-serif;
+  font-size:0.8rem;cursor:pointer;text-align:left;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:all 0.2s;
+}
+.event-option:hover,.event-option.selected{border-color:var(--gold);background:var(--glass);}
+.event-option .ev-name{font-weight:600;}
+.event-option .ev-cat{font-size:0.6rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
+.event-option .ev-check{width:20px;height:20px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;}
+.event-option.selected .ev-check{background:var(--gold);border-color:var(--gold);color:#000;}
+
+/* SUBMIT */
+.btn-submit{
+  width:100%;padding:14px;border-radius:8px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-dim));
+  color:#0A0C08;font-family:'Josefin Sans',sans-serif;
+  font-size:0.78rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  border:none;cursor:pointer;transition:all 0.3s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.btn-submit:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,168,76,0.4);}
+.btn-submit:disabled{opacity:0.5;cursor:not-allowed;transform:none;box-shadow:none;}
+
+/* STATUS */
+.status-msg{
+  padding:14px 16px;border-radius:8px;font-size:0.8rem;margin-top:16px;display:none;
+  border-left:2px solid var(--gold);background:var(--glass);color:var(--text-primary);
+}
+.status-msg.error{border-color:var(--red);background:rgba(192,57,43,0.1);color:#e74c3c;}
+.status-msg.visible{display:block;}
+
+/* SUCCESS */
+.success-screen{
+  display:none;text-align:center;padding:60px 20px;
+}
+.success-screen.visible{display:block;}
+.success-icon{font-size:3rem;color:var(--gold);margin-bottom:20px;}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--text-primary);margin-bottom:8px;}
+.success-sub{font-size:0.8rem;color:var(--text-secondary);line-height:1.7;margin-bottom:28px;}
+
+.spinner{width:16px;height:16px;border:2px solid transparent;border-top:2px solid #0A0C08;border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.main{animation:fadeUp 0.6s ease;}
+
+.note-box{
+  background:var(--glass);border:1px solid var(--border);border-radius:8px;
+  padding:14px 16px;font-size:0.73rem;color:var(--text-secondary);line-height:1.7;
+  margin-bottom:20px;
+}
+.note-box strong{color:var(--gold);}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a href="index.html" class="top-logo">Critically Yours</a>
+  <div class="top-right">
+    <button class="theme-toggle" id="themeToggle">&#9790;</button>
+    <a href="index.html" class="back-link">&#8592; Home</a>
+  </div>
+</div>
+
+<div class="main">
+  <div class="page-header">
+    <div class="page-badge">&#9670; Registration &#9670;</div>
+    <h1 class="page-title">Event <em>Enrollment</em></h1>
+    <p class="page-sub">Register for Critically Yours 2025</p>
+  </div>
+
+  <!-- SUCCESS SCREEN -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">&#10003;</div>
+    <h2 class="success-title">Registration Submitted!</h2>
+    <p class="success-sub">Your enrollment is now <strong style="color:var(--gold);">Audition Pending</strong>. The Event Head will review your application after auditions. You will be notified of the result.</p>
+    <a href="login.html" style="display:inline-block;padding:12px 32px;border-radius:6px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:#0A0C08;font-size:0.75rem;font-weight:600;letter-spacing:2px;text-decoration:none;text-transform:uppercase;">Go to Participant Portal</a>
+  </div>
+
+  <!-- STEP 1: GOOGLE AUTH -->
+  <div id="enrollForm">
+    <div class="auth-card" id="authCard">
+      <h3>Step 1 — Verify School Identity</h3>
+      <p>Sign in with your <strong style="color:var(--gold);">@dpsmegacity.in</strong> school Google account. Your name, profile picture, and registration number will be captured automatically.</p>
+      
+      <div class="user-confirmed" id="userConfirmed">
+        <img class="uc-avatar" id="ucAvatar" src="" alt="">
+        <div class="uc-info">
+          <div class="uc-name" id="ucName"></div>
+          <div class="uc-email" id="ucEmail"></div>
+          <div class="uc-reg" id="ucReg"></div>
+        </div>
+        <button class="btn-change" onclick="changeAccount()">Change</button>
+      </div>
+
+      <button class="google-btn" id="googleSignInBtn" onclick="signInWithSchool()">
+        <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continue with School Google Account
+      </button>
+      <div class="status-msg" id="authStatus"></div>
+    </div>
+
+    <!-- STEP 2: EVENT -->
+    <div class="event-select-card" id="eventCard">
+      <div class="form-section-title">Step 2 — Select Your Event</div>
+      <div class="note-box">You may enroll in <strong>maximum 1 event</strong> only. Choose wisely.</div>
+      <div class="events-list" id="eventsList">
+        <div style="text-align:center;color:var(--text-secondary);padding:20px;font-size:0.8rem;">Loading events...</div>
+      </div>
+    </div>
+
+    <!-- STEP 3: DETAILS -->
+    <div class="form-card" id="formCard">
+      <div class="form-section-title">Step 3 — Fill Your Details</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name <span>*</span></label>
+          <input type="text" id="fName" readonly placeholder="From Google account">
+        </div>
+        <div class="form-group">
+          <label>Registration Number <span>*</span></label>
+          <input type="text" id="fReg" readonly placeholder="From email">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Class <span>*</span></label>
+          <select id="fClass" onchange="loadSections()">
+            <option value="">Select class</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Section <span>*</span></label>
+          <select id="fSection" onchange="loadClassTeacher()">
+            <option value="">Select section</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Roll Number <span>*</span></label>
+        <input type="number" id="fRoll" placeholder="Enter your roll number" min="1">
+      </div>
+
+      <div class="form-group">
+        <label>Class Teacher <span>*</span></label>
+        <input type="text" id="fTeacher" readonly placeholder="Auto-filled based on class &amp; section">
+        <span class="hint">Automatically filled based on your class and section.</span>
+      </div>
+
+      <div class="form-group">
+        <label>Email ID <span>*</span></label>
+        <input type="email" id="fEmail" readonly placeholder="From Google account">
+      </div>
+
+      <div class="form-group">
+        <label>Calling Number <span>*</span></label>
+        <input type="tel" id="fCall" placeholder="10-digit mobile number" maxlength="10">
+      </div>
+
+      <div class="form-group">
+        <label>WhatsApp Number <span>*</span></label>
+        <input type="tel" id="fWhatsapp" placeholder="10-digit WhatsApp number" maxlength="10">
+        <label class="same-as-call">
+          <input type="checkbox" id="sameAsCall" onchange="toggleSameAsCall()">
+          Same as calling number
+        </label>
+      </div>
+
+      <button class="btn-submit" id="submitBtn" onclick="submitEnrollment()">
+        Submit Enrollment
+      </button>
+      <div class="status-msg" id="formStatus"></div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, collection, query, where, getDocs, addDoc, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut as fbSignOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBKeQxNTRaGsry7vpHZOBOD6CCuvZhBpU0",
+  authDomain: "critically-yours-v5.firebaseapp.com",
+  projectId: "critically-yours-v5",
+  storageBucket: "critically-yours-v5.firebasestorage.app",
+  messagingSenderId: "436240015995",
+  appId: "1:436240015995:web:e646abe16d80d7eab9f8de"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+provider.setCustomParameters({ prompt: 'select_account' });
+
+// THEME
+const themeToggle = document.getElementById('themeToggle');
+const saved = localStorage.getItem('cy_theme') || 'dark';
+document.documentElement.setAttribute('data-theme', saved);
+themeToggle.textContent = saved === 'dark' ? '☀' : '☾';
+themeToggle.addEventListener('click', () => {
+  const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('cy_theme', t);
+  themeToggle.textContent = t === 'dark' ? '☀' : '☾';
+});
+
+// Check URL for pre-selected event
+const urlParams = new URLSearchParams(window.location.search);
+let preSelectedEvent = urlParams.get('event');
+let currentUser = null;
+let selectedEventId = preSelectedEvent || null;
+let allClasses = [];
+let classTeacherMap = {};
+
+function showAuthStatus(msg, isError) {
+  const el = document.getElementById('authStatus');
+  el.textContent = msg; el.className = 'status-msg visible' + (isError?' error':'');
+}
+function showFormStatus(msg, isError) {
+  const el = document.getElementById('formStatus');
+  el.textContent = msg; el.className = 'status-msg visible' + (isError?' error':'');
+}
+
+// Extract registration number from school email
+function extractRegNumber(email) {
+  if (!email.endsWith('@dpsmegacity.in')) return '';
+  const local = email.split('@')[0];
+  const match = local.match(/(\d+)$/);
+  return match ? match[1] : '';
+}
+
+window.signInWithSchool = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    const email = user.email;
+    if (!email.endsWith('@dpsmegacity.in')) {
+      showAuthStatus('Only @dpsmegacity.in school accounts are allowed for enrollment.', true);
+      await fbSignOut(auth);
+      return;
+    }
+    // Check already enrolled
+    const existing = await getDocs(query(collection(db,'registrations'), where('email','==',email)));
+    if (!existing.empty) {
+      showAuthStatus('You have already enrolled. Visit the Participant Portal to check your status.', true);
+      await fbSignOut(auth);
+      return;
+    }
+    setupUser(user);
+  } catch(e) {
+    if (e.code !== 'auth/popup-closed-by-user') showAuthStatus('Sign-in failed: ' + e.message, true);
+  }
+};
+
+function setupUser(user) {
+  currentUser = user;
+  const regNo = extractRegNumber(user.email);
+  document.getElementById('ucAvatar').src = user.photoURL || '';
+  document.getElementById('ucName').textContent = user.displayName || '';
+  document.getElementById('ucEmail').textContent = user.email;
+  document.getElementById('ucReg').textContent = regNo ? 'Reg. No: ' + regNo : '';
+  document.getElementById('userConfirmed').classList.add('visible');
+  document.getElementById('googleSignInBtn').style.display = 'none';
+  document.getElementById('fName').value = user.displayName || '';
+  document.getElementById('fEmail').value = user.email;
+  document.getElementById('fReg').value = regNo;
+  document.getElementById('eventCard').classList.add('visible');
+  document.getElementById('formCard').classList.add('visible');
+  loadEvents();
+  loadClassData();
+}
+
+window.changeAccount = async () => {
+  await fbSignOut(auth);
+  location.reload();
+};
+
+async function loadEvents() {
+  const list = document.getElementById('eventsList');
+  try {
+    const snap = await getDocs(query(collection(db,'events'), orderBy('order','asc')));
+    if (snap.empty) { list.innerHTML = '<div style="text-align:center;color:var(--text-secondary);padding:20px;">No events available.</div>'; return; }
+    list.innerHTML = '';
+    snap.forEach(d => {
+      const ev = d.data();
+      const opt = document.createElement('button');
+      opt.className = 'event-option' + (d.id === selectedEventId ? ' selected' : '');
+      opt.setAttribute('data-id', d.id);
+      opt.innerHTML = `
+        <div>
+          <div class="ev-name">${ev.name||''}</div>
+          <div class="ev-cat">${ev.category||''}</div>
+        </div>
+        <div class="ev-check">${d.id===selectedEventId?'&#10003;':''}</div>`;
+      opt.addEventListener('click', () => selectEvent(d.id, opt));
+      list.appendChild(opt);
+    });
+  } catch(e) { list.innerHTML = '<div style="text-align:center;color:#e74c3c;padding:20px;">Failed to load events.</div>'; }
+}
+
+function selectEvent(id, el) {
+  selectedEventId = id;
+  document.querySelectorAll('.event-option').forEach(o => {
+    o.classList.remove('selected');
+    o.querySelector('.ev-check').innerHTML = '';
+  });
+  el.classList.add('selected');
+  el.querySelector('.ev-check').innerHTML = '&#10003;';
+}
+
+async function loadClassData() {
+  try {
+    const snap = await getDocs(query(collection(db,'classes'), orderBy('order','asc')));
+    allClasses = [];
+    snap.forEach(d => allClasses.push({id: d.id, ...d.data()}));
+    const classSelect = document.getElementById('fClass');
+    classSelect.innerHTML = '<option value="">Select class</option>';
+    allClasses.forEach(c => {
+      const o = document.createElement('option');
+      o.value = c.id; o.textContent = c.name;
+      classSelect.appendChild(o);
+    });
+  } catch(e) {}
+}
+
+window.loadSections = () => {
+  const classId = document.getElementById('fClass').value;
+  const secSelect = document.getElementById('fSection');
+  secSelect.innerHTML = '<option value="">Select section</option>';
+  document.getElementById('fTeacher').value = '';
+  if (!classId) return;
+  const cls = allClasses.find(c => c.id === classId);
+  if (cls && cls.sections) {
+    cls.sections.forEach(s => {
+      const o = document.createElement('option');
+      o.value = s.name || s; o.textContent = s.name || s;
+      secSelect.appendChild(o);
+    });
+    // Build teacher map for this class
+    classTeacherMap = {};
+    if (cls.sections) {
+      cls.sections.forEach(s => {
+        if (s.name && s.teacher) classTeacherMap[s.name] = s.teacher;
+        else if (typeof s === 'string') classTeacherMap[s] = '';
+      });
+    }
+  }
+};
+
+window.loadClassTeacher = () => {
+  const sec = document.getElementById('fSection').value;
+  const teacher = classTeacherMap[sec] || '';
+  document.getElementById('fTeacher').value = teacher;
+};
+
+window.toggleSameAsCall = () => {
+  const checked = document.getElementById('sameAsCall').checked;
+  const wa = document.getElementById('fWhatsapp');
+  if (checked) { wa.value = document.getElementById('fCall').value; wa.readOnly = true; }
+  else { wa.readOnly = false; }
+  document.getElementById('fCall').addEventListener('input', () => {
+    if (document.getElementById('sameAsCall').checked) {
+      document.getElementById('fWhatsapp').value = document.getElementById('fCall').value;
+    }
+  });
+};
+
+window.submitEnrollment = async () => {
+  if (!currentUser) { showFormStatus('Please sign in with your school account first.', true); return; }
+  const name = document.getElementById('fName').value.trim();
+  const reg = document.getElementById('fReg').value.trim();
+  const cls = document.getElementById('fClass').value;
+  const sec = document.getElementById('fSection').value;
+  const roll = document.getElementById('fRoll').value.trim();
+  const teacher = document.getElementById('fTeacher').value.trim();
+  const email = document.getElementById('fEmail').value.trim();
+  const call = document.getElementById('fCall').value.trim();
+  const wa = document.getElementById('fWhatsapp').value.trim();
+
+  if (!name||!reg||!cls||!sec||!roll||!teacher||!email||!call||!wa) { showFormStatus('Please fill all required fields.', true); return; }
+  if (!selectedEventId) { showFormStatus('Please select an event.', true); return; }
+  if (!/^\d{10}$/.test(call)) { showFormStatus('Calling number must be 10 digits.', true); return; }
+  if (!/^\d{10}$/.test(wa)) { showFormStatus('WhatsApp number must be 10 digits.', true); return; }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Submitting...';
+
+  try {
+    // Check enrollment status
+    const settingsSnap = await getDoc(doc(db,'settings','global'));
+    if (settingsSnap.exists() && settingsSnap.data().enrollmentOpen === false) {
+      showFormStatus('Enrollment is currently closed.', true);
+      btn.disabled = false; btn.textContent = 'Submit Enrollment'; return;
+    }
+
+    // Check duplicate
+    const dupSnap = await getDocs(query(collection(db,'registrations'), where('email','==',email)));
+    if (!dupSnap.empty) {
+      showFormStatus('You have already registered for an event.', true);
+      btn.disabled = false; btn.textContent = 'Submit Enrollment'; return;
+    }
+
+    const { nanoid } = await import('https://esm.sh/nanoid@5');
+    const qrId = nanoid(12);
+
+    await addDoc(collection(db,'registrations'), {
+      uid: currentUser.uid, name, registrationNumber: reg,
+      class: cls, section: sec, rollNumber: roll, classTeacher: teacher,
+      email, callingNumber: call, whatsappNumber: wa,
+      eventId: selectedEventId, status: 'audition_pending',
+      photoURL: currentUser.photoURL || '',
+      qrId, createdAt: serverTimestamp()
+    });
+    document.getElementById('enrollForm').style.display = 'none';
+    document.getElementById('successScreen').classList.add('visible');
+  } catch(e) {
+    showFormStatus('Submission failed: ' + e.message, true);
+    btn.disabled = false; btn.innerHTML = 'Submit Enrollment';
+  }
+};
+
+onAuthStateChanged(auth, user => {
+  if (user && user.email && user.email.endsWith('@dpsmegacity.in')) {
+    setupUser(user);
+  }
+});
+</script>
+</body>
+</html>
