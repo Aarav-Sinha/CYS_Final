@@ -2,279 +2,238 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Admin — Critically Yours</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Josefin+Sans:wght@200;300;400;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --gold:#C9A84C;--gold-dim:#8B6914;--green:#4A7C59;--green-light:#6BAA7D;
-  --red:#C0392B;--red-light:#e74c3c;
-  --bg-dark:#080A06;--bg-sidebar:#0D0F0B;
-  --bg-card:rgba(255,255,255,0.04);--bg-card-hover:rgba(255,255,255,0.07);
-  --glass:rgba(201,168,76,0.08);
-  --text-primary:#F5EDD6;--text-secondary:#A89060;
-  --border:rgba(201,168,76,0.15);--shadow-gold:0 0 40px rgba(201,168,76,0.1);
-}
-[data-theme="light"]{
-  --bg-dark:#F0EBE0;--bg-sidebar:#E8E0D0;
-  --bg-card:rgba(0,0,0,0.04);--bg-card-hover:rgba(0,0,0,0.07);
-  --glass:rgba(201,168,76,0.1);
-  --text-primary:#1A1208;--text-secondary:#6B5020;
-  --border:rgba(201,168,76,0.25);
-}
+:root{--gold:#C9A84C;--gold-dim:#8B6914;--gold-g:rgba(201,168,76,0.15);--green:#3A7D44;--green-l:#5BAD6F;--green-d:#1E4D28;--red:#C0392B;--red-l:#e74c3c;--bg:#06080A;--bg2:#090C07;--bg3:#0C0F0A;--card:rgba(255,255,255,0.03);--cardh:rgba(255,255,255,0.06);--glass:rgba(201,168,76,0.06);--t1:#F0E8D0;--t2:#9A8050;--t3:#6A5830;--b1:rgba(201,168,76,0.15);--b2:rgba(58,125,68,0.18);}
+[data-theme="light"]{--bg:#F5F0E8;--bg2:#EDE8DC;--bg3:#E5DFD0;--card:rgba(0,0,0,0.03);--cardh:rgba(0,0,0,0.06);--glass:rgba(201,168,76,0.08);--t1:#1A1208;--t2:#5A4010;--t3:#8A6830;--b1:rgba(201,168,76,0.25);--b2:rgba(58,125,68,0.25);}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(--text-primary);min-height:100vh;display:flex;transition:background 0.3s,color 0.3s;}
+html,body{height:100%;overflow-x:hidden;}
+body{font-family:'Josefin Sans',sans-serif;background:var(--bg);color:var(--t1);display:flex;height:100vh;transition:background .4s,color .4s;}
 
 /* SIDEBAR */
-.sidebar{
-  width:240px;flex-shrink:0;background:var(--bg-sidebar);
-  border-right:1px solid var(--border);
-  display:flex;flex-direction:column;
-  height:100vh;position:sticky;top:0;
-  overflow-y:auto;
-}
-.sb-logo{
-  padding:24px 20px;border-bottom:1px solid var(--border);
-  font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);letter-spacing:2px;
-}
-.sb-logo span{display:block;font-size:0.6rem;letter-spacing:3px;color:var(--text-secondary);margin-top:2px;font-family:'Josefin Sans',sans-serif;}
-.sb-user{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
-.sb-avatar{width:34px;height:34px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;flex-shrink:0;}
-.sb-user-info{flex:1;min-width:0;}
-.sb-name{font-size:0.75rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sb-role{font-size:0.58rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
-.sb-nav{flex:1;padding:12px 0;}
-.sb-section{font-size:0.55rem;letter-spacing:3px;color:var(--text-secondary);text-transform:uppercase;padding:12px 20px 6px;}
-.sb-item{
-  display:flex;align-items:center;gap:10px;
-  padding:10px 20px;font-size:0.72rem;letter-spacing:1px;
-  color:var(--text-secondary);cursor:pointer;
-  transition:all 0.2s;border:none;background:none;width:100%;text-align:left;
-}
-.sb-item:hover,.sb-item.active{color:var(--gold);background:var(--glass);}
-.sb-item.active{border-left:2px solid var(--gold);}
-.sb-item-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0;}
-.sb-bottom{padding:16px 20px;border-top:1px solid var(--border);}
-.sb-signout{
-  width:100%;padding:8px;border-radius:6px;
-  background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.3);
-  color:var(--red-light);font-family:'Josefin Sans',sans-serif;
-  font-size:0.65rem;letter-spacing:2px;cursor:pointer;transition:all 0.2s;
-}
-.sb-signout:hover{background:rgba(192,57,43,0.2);}
+.sb{width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--b1);display:flex;flex-direction:column;height:100vh;position:sticky;top:0;overflow-y:auto;transition:background .4s;}
+.sb-head{padding:18px 16px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:10px;}
+.sb-logo-img{width:32px;height:32px;object-fit:contain;border-radius:6px;}
+.sb-logo-fb{width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#06080A;font-weight:700;flex-shrink:0;}
+.sb-brand{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--gold);letter-spacing:1.5px;line-height:1.2;}
+.sb-brand small{display:block;font-size:.52rem;letter-spacing:3px;color:var(--t3);font-family:'Josefin Sans',sans-serif;text-transform:uppercase;}
+.sb-user{padding:12px 16px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:10px;}
+.sb-av{width:32px;height:32px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;flex-shrink:0;}
+.sb-uname{font-size:.72rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--t1);}
+.sb-urole{font-size:.54rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
+.sb-nav{flex:1;padding:8px 0;overflow-y:auto;}
+.sb-sec{font-size:.5rem;letter-spacing:3px;color:var(--t3);text-transform:uppercase;padding:10px 16px 4px;}
+.sb-item{display:flex;align-items:center;gap:9px;padding:9px 16px;font-size:.68rem;letter-spacing:.5px;color:var(--t2);cursor:pointer;transition:all .2s;border:none;background:none;width:100%;text-align:left;border-left:2px solid transparent;}
+.sb-item:hover,.sb-item.on{color:var(--gold);background:var(--glass);border-left-color:var(--gold);}
+.sb-foot{padding:12px 16px;border-top:1px solid var(--b1);}
+.sb-out{width:100%;padding:8px;border-radius:6px;background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.3);color:var(--red-l);font-family:'Josefin Sans',sans-serif;font-size:.6rem;letter-spacing:1.5px;cursor:pointer;transition:all .2s;}
+.sb-out:hover{background:rgba(192,57,43,0.2);}
+.mob-sb-btn{display:none;width:32px;height:32px;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--b1);border-radius:4px;color:var(--gold);cursor:pointer;font-size:16px;flex-shrink:0;}
 
 /* MAIN */
-.main{flex:1;overflow-y:auto;display:flex;flex-direction:column;}
-.topbar{
-  padding:16px 28px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  background:var(--bg-dark);position:sticky;top:0;z-index:10;
-}
-.topbar-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--text-primary);}
-.topbar-actions{display:flex;gap:12px;align-items:center;}
-.theme-toggle{width:34px;height:34px;border-radius:50%;background:var(--bg-card);border:1px solid var(--border);color:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;}
-
-.content{padding:28px;flex:1;}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.topbar{height:52px;padding:0 22px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;background:var(--bg);position:sticky;top:0;z-index:10;flex-shrink:0;}
+.topbar-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--t1);}
+.tb-right{display:flex;gap:8px;align-items:center;}
+.theme-btn{width:30px;height:30px;border-radius:50%;background:var(--card);border:1px solid var(--b1);color:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;}
+.content-area{flex:1;overflow-y:auto;padding:22px;}
 
 /* PANELS */
-.panel{display:none;}
-.panel.active{display:block;}
+.panel{display:none;animation:fadeUp .35s ease;}.panel.on{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 
-/* STAT CARDS */
-.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:28px;}
-.stat-card{
-  background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:20px;
-  transition:all 0.2s;
-}
-.stat-card:hover{background:var(--bg-card-hover);}
-.stat-val{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:var(--gold);line-height:1;}
-.stat-label{font-size:0.62rem;letter-spacing:2px;color:var(--text-secondary);text-transform:uppercase;margin-top:8px;}
-.stat-sub{font-size:0.7rem;color:var(--text-secondary);margin-top:4px;}
+/* STATS */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:20px;}
+.stat-c{background:var(--card);border:1px solid var(--b1);border-radius:10px;padding:16px 14px;transition:all .2s;}
+.stat-c:hover{background:var(--cardh);}
+.stat-v{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--gold);line-height:1;}
+.stat-l{font-size:.54rem;letter-spacing:2px;color:var(--t2);text-transform:uppercase;margin-top:6px;}
 
 /* TABLE */
-.table-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:20px;}
-.table-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
-.table-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--text-primary);}
-.search-box{padding:8px 12px;border-radius:6px;background:var(--bg-dark);border:1px solid var(--border);color:var(--text-primary);font-family:'Josefin Sans',sans-serif;font-size:0.75rem;outline:none;width:200px;}
-.search-box:focus{border-color:var(--gold);}
+.tbl-wrap{background:var(--card);border:1px solid var(--b1);border-radius:10px;overflow:hidden;margin-bottom:18px;}
+.tbl-head{padding:13px 16px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.tbl-title{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--t1);}
+.tbl-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.search{padding:7px 11px;border-radius:6px;background:var(--bg);border:1px solid var(--b1);color:var(--t1);font-family:'Josefin Sans',sans-serif;font-size:.7rem;outline:none;width:160px;transition:border .2s;}
+.search:focus{border-color:var(--gold);}
+.sel-filter{padding:7px 10px;border-radius:6px;background:var(--bg);border:1px solid var(--b1);color:var(--t1);font-family:'Josefin Sans',sans-serif;font-size:.7rem;outline:none;cursor:pointer;}
+.sel-filter option{background:var(--bg2);}
 table{width:100%;border-collapse:collapse;}
-th{font-size:0.6rem;letter-spacing:2px;color:var(--text-secondary);text-transform:uppercase;padding:12px 16px;text-align:left;border-bottom:1px solid var(--border);background:var(--bg-card);}
-td{font-size:0.78rem;padding:12px 16px;border-bottom:1px solid var(--border);color:var(--text-primary);vertical-align:middle;}
+th{font-size:.54rem;letter-spacing:2px;color:var(--t2);text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid var(--b1);}
+td{font-size:.74rem;padding:10px 14px;border-bottom:1px solid var(--b1);color:var(--t1);vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
-tr:hover td{background:var(--bg-card-hover);}
+tr:hover td{background:var(--cardh);}
+.badge{display:inline-block;padding:2px 9px;border-radius:10px;font-size:.56rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;}
+.b-pend{background:rgba(201,168,76,0.12);color:var(--gold);border:1px solid rgba(201,168,76,0.3);}
+.b-sel{background:rgba(58,125,68,0.12);color:var(--green-l);border:1px solid rgba(58,125,68,0.3);}
+.b-rej{background:rgba(192,57,43,0.12);color:var(--red-l);border:1px solid rgba(192,57,43,0.3);}
+.b-open{background:rgba(58,125,68,0.12);color:var(--green-l);border:1px solid rgba(58,125,68,0.3);}
+.b-res{background:rgba(201,168,76,0.12);color:var(--gold);border:1px solid rgba(201,168,76,0.3);}
 
-.badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:0.6rem;letter-spacing:1px;text-transform:uppercase;}
-.badge-pending{background:rgba(201,168,76,0.15);color:var(--gold);border:1px solid rgba(201,168,76,0.3);}
-.badge-selected{background:rgba(74,124,89,0.15);color:var(--green-light);border:1px solid rgba(74,124,89,0.3);}
-.badge-rejected{background:rgba(192,57,43,0.15);color:var(--red-light);border:1px solid rgba(192,57,43,0.3);}
+/* ACTIONS */
+.ab{padding:4px 11px;border-radius:4px;font-family:'Josefin Sans',sans-serif;font-size:.58rem;letter-spacing:.5px;cursor:pointer;transition:all .2s;border:1px solid var(--b1);background:transparent;color:var(--t2);}
+.ab:hover{border-color:var(--gold);color:var(--gold);}
+.ab-g{background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:#06080A;border-color:transparent;}
+.ab-g:hover{opacity:.9;}
+.ab-r{border-color:rgba(192,57,43,.4);color:var(--red-l);}
+.ab-r:hover{background:rgba(192,57,43,.15);}
+.ab-gr{border-color:rgba(58,125,68,.4);color:var(--green-l);}
+.ab-gr:hover{background:rgba(58,125,68,.15);}
 
-.action-btn{padding:5px 12px;border-radius:4px;font-family:'Josefin Sans',sans-serif;font-size:0.6rem;letter-spacing:1px;cursor:pointer;transition:all 0.2s;border:1px solid var(--border);background:transparent;color:var(--text-secondary);}
-.action-btn:hover{border-color:var(--gold);color:var(--gold);}
-.action-btn.danger:hover{border-color:var(--red);color:var(--red-light);}
-.action-btn.primary{background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:#0A0C08;border-color:transparent;}
-
-/* FORM ELEMENTS */
-.form-section{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:20px;}
-.form-section-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--text-primary);margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid var(--border);}
-.form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:16px;}
-.fg{display:flex;flex-direction:column;gap:6px;}
-.fg label{font-size:0.6rem;letter-spacing:2px;color:var(--text-secondary);text-transform:uppercase;}
-.fg input,.fg select,.fg textarea{
-  padding:10px 12px;border-radius:6px;
-  background:var(--bg-dark);border:1px solid var(--border);
-  color:var(--text-primary);font-family:'Josefin Sans',sans-serif;font-size:0.82rem;outline:none;transition:border 0.2s;
-}
+/* FORM SECTION */
+.fs{background:var(--card);border:1px solid var(--b1);border-radius:10px;padding:20px;margin-bottom:16px;}
+.fs-title{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--t1);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--b1);}
+.fg{margin-bottom:13px;}
+.fg label{display:block;font-size:.56rem;letter-spacing:2px;color:var(--t2);text-transform:uppercase;margin-bottom:6px;}
+.fg input,.fg select,.fg textarea{width:100%;padding:9px 12px;border-radius:6px;background:var(--bg);border:1px solid var(--b1);color:var(--t1);font-family:'Josefin Sans',sans-serif;font-size:.8rem;outline:none;transition:border .2s;}
 .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);}
-.fg select option{background:var(--bg-dark);}
-.fg textarea{resize:vertical;min-height:80px;}
-.btn-primary{padding:10px 24px;border-radius:6px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:#0A0C08;font-family:'Josefin Sans',sans-serif;font-size:0.72rem;font-weight:600;letter-spacing:2px;border:none;cursor:pointer;transition:all 0.2s;text-transform:uppercase;}
-.btn-primary:hover{opacity:0.9;transform:translateY(-1px);}
-.btn-secondary{padding:10px 20px;border-radius:6px;background:transparent;border:1px solid var(--border);color:var(--text-secondary);font-family:'Josefin Sans',sans-serif;font-size:0.72rem;cursor:pointer;transition:all 0.2s;}
-.btn-secondary:hover{border-color:var(--gold);color:var(--gold);}
-.btn-danger{padding:10px 20px;border-radius:6px;background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.3);color:var(--red-light);font-family:'Josefin Sans',sans-serif;font-size:0.72rem;cursor:pointer;transition:all 0.2s;}
-.btn-danger:hover{background:rgba(192,57,43,0.2);}
+.fg select option{background:var(--bg2);}
+.fg textarea{resize:vertical;min-height:70px;}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:13px;}
+.btn-prim{padding:9px 22px;border-radius:6px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:#06080A;font-family:'Josefin Sans',sans-serif;font-size:.67rem;font-weight:700;letter-spacing:2px;border:none;cursor:pointer;transition:all .2s;text-transform:uppercase;}
+.btn-prim:hover{opacity:.9;transform:translateY(-1px);}
+.btn-sec{padding:9px 18px;border-radius:6px;background:transparent;border:1px solid var(--b1);color:var(--t2);font-family:'Josefin Sans',sans-serif;font-size:.67rem;cursor:pointer;transition:all .2s;}
+.btn-sec:hover{border-color:var(--gold);color:var(--gold);}
+.btn-danger{padding:9px 18px;border-radius:6px;background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.3);color:var(--red-l);font-family:'Josefin Sans',sans-serif;font-size:.67rem;cursor:pointer;transition:all .2s;}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;}
+.msg{padding:10px 13px;border-radius:6px;font-size:.74rem;margin-top:10px;display:none;}
+.msg.s{background:rgba(58,125,68,.12);border:1px solid rgba(58,125,68,.3);color:var(--green-l);display:block;}
+.msg.e{background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.3);color:var(--red-l);display:block;}
 
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);}
-.toggle-row:last-child{border-bottom:none;}
-.toggle-info .toggle-label{font-size:0.82rem;font-weight:600;color:var(--text-primary);}
-.toggle-info .toggle-desc{font-size:0.7rem;color:var(--text-secondary);margin-top:3px;}
-.toggle-switch{position:relative;width:44px;height:24px;flex-shrink:0;}
-.toggle-switch input{opacity:0;width:0;height:0;}
-.toggle-slider{
-  position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;
-  background:var(--border);border-radius:24px;transition:0.3s;
-}
-.toggle-slider:before{
-  content:'';position:absolute;height:18px;width:18px;
-  left:3px;bottom:3px;background:#888;border-radius:50%;transition:0.3s;
-}
-.toggle-switch input:checked + .toggle-slider{background:var(--green);}
-.toggle-switch input:checked + .toggle-slider:before{transform:translateX(20px);background:white;}
+/* TOGGLES */
+.t-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--b1);}
+.t-row:last-child{border-bottom:none;}
+.t-info .t-label{font-size:.8rem;font-weight:600;color:var(--t1);}
+.t-info .t-desc{font-size:.66rem;color:var(--t2);margin-top:2px;}
+.ts{position:relative;width:42px;height:22px;flex-shrink:0;}
+.ts input{opacity:0;width:0;height:0;}
+.tsl{position:absolute;cursor:pointer;inset:0;background:var(--b1);border-radius:22px;transition:.3s;}
+.tsl::before{content:'';position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:#888;border-radius:50%;transition:.3s;}
+.ts input:checked+.tsl{background:var(--green);}
+.ts input:checked+.tsl::before{transform:translateX(20px);background:#fff;}
 
-.tag-input-wrap{display:flex;gap:8px;flex-wrap:wrap;padding:8px;border:1px solid var(--border);border-radius:6px;background:var(--bg-dark);min-height:42px;align-items:center;}
-.tag{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:12px;background:var(--glass);border:1px solid var(--border);font-size:0.7rem;color:var(--gold);}
-.tag button{background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:12px;padding:0;line-height:1;}
-.tag-input-wrap input{border:none;background:none;color:var(--text-primary);font-family:'Josefin Sans',sans-serif;font-size:0.8rem;outline:none;flex:1;min-width:100px;}
+/* SLIDESHOW IMAGE LIST */
+.img-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;background:var(--glass);border:1px solid var(--b1);font-size:.7rem;color:var(--t1);margin:3px;}
+.img-tag button{background:none;border:none;color:var(--t3);cursor:pointer;font-size:12px;line-height:1;padding:0;}
+.img-tag button:hover{color:var(--red-l);}
+.imgs-container{min-height:36px;border:1px solid var(--b1);border-radius:6px;padding:8px;background:var(--bg);display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-bottom:8px;}
+.img-add-row{display:flex;gap:8px;align-items:center;}
+.img-add-row input{flex:1;padding:8px 11px;border-radius:6px;background:var(--bg);border:1px solid var(--b1);color:var(--t1);font-family:'Josefin Sans',sans-serif;font-size:.78rem;outline:none;}
+.img-add-row input:focus{border-color:var(--gold);}
 
-.msg{padding:12px 16px;border-radius:6px;font-size:0.78rem;margin-top:12px;display:none;}
-.msg.success{background:rgba(74,124,89,0.15);border:1px solid rgba(74,124,89,0.3);color:var(--green-light);display:block;}
-.msg.error{background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.3);color:var(--red-light);display:block;}
+/* ATTENDANCE */
+.att-date-head{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);margin-bottom:14px;}
+.att-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
+.att-card{background:var(--card);border:1px solid var(--b1);border-radius:8px;padding:13px 15px;display:flex;align-items:center;gap:12px;}
+.att-av{width:32px;height:32px;border-radius:50%;border:2px solid var(--b1);object-fit:cover;flex-shrink:0;font-size:12px;background:var(--glass);display:flex;align-items:center;justify-content:center;color:var(--gold);}
+.att-av img{width:100%;height:100%;border-radius:50%;object-fit:cover;}
+.att-name{font-size:.76rem;font-weight:600;color:var(--t1);}
+.att-role{font-size:.58rem;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase;}
+.att-time{font-size:.6rem;color:var(--t2);margin-top:1px;}
+.att-present{width:10px;height:10px;border-radius:50%;background:var(--green-l);margin-left:auto;flex-shrink:0;}
+.att-absent{width:10px;height:10px;border-radius:50%;border:2px solid var(--b1);margin-left:auto;flex-shrink:0;}
 
-.loading-row td{text-align:center;color:var(--text-secondary);padding:32px;font-size:0.8rem;}
+/* TICKET CARD */
+.tk-card{background:var(--card);border:1px solid var(--b1);border-radius:8px;padding:14px 16px;margin-bottom:10px;}
+.tk-cat{font-size:.56rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
+.tk-title{font-size:.84rem;font-weight:600;color:var(--t1);margin:3px 0;}
+.tk-body{font-size:.74rem;color:var(--t2);line-height:1.6;margin-bottom:8px;}
+.tk-meta{font-size:.6rem;color:var(--t3);}
 
-/* TICKETS */
-.ticket-card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;transition:all 0.2s;}
-.ticket-card:hover{background:var(--bg-card-hover);}
-.ticket-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px;}
-.ticket-cat{font-size:0.6rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
-.ticket-title{font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-top:2px;}
-.ticket-body{font-size:0.78rem;color:var(--text-secondary);line-height:1.6;margin-bottom:10px;}
-.ticket-meta{font-size:0.65rem;color:var(--text-secondary);}
-.ticket-actions{display:flex;gap:8px;margin-top:10px;}
+/* LOADING */
+.loading-ph{text-align:center;padding:30px;color:var(--t2);font-size:.75rem;}
+
+/* SCROLLABLE TABLE */
+.tbl-scroll{overflow-x:auto;}
 
 /* RESPONSIVE */
 @media(max-width:700px){
-  .sidebar{width:100%;height:auto;position:fixed;z-index:200;top:0;flex-direction:row;flex-wrap:wrap;overflow-x:auto;}
-  .main{margin-top:60px;}
-  .sb-nav,.sb-bottom,.sb-user,.sb-logo{display:none;}
-  .mobile-sidebar-toggle{display:flex;}
-}
-.mobile-header{display:none;}
-@media(max-width:700px){
   body{flex-direction:column;}
-  .sidebar{width:100%;height:56px;position:sticky;flex-direction:row;align-items:center;padding:0 16px;overflow:visible;}
-  .sb-logo{padding:0;border:none;flex:1;}
-  .sb-nav,.sb-user,.sb-section,.sb-bottom{display:none;}
-  .sidebar.open .sb-nav,.sidebar.open .sb-user,.sidebar.open .sb-section,.sidebar.open .sb-bottom{display:flex;flex-direction:column;position:fixed;top:56px;left:0;right:0;background:var(--bg-sidebar);border-bottom:1px solid var(--border);z-index:100;max-height:80vh;overflow-y:auto;}
-  .sidebar.open .sb-nav,.sidebar.open .sb-bottom{display:block;}
-  .mobile-menu-btn{display:flex;width:36px;height:36px;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--gold);cursor:pointer;font-size:18px;flex-shrink:0;}
+  .sb{width:100%;height:52px;flex-direction:row;align-items:center;padding:0 14px;overflow:visible;position:sticky;top:0;z-index:100;gap:10px;}
+  .sb-head{padding:0;border:none;flex:1;}
+  .sb-brand small{display:none;}
+  .sb-nav,.sb-user,.sb-sec,.sb-foot{display:none;}
+  .sb.open .sb-nav,.sb.open .sb-foot,.sb.open .sb-user{display:flex;flex-direction:column;position:fixed;top:52px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--b1);z-index:99;max-height:80vh;overflow-y:auto;}
+  .sb.open .sb-nav,.sb.open .sb-foot{display:block;}
+  .mob-sb-btn{display:flex;}
+  .main{height:calc(100vh - 52px);}
+  .fgrid{grid-template-columns:1fr;}
 }
-.mobile-menu-btn{display:none;}
 </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar" id="sidebar">
-  <div class="sb-logo">
-    Critically Yours
-    <span>Administrator Panel</span>
+<div class="sb" id="sb">
+  <div class="sb-head">
+    <img src="cys_logo.png" alt="CY" class="sb-logo-img" onerror="this.style.display='none';document.getElementById('sbLogoFb').style.display='flex'">
+    <div class="sb-logo-fb" id="sbLogoFb" style="display:none;">CY</div>
+    <div class="sb-brand">Critically Yours<small>Administrator</small></div>
   </div>
   <div class="sb-user">
-    <img class="sb-avatar" id="sbAvatar" src="" alt="">
-    <div class="sb-user-info">
-      <div class="sb-name" id="sbName">Loading...</div>
-      <div class="sb-role" id="sbRole">Admin</div>
-    </div>
+    <img class="sb-av" id="sbAv" src="" alt="">
+    <div style="flex:1;min-width:0;"><div class="sb-uname" id="sbUN">Loading&hellip;</div><div class="sb-urole" id="sbUR">Admin</div></div>
   </div>
   <nav class="sb-nav">
-    <div class="sb-section">Overview</div>
-    <button class="sb-item active" onclick="showPanel('dashboard')"><span class="sb-item-icon">&#9670;</span>Dashboard</button>
-    <button class="sb-item" onclick="showPanel('analytics')"><span class="sb-item-icon">&#9636;</span>Analytics</button>
-    <div class="sb-section">Management</div>
-    <button class="sb-item" onclick="showPanel('users')"><span class="sb-item-icon">&#9671;</span>User Management</button>
-    <button class="sb-item" onclick="showPanel('registrations')"><span class="sb-item-icon">&#9673;</span>Registrations</button>
-    <button class="sb-item" onclick="showPanel('events')"><span class="sb-item-icon">&#9672;</span>Events</button>
-    <button class="sb-item" onclick="showPanel('classes')"><span class="sb-item-icon">&#9674;</span>Classes &amp; Sections</button>
-    <button class="sb-item" onclick="showPanel('announcements')"><span class="sb-item-icon">&#9670;</span>Announcements</button>
-    <div class="sb-section">Content</div>
-    <button class="sb-item" onclick="showPanel('homepage')"><span class="sb-item-icon">&#9670;</span>Homepage Settings</button>
-    <button class="sb-item" onclick="showPanel('timeline')"><span class="sb-item-icon">&#9670;</span>Timeline</button>
-    <button class="sb-item" onclick="showPanel('rules')"><span class="sb-item-icon">&#9670;</span>Rules &amp; Regs</button>
-    <div class="sb-section">Operations</div>
-    <button class="sb-item" onclick="showPanel('tickets')"><span class="sb-item-icon">&#9873;</span>Tickets</button>
-    <button class="sb-item" onclick="showPanel('security')"><span class="sb-item-icon">&#9632;</span>Security</button>
-    <button class="sb-item" onclick="showPanel('settings')"><span class="sb-item-icon">&#9881;</span>Global Settings</button>
-    <button class="sb-item" onclick="showPanel('export')"><span class="sb-item-icon">&#8659;</span>Export Data</button>
+    <div class="sb-sec">Overview</div>
+    <button class="sb-item on" onclick="nav('dashboard',this)">&#9670; Dashboard</button>
+    <button class="sb-item" onclick="nav('analytics',this)">&#9636; Analytics</button>
+    <div class="sb-sec">Management</div>
+    <button class="sb-item" onclick="nav('users',this)">&#9671; User Management</button>
+    <button class="sb-item" onclick="nav('registrations',this)">&#9673; Registrations</button>
+    <button class="sb-item" onclick="nav('events',this)">&#9672; Events</button>
+    <button class="sb-item" onclick="nav('classes',this)">&#9674; Classes &amp; Sections</button>
+    <button class="sb-item" onclick="nav('announcements',this)">&#9670; Announcements</button>
+    <div class="sb-sec">Content</div>
+    <button class="sb-item" onclick="nav('homepage',this)">&#9670; Homepage &amp; Slideshow</button>
+    <button class="sb-item" onclick="nav('timeline',this)">&#9670; Timeline</button>
+    <button class="sb-item" onclick="nav('rules',this)">&#9670; Rules</button>
+    <div class="sb-sec">Operations</div>
+    <button class="sb-item" onclick="nav('attendance',this)">&#9632; Attendance</button>
+    <button class="sb-item" onclick="nav('tickets',this)">&#9873; Tickets</button>
+    <button class="sb-item" onclick="nav('security',this)">&#9632; Security</button>
+    <button class="sb-item" onclick="nav('settings',this)">&#9881; Global Settings</button>
+    <button class="sb-item" onclick="nav('export',this)">&#8659; Export Data</button>
   </nav>
-  <div class="sb-bottom">
-    <button class="sb-signout" onclick="doSignOut()">Sign Out</button>
+  <div class="sb-foot">
+    <button class="sb-out" onclick="doSignOut()">Sign Out</button>
   </div>
-  <button class="mobile-menu-btn" onclick="toggleSidebar()">&#9776;</button>
+  <button class="mob-sb-btn" onclick="document.getElementById('sb').classList.toggle('open')">&#9776;</button>
 </div>
 
-<!-- MAIN -->
 <div class="main">
   <div class="topbar">
-    <div class="topbar-title" id="topbarTitle">Dashboard</div>
-    <div class="topbar-actions">
-      <button class="theme-toggle" id="themeToggle">&#9790;</button>
+    <div class="topbar-title" id="topTitle">Dashboard</div>
+    <div class="tb-right">
+      <button class="theme-btn" id="themeBtn">&#9790;</button>
     </div>
   </div>
-  <div class="content">
+  <div class="content-area">
 
     <!-- DASHBOARD -->
-    <div class="panel active" id="panel-dashboard">
-      <div class="stat-grid" id="statGrid">
-        <div class="stat-card"><div class="stat-val" id="statTotal">--</div><div class="stat-label">Total Registrations</div></div>
-        <div class="stat-card"><div class="stat-val" id="statPending">--</div><div class="stat-label">Audition Pending</div></div>
-        <div class="stat-card"><div class="stat-val" id="statSelected">--</div><div class="stat-label">Selected</div></div>
-        <div class="stat-card"><div class="stat-val" id="statRejected">--</div><div class="stat-label">Rejected</div></div>
-      </div>
-      <div class="table-wrap">
-        <div class="table-header"><div class="table-title">Recent Registrations</div></div>
-        <table><thead><tr><th>Name</th><th>Event</th><th>Class</th><th>Status</th><th>Date</th></tr></thead>
-        <tbody id="recentRegsBody"><tr class="loading-row"><td colspan="5">Loading...</td></tr></tbody></table>
+    <div class="panel on" id="p-dashboard">
+      <div class="stat-row" id="statRow"><div class="loading-ph">Loading&hellip;</div></div>
+      <div class="tbl-wrap">
+        <div class="tbl-head"><div class="tbl-title">Recent Registrations</div></div>
+        <div class="tbl-scroll"><table><thead><tr><th>Name</th><th>Event</th><th>Class</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody id="recentTbody"><tr><td colspan="5" class="loading-ph">Loading&hellip;</td></tr></tbody></table></div>
       </div>
     </div>
 
     <!-- ANALYTICS -->
-    <div class="panel" id="panel-analytics">
-      <div class="form-section">
-        <div class="form-section-title">Event-wise Breakdown</div>
-        <div id="analyticsData"><div style="color:var(--text-secondary);font-size:0.8rem;">Loading analytics...</div></div>
-      </div>
+    <div class="panel" id="p-analytics">
+      <div id="analyticsContent" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;"></div>
     </div>
 
     <!-- USER MANAGEMENT -->
-    <div class="panel" id="panel-users">
-      <div class="form-section">
-        <div class="form-section-title">Add Staff Member</div>
-        <div class="form-grid">
+    <div class="panel" id="p-users">
+      <div class="fs">
+        <div class="fs-title">Add Staff / Team Member</div>
+        <div class="fgrid">
           <div class="fg"><label>Full Name</label><input type="text" id="uName" placeholder="Aarav Sinha"></div>
           <div class="fg"><label>Email ID</label><input type="email" id="uEmail" placeholder="staff@dpsmegacity.in"></div>
-          <div class="fg">
-            <label>Roles</label>
+          <div class="fg"><label>Role</label>
             <select id="uRole">
               <option value="it_team">IT Team</option>
               <option value="core">Core Team</option>
@@ -282,258 +241,306 @@ tr:hover td{background:var(--bg-card-hover);}
               <option value="event_head">Event Head</option>
               <option value="volunteer">Volunteer</option>
               <option value="media">Media Team</option>
+              <option value="security">Security</option>
             </select>
           </div>
-          <div class="fg"><label>Assigned Event (if Event Head)</label><select id="uEvent"><option value="">None</option></select></div>
+          <div class="fg"><label>Assigned Event (Event Head only)</label><select id="uEvent"><option value="">None</option></select></div>
         </div>
-        <div style="display:flex;gap:12px;flex-wrap:wrap;">
-          <button class="btn-primary" onclick="addUser()">Add Staff Member</button>
-        </div>
-        <div class="msg" id="userMsg"></div>
+        <div class="btn-row"><button class="btn-prim" onclick="addUser()">Add Member</button></div>
+        <div class="msg" id="uMsg"></div>
       </div>
-      <div class="table-wrap">
-        <div class="table-header">
-          <div class="table-title">All Staff Members</div>
-          <input class="search-box" placeholder="Search..." oninput="filterTable('usersBody',this.value)">
-        </div>
-        <table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Event</th><th>Actions</th></tr></thead>
-        <tbody id="usersBody"><tr class="loading-row"><td colspan="5">Loading...</td></tr></tbody></table>
+      <div class="tbl-wrap">
+        <div class="tbl-head"><div class="tbl-title">All Staff Members</div><input class="search" placeholder="Search&hellip;" oninput="filterTbl('uTbody',this.value)"></div>
+        <div class="tbl-scroll"><table><thead><tr><th>Name</th><th>Email</th><th>Role(s)</th><th>Event</th><th>Actions</th></tr></thead>
+        <tbody id="uTbody"><tr><td colspan="5" class="loading-ph">Loading&hellip;</td></tr></tbody></table></div>
       </div>
     </div>
 
     <!-- REGISTRATIONS -->
-    <div class="panel" id="panel-registrations">
-      <div class="table-wrap">
-        <div class="table-header">
-          <div class="table-title">All Registrations</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-            <select id="regFilterStatus" onchange="loadRegistrations()" style="padding:8px 10px;border-radius:6px;background:var(--bg-dark);border:1px solid var(--border);color:var(--text-primary);font-size:0.75rem;outline:none;">
-              <option value="">All Status</option>
-              <option value="audition_pending">Audition Pending</option>
-              <option value="selected">Selected</option>
-              <option value="rejected">Rejected</option>
-            </select>
-            <input class="search-box" placeholder="Search..." oninput="filterTable('regsBody',this.value)">
+    <div class="panel" id="p-registrations">
+      <div class="tbl-wrap">
+        <div class="tbl-head">
+          <div class="tbl-title">All Registrations</div>
+          <div class="tbl-tools">
+            <select class="sel-filter" id="regEvFilter" onchange="loadRegs()"><option value="">All Events</option></select>
+            <select class="sel-filter" id="regStFilter" onchange="loadRegs()"><option value="">All Status</option><option value="audition_pending">Audition Pending</option><option value="selected">Selected</option><option value="rejected">Rejected</option></select>
+            <input class="search" placeholder="Search&hellip;" oninput="filterTbl('regTbody',this.value)">
           </div>
         </div>
-        <div style="overflow-x:auto;">
-        <table><thead><tr><th>Name</th><th>Event</th><th>Class</th><th>Roll</th><th>Call</th><th>Status</th><th>Registered</th><th>Actions</th></tr></thead>
-        <tbody id="regsBody"><tr class="loading-row"><td colspan="8">Loading...</td></tr></tbody></table>
-        </div>
+        <div class="tbl-scroll"><table><thead><tr><th>Name</th><th>Event</th><th>Class</th><th>Roll</th><th>Contact</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+        <tbody id="regTbody"><tr><td colspan="8" class="loading-ph">Loading&hellip;</td></tr></tbody></table></div>
       </div>
     </div>
 
     <!-- EVENTS -->
-    <div class="panel" id="panel-events">
-      <div class="form-section">
-        <div class="form-section-title">Add / Edit Event</div>
-        <div class="form-grid">
+    <div class="panel" id="p-events">
+      <div class="fs">
+        <div class="fs-title" id="evFormTitle">Add Event</div>
+        <div class="fgrid">
           <div class="fg"><label>Event Name</label><input type="text" id="evName" placeholder="Poetry Slam"></div>
-          <div class="fg"><label>Category</label><input type="text" id="evCategory" placeholder="Literary"></div>
-          <div class="fg"><label>Logo File Name (with ext)</label><input type="text" id="evLogo" placeholder="poetry_logo.png"></div>
-          <div class="fg"><label>Venue</label><input type="text" id="evVenue" placeholder="Auditorium"></div>
+          <div class="fg"><label>Category</label><input type="text" id="evCat" placeholder="Literary"></div>
+          <div class="fg"><label>Logo Filename (e.g. poetry_logo.png)</label><input type="text" id="evLogo" placeholder="poetry_logo.png"></div>
+          <div class="fg"><label>Venue</label><input type="text" id="evVenue" placeholder="Auditorium Hall A"></div>
           <div class="fg"><label>Max Participants</label><input type="number" id="evMax" placeholder="20" min="1"></div>
           <div class="fg"><label>Display Order</label><input type="number" id="evOrder" placeholder="1" min="1"></div>
         </div>
-        <div class="fg" style="margin-bottom:16px;"><label>Description</label><textarea id="evDesc" placeholder="Brief description of the event..."></textarea></div>
+        <div class="fg"><label>Description</label><textarea id="evDesc" placeholder="Brief description of the event&hellip;"></textarea></div>
         <input type="hidden" id="evEditId">
-        <div style="display:flex;gap:12px;flex-wrap:wrap;">
-          <button class="btn-primary" onclick="saveEvent()">Save Event</button>
-          <button class="btn-secondary" onclick="clearEventForm()">Clear</button>
-        </div>
+        <div class="btn-row"><button class="btn-prim" onclick="saveEvent()">Save Event</button><button class="btn-sec" onclick="clearEvForm()">Clear</button></div>
         <div class="msg" id="evMsg"></div>
       </div>
-      <div class="table-wrap">
-        <div class="table-header"><div class="table-title">All Events</div></div>
-        <table><thead><tr><th>Order</th><th>Name</th><th>Category</th><th>Venue</th><th>Max</th><th>Actions</th></tr></thead>
-        <tbody id="eventsBody"><tr class="loading-row"><td colspan="6">Loading...</td></tr></tbody></table>
+      <div class="tbl-wrap">
+        <div class="tbl-head"><div class="tbl-title">All Events</div></div>
+        <div class="tbl-scroll"><table><thead><tr><th>Order</th><th>Name</th><th>Category</th><th>Logo</th><th>Venue</th><th>Max</th><th>Actions</th></tr></thead>
+        <tbody id="evTbody"><tr><td colspan="7" class="loading-ph">Loading&hellip;</td></tr></tbody></table></div>
       </div>
     </div>
 
     <!-- CLASSES -->
-    <div class="panel" id="panel-classes">
-      <div class="form-section">
-        <div class="form-section-title">Add Class</div>
-        <div class="form-grid">
+    <div class="panel" id="p-classes">
+      <div class="fs">
+        <div class="fs-title">Add Class</div>
+        <div class="fgrid">
           <div class="fg"><label>Class Name</label><input type="text" id="clName" placeholder="IX"></div>
           <div class="fg"><label>Display Order</label><input type="number" id="clOrder" placeholder="1"></div>
         </div>
-        <button class="btn-primary" onclick="addClass()">Add Class</button>
+        <div class="btn-row"><button class="btn-prim" onclick="addClass()">Add Class</button></div>
         <div class="msg" id="clMsg"></div>
       </div>
-      <div class="form-section">
-        <div class="form-section-title">Manage Sections &amp; Class Teachers</div>
-        <div class="form-grid">
-          <div class="fg"><label>Select Class</label><select id="clSelectClass" onchange="loadSectionsAdmin()"><option value="">Select class</option></select></div>
-        </div>
-        <div id="sectionsAdmin" style="margin-top:16px;"></div>
-        <div style="margin-top:16px;display:none;" id="addSectionWrap">
-          <div class="form-grid">
+      <div class="fs">
+        <div class="fs-title">Manage Sections &amp; Class Teachers</div>
+        <div class="fg"><label>Select Class</label><select id="clSelect" onchange="loadSectionsAdmin()"><option value="">Select class</option></select></div>
+        <div id="sectionsPanel"></div>
+        <div id="addSecPanel" style="display:none;margin-top:14px;">
+          <div class="fgrid">
             <div class="fg"><label>Section Name</label><input type="text" id="secName" placeholder="A"></div>
             <div class="fg"><label>Class Teacher Name</label><input type="text" id="secTeacher" placeholder="Mrs. Sharma"></div>
           </div>
-          <button class="btn-primary" onclick="addSection()">Add Section</button>
+          <div class="btn-row"><button class="btn-prim" onclick="addSection()">Add Section</button></div>
         </div>
       </div>
     </div>
 
     <!-- ANNOUNCEMENTS -->
-    <div class="panel" id="panel-announcements">
-      <div class="form-section">
-        <div class="form-section-title">Post Announcement</div>
-        <div class="form-grid">
-          <div class="fg"><label>Title</label><input type="text" id="annTitle" placeholder="Announcement title"></div>
-        </div>
-        <div class="fg" style="margin-bottom:16px;"><label>Body</label><textarea id="annBody" placeholder="Announcement content..."></textarea></div>
-        <div class="fg" style="margin-bottom:16px;">
-          <label>Target Audience</label>
-          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;">
-            <label style="display:flex;align-items:center;gap:6px;font-size:0.75rem;color:var(--text-secondary);cursor:pointer;"><input type="checkbox" value="public" style="accent-color:var(--gold);"> Public</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:0.75rem;color:var(--text-secondary);cursor:pointer;"><input type="checkbox" value="participant" style="accent-color:var(--gold);"> Participants</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:0.75rem;color:var(--text-secondary);cursor:pointer;"><input type="checkbox" value="volunteer" style="accent-color:var(--gold);"> Volunteers</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:0.75rem;color:var(--text-secondary);cursor:pointer;"><input type="checkbox" value="event_head" style="accent-color:var(--gold);"> Event Heads</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:0.75rem;color:var(--text-secondary);cursor:pointer;"><input type="checkbox" value="core" style="accent-color:var(--gold);"> Core Team</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:0.75rem;color:var(--text-secondary);cursor:pointer;"><input type="checkbox" value="media" style="accent-color:var(--gold);"> Media Team</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:0.75rem;color:var(--text-secondary);cursor:pointer;"><input type="checkbox" value="all" style="accent-color:var(--gold);"> All</label>
+    <div class="panel" id="p-announcements">
+      <div class="fs">
+        <div class="fs-title">Post Announcement</div>
+        <div class="fg"><label>Title</label><input type="text" id="annTitle" placeholder="Announcement title"></div>
+        <div class="fg"><label>Body</label><textarea id="annBody" placeholder="Announcement content&hellip;"></textarea></div>
+        <div class="fg"><label>Target Audience</label>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;" id="annTargets">
+            <label style="display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--t2);cursor:pointer;"><input type="checkbox" value="public" style="accent-color:var(--gold);"> Public</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--t2);cursor:pointer;"><input type="checkbox" value="participant" style="accent-color:var(--gold);"> Participants</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--t2);cursor:pointer;"><input type="checkbox" value="volunteer" style="accent-color:var(--gold);"> Volunteers</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--t2);cursor:pointer;"><input type="checkbox" value="event_head" style="accent-color:var(--gold);"> Event Heads</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--t2);cursor:pointer;"><input type="checkbox" value="core" style="accent-color:var(--gold);"> Core Team</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--t2);cursor:pointer;"><input type="checkbox" value="media" style="accent-color:var(--gold);"> Media Team</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--t2);cursor:pointer;"><input type="checkbox" value="all" style="accent-color:var(--gold);"> All</label>
           </div>
         </div>
-        <button class="btn-primary" onclick="postAnnouncement()">Post Announcement</button>
+        <div class="btn-row"><button class="btn-prim" onclick="postAnn()">Post Announcement</button></div>
         <div class="msg" id="annMsg"></div>
       </div>
-      <div class="table-wrap">
-        <div class="table-header"><div class="table-title">All Announcements</div></div>
-        <table><thead><tr><th>Title</th><th>Targets</th><th>Posted By</th><th>Date</th><th>Actions</th></tr></thead>
-        <tbody id="annBody2"><tr class="loading-row"><td colspan="5">Loading...</td></tr></tbody></table>
+      <div class="tbl-wrap">
+        <div class="tbl-head"><div class="tbl-title">All Announcements</div></div>
+        <div class="tbl-scroll"><table><thead><tr><th>Title</th><th>Targets</th><th>Posted By</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+        <tbody id="annTbody"><tr><td colspan="6" class="loading-ph">Loading&hellip;</td></tr></tbody></table></div>
       </div>
     </div>
 
-    <!-- HOMEPAGE SETTINGS -->
-    <div class="panel" id="panel-homepage">
-      <div class="form-section">
-        <div class="form-section-title">Fest Date (for Countdown)</div>
-        <div class="form-grid">
-          <div class="fg"><label>Fest Date &amp; Time</label><input type="datetime-local" id="festDate"></div>
+    <!-- HOMEPAGE & SLIDESHOW -->
+    <div class="panel" id="p-homepage">
+      <div class="fs">
+        <div class="fs-title">Hero Tagline</div>
+        <div class="fg"><label>Tagline Text</label><input type="text" id="heroTagline" placeholder="An intraschool celebration of&hellip;"></div>
+        <div class="btn-row"><button class="btn-prim" onclick="saveTagline()">Save Tagline</button></div>
+        <div class="msg" id="tagMsg"></div>
+      </div>
+      <div class="fs">
+        <div class="fs-title">Slideshow Configuration</div>
+        <div class="t-row">
+          <div class="t-info"><div class="t-label">Enable Slideshow on Opening</div><div class="t-desc">Show image slideshow overlay when visitors open index.html</div></div>
+          <label class="ts"><input type="checkbox" id="tgSlideshow" onchange="saveToggle('slideshowEnabled',this.checked)"><span class="tsl"></span></label>
         </div>
-        <button class="btn-primary" onclick="saveFestDate()">Save Date</button>
+        <div style="margin-top:16px;">
+          <label style="font-size:.56rem;letter-spacing:2px;color:var(--t2);text-transform:uppercase;display:block;margin-bottom:8px;">Slideshow Images (filename.ext — file must be deployed)</label>
+          <div class="imgs-container" id="imgsContainer"></div>
+          <div class="img-add-row">
+            <input type="text" id="imgInput" placeholder="e.g. slide1.jpg" onkeydown="if(event.key==='Enter')addSlideImg()">
+            <button class="btn-prim" onclick="addSlideImg()">Add</button>
+          </div>
+          <div style="font-size:.62rem;color:var(--t3);margin-top:6px;">Add filenames of images you have deployed. They will loop in a slideshow.</div>
+        </div>
+        <div class="btn-row" style="margin-top:16px;"><button class="btn-prim" onclick="saveSlideshow()">Save Slideshow Settings</button></div>
+        <div class="msg" id="slideMsg"></div>
+      </div>
+      <div class="fs">
+        <div class="fs-title">Unofficial Banner</div>
+        <div class="t-row">
+          <div class="t-info"><div class="t-label">Show &ldquo;Unofficial Parallel Entry&rdquo; Banner</div><div class="t-desc">Displays a banner at the top of the homepage</div></div>
+          <label class="ts"><input type="checkbox" id="tgBanner" onchange="saveToggle('showUnofficialBanner',this.checked)"><span class="tsl"></span></label>
+        </div>
+      </div>
+      <div class="fs">
+        <div class="fs-title">Fest Date (Countdown)</div>
+        <div class="fgrid">
+          <div class="fg"><label>Date &amp; Time</label><input type="datetime-local" id="festDate"></div>
+        </div>
+        <div class="btn-row"><button class="btn-prim" onclick="saveFestDate()">Save Date</button></div>
         <div class="msg" id="dateMsg"></div>
       </div>
-      <div class="form-section">
-        <div class="form-section-title">Venue</div>
-        <div class="form-grid">
-          <div class="fg"><label>Venue Name</label><input type="text" id="venueName" placeholder="DPS Megacity"></div>
-          <div class="fg"><label>Address</label><input type="text" id="venueAddr" placeholder="Kolkata, WB"></div>
-          <div class="fg"><label>Hall / Room</label><input type="text" id="venueHall" placeholder="Main Auditorium"></div>
+      <div class="fs">
+        <div class="fs-title">Venue Information</div>
+        <div class="fgrid">
+          <div class="fg"><label>Venue Name</label><input type="text" id="vName" placeholder="Delhi Public School Megacity"></div>
+          <div class="fg"><label>Address</label><input type="text" id="vAddr" placeholder="Kolkata, West Bengal"></div>
+          <div class="fg"><label>Hall / Room</label><input type="text" id="vHall" placeholder="Main Auditorium"></div>
         </div>
-        <button class="btn-primary" onclick="saveVenue()">Save Venue</button>
+        <div class="btn-row"><button class="btn-prim" onclick="saveVenue()">Save Venue</button></div>
         <div class="msg" id="venueMsg"></div>
+      </div>
+      <div class="fs">
+        <div class="fs-title">CYS Logo</div>
+        <div class="fg"><label>Logo Filename (deployed as-is)</label><input type="text" id="logoFile" placeholder="cys_logo.png"></div>
+        <div style="font-size:.62rem;color:var(--t3);margin-top:4px;">The logo file must be deployed alongside the HTML files. Default: <em>cys_logo.png</em></div>
+        <div class="btn-row" style="margin-top:10px;"><button class="btn-prim" onclick="saveLogo()">Save Logo Filename</button></div>
+        <div class="msg" id="logoMsg"></div>
       </div>
     </div>
 
     <!-- TIMELINE -->
-    <div class="panel" id="panel-timeline">
-      <div class="form-section">
-        <div class="form-section-title">Add Timeline Entry</div>
-        <div class="form-grid">
-          <div class="fg"><label>Date / Time Label</label><input type="text" id="tlDate" placeholder="10 Jan 2025"></div>
+    <div class="panel" id="p-timeline">
+      <div class="fs">
+        <div class="fs-title">Add Timeline Entry</div>
+        <div class="fgrid">
+          <div class="fg"><label>Date Label</label><input type="text" id="tlDate" placeholder="10 Jan 2025"></div>
           <div class="fg"><label>Title</label><input type="text" id="tlTitle" placeholder="Registrations Open"></div>
-          <div class="fg"><label>Description</label><input type="text" id="tlDesc" placeholder="Optional details"></div>
-          <div class="fg"><label>Order</label><input type="number" id="tlOrder" placeholder="1"></div>
+          <div class="fg"><label>Description (optional)</label><input type="text" id="tlDesc" placeholder="Additional details"></div>
+          <div class="fg"><label>Order</label><input type="number" id="tlOrder" placeholder="1" min="1"></div>
         </div>
-        <button class="btn-primary" onclick="addTimeline()">Add Entry</button>
+        <div class="btn-row"><button class="btn-prim" onclick="addTimeline()">Add Entry</button></div>
         <div class="msg" id="tlMsg"></div>
       </div>
-      <div class="table-wrap">
-        <div class="table-header"><div class="table-title">Timeline Entries</div></div>
+      <div class="tbl-wrap">
+        <div class="tbl-head"><div class="tbl-title">Timeline Entries</div></div>
         <table><thead><tr><th>Order</th><th>Date</th><th>Title</th><th>Description</th><th>Actions</th></tr></thead>
-        <tbody id="timelineBody"><tr class="loading-row"><td colspan="5">Loading...</td></tr></tbody></table>
+        <tbody id="tlTbody"><tr><td colspan="5" class="loading-ph">Loading&hellip;</td></tr></tbody></table>
       </div>
     </div>
 
     <!-- RULES -->
-    <div class="panel" id="panel-rules">
-      <div class="form-section">
-        <div class="form-section-title">Add Rule</div>
-        <div class="form-grid">
-          <div class="fg"><label>Rule Text</label><input type="text" id="ruleText" placeholder="Participants must arrive 15 mins early."></div>
-          <div class="fg"><label>Order</label><input type="number" id="ruleOrder" placeholder="1"></div>
+    <div class="panel" id="p-rules">
+      <div class="fs">
+        <div class="fs-title">Add Rule</div>
+        <div class="fgrid">
+          <div class="fg"><label>Rule Text</label><input type="text" id="ruleText" placeholder="Participants must arrive 15 minutes early."></div>
+          <div class="fg"><label>Order</label><input type="number" id="ruleOrder" placeholder="1" min="1"></div>
         </div>
-        <button class="btn-primary" onclick="addRule()">Add Rule</button>
+        <div class="btn-row"><button class="btn-prim" onclick="addRule()">Add Rule</button></div>
         <div class="msg" id="ruleMsg"></div>
       </div>
-      <div class="table-wrap">
-        <div class="table-header"><div class="table-title">Rules</div></div>
+      <div class="tbl-wrap">
+        <div class="tbl-head"><div class="tbl-title">Rules</div></div>
         <table><thead><tr><th>Order</th><th>Text</th><th>Actions</th></tr></thead>
-        <tbody id="rulesBody"><tr class="loading-row"><td colspan="3">Loading...</td></tr></tbody></table>
+        <tbody id="ruleTbody"><tr><td colspan="3" class="loading-ph">Loading&hellip;</td></tr></tbody></table>
+      </div>
+    </div>
+
+    <!-- ATTENDANCE -->
+    <div class="panel" id="p-attendance">
+      <div class="fs">
+        <div class="fs-title">Attendance Management</div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
+          <input type="date" id="attDate" style="padding:8px 12px;border-radius:6px;background:var(--bg);border:1px solid var(--b1);color:var(--t1);font-family:'Josefin Sans',sans-serif;font-size:.78rem;outline:none;">
+          <button class="btn-prim" onclick="startAttendance()">Start Attendance for this Day</button>
+          <button class="btn-sec" onclick="loadAttendance()">Load Attendance</button>
+        </div>
+        <div class="msg" id="attMsg"></div>
+        <div class="att-date-head" id="attDateHead"></div>
+        <div class="att-grid" id="attGrid"></div>
+      </div>
+      <div class="fs">
+        <div class="fs-title">Mark Admin Attendance (Self)</div>
+        <p style="font-size:.72rem;color:var(--t2);margin-bottom:14px;">Mark yourself present for today. Security scans everyone else.</p>
+        <button class="btn-prim" onclick="markAdminPresent()">Mark Myself Present Today</button>
+        <div class="msg" id="selfAttMsg"></div>
       </div>
     </div>
 
     <!-- TICKETS -->
-    <div class="panel" id="panel-tickets">
-      <div id="ticketsList"><div style="color:var(--text-secondary);font-size:0.8rem;">Loading tickets...</div></div>
+    <div class="panel" id="p-tickets">
+      <div id="ticketsList"><div class="loading-ph">Loading&hellip;</div></div>
     </div>
 
-    <!-- SECURITY -->
-    <div class="panel" id="panel-security">
-      <div class="form-section">
-        <div class="form-section-title">Security Portal Access</div>
-        <div class="toggle-row">
-          <div class="toggle-info"><div class="toggle-label">Enable Security Portal</div><div class="toggle-desc">Allow security.html to be accessed by assigned volunteer</div></div>
-          <label class="toggle-switch"><input type="checkbox" id="secPortalToggle" onchange="saveSecurityToggle()"><span class="toggle-slider"></span></label>
+    <!-- SECURITY SETTINGS -->
+    <div class="panel" id="p-security">
+      <div class="fs">
+        <div class="fs-title">Security Portal Access</div>
+        <div class="t-row">
+          <div class="t-info"><div class="t-label">Enable Security Portal</div><div class="t-desc">Allow the assigned volunteer to access security.html</div></div>
+          <label class="ts"><input type="checkbox" id="tgSecurity" onchange="saveToggle('securityPortalOpen',this.checked)"><span class="tsl"></span></label>
         </div>
-        <div style="margin-top:20px;">
-          <div class="fg"><label>Assign Security Volunteer (Email)</label><input type="email" id="secVolEmail" placeholder="volunteer@dpsmegacity.in"></div>
-          <button class="btn-primary" style="margin-top:12px;" onclick="assignSecurity()">Assign</button>
+        <div style="margin-top:16px;">
+          <div class="fg"><label>Assign Security Volunteer (email)</label><input type="email" id="secVolEmail" placeholder="volunteer@dpsmegacity.in"></div>
+          <div class="btn-row"><button class="btn-prim" onclick="assignSecurity()">Assign Security Volunteer</button></div>
           <div class="msg" id="secMsg"></div>
         </div>
       </div>
-      <div class="form-section">
-        <div class="form-section-title">Mark Admin Attendance</div>
-        <p style="font-size:0.78rem;color:var(--text-secondary);margin-bottom:16px;">Admin attendance is managed directly here.</p>
-        <button class="btn-primary" onclick="markAdminPresent()">Mark Myself Present</button>
-        <div class="msg" id="adminAttMsg"></div>
-      </div>
     </div>
 
-    <!-- SETTINGS -->
-    <div class="panel" id="panel-settings">
-      <div class="form-section">
-        <div class="form-section-title">Global Feature Toggles</div>
-        <div class="toggle-row">
-          <div class="toggle-info"><div class="toggle-label">Enrollment Open</div><div class="toggle-desc">Allow participants to submit enrollment forms</div></div>
-          <label class="toggle-switch"><input type="checkbox" id="toggleEnrollment" onchange="saveToggle('enrollmentOpen',this.checked)"><span class="toggle-slider"></span></label>
+    <!-- GLOBAL SETTINGS -->
+    <div class="panel" id="p-settings">
+      <div class="fs">
+        <div class="fs-title">Feature Toggles</div>
+        <div class="t-row">
+          <div class="t-info"><div class="t-label">Enrollment Open</div><div class="t-desc">Allow participants to submit enrollment forms</div></div>
+          <label class="ts"><input type="checkbox" id="tgEnroll" onchange="saveToggle('enrollmentOpen',this.checked)"><span class="tsl"></span></label>
         </div>
-        <div class="toggle-row">
-          <div class="toggle-info"><div class="toggle-label">Allow Non-School Accounts</div><div class="toggle-desc">Let non-@dpsmegacity.in accounts sign in (admin-approved only)</div></div>
-          <label class="toggle-switch"><input type="checkbox" id="toggleNonSchool" onchange="saveToggle('allowNonSchoolAccounts',this.checked)"><span class="toggle-slider"></span></label>
+        <div class="t-row">
+          <div class="t-info"><div class="t-label">Volunteer Registration Open</div><div class="t-desc">Show volunteer registration button on homepage</div></div>
+          <label class="ts"><input type="checkbox" id="tgVolunteer" onchange="saveToggle('volunteerOpen',this.checked)"><span class="tsl"></span></label>
         </div>
-        <div class="toggle-row">
-          <div class="toggle-info"><div class="toggle-label">Participant Portal</div><div class="toggle-desc">Toggle participant.html access</div></div>
-          <label class="toggle-switch"><input type="checkbox" id="toggleParticipantPortal" onchange="saveToggle('participantPortalOpen',this.checked)"><span class="toggle-slider"></span></label>
+        <div class="t-row">
+          <div class="t-info"><div class="t-label">Participant Portal Active</div><div class="t-desc">Toggle participant.html accessibility</div></div>
+          <label class="ts"><input type="checkbox" id="tgPartPortal" onchange="saveToggle('participantPortalOpen',this.checked)"><span class="tsl"></span></label>
         </div>
-        <div class="toggle-row">
-          <div class="toggle-info"><div class="toggle-label">Volunteer Portal</div><div class="toggle-desc">Toggle volunteer.html access</div></div>
-          <label class="toggle-switch"><input type="checkbox" id="toggleVolunteerPortal" onchange="saveToggle('volunteerPortalOpen',this.checked)"><span class="toggle-slider"></span></label>
+        <div class="t-row">
+          <div class="t-info"><div class="t-label">Volunteer Portal Active</div><div class="t-desc">Toggle volunteer.html accessibility</div></div>
+          <label class="ts"><input type="checkbox" id="tgVolPortal" onchange="saveToggle('volunteerPortalOpen',this.checked)"><span class="tsl"></span></label>
+        </div>
+        <div class="t-row">
+          <div class="t-info"><div class="t-label">Allow Non-School Accounts</div><div class="t-desc">Permit non-@dpsmegacity.in accounts added by admin</div></div>
+          <label class="ts"><input type="checkbox" id="tgNonSchool" onchange="saveToggle('allowNonSchoolAccounts',this.checked)"><span class="tsl"></span></label>
         </div>
       </div>
-      <div class="form-section">
-        <div class="form-section-title">Add Non-School Account</div>
-        <div class="form-grid">
-          <div class="fg"><label>Email</label><input type="email" id="nonSchoolEmail" placeholder="external@gmail.com"></div>
-          <div class="fg"><label>Role</label><select id="nonSchoolRole"><option value="it_team">IT Team</option><option value="core">Core</option><option value="media">Media</option><option value="volunteer">Volunteer</option></select></div>
+      <div class="fs">
+        <div class="fs-title">Add Non-School Account</div>
+        <div class="fgrid">
+          <div class="fg"><label>Email</label><input type="email" id="nsEmail" placeholder="external@gmail.com"></div>
+          <div class="fg"><label>Role</label>
+            <select id="nsRole">
+              <option value="it_team">IT Team</option>
+              <option value="core">Core Team</option>
+              <option value="media">Media Team</option>
+              <option value="volunteer">Volunteer</option>
+            </select>
+          </div>
         </div>
-        <button class="btn-primary" onclick="addNonSchoolAccount()">Add Account</button>
-        <div class="msg" id="nonSchoolMsg"></div>
+        <div class="btn-row"><button class="btn-prim" onclick="addNonSchool()">Add Account</button></div>
+        <div class="msg" id="nsMsg"></div>
       </div>
     </div>
 
     <!-- EXPORT -->
-    <div class="panel" id="panel-export">
-      <div class="form-section">
-        <div class="form-section-title">Export Data</div>
-        <div style="display:flex;flex-direction:column;gap:12px;">
-          <button class="btn-primary" onclick="exportCSV('all')">Export All Registrations (CSV)</button>
-          <div class="fg"><label>Export by Event</label><select id="exportEventSelect"><option value="">All Events</option></select></div>
-          <button class="btn-secondary" onclick="exportCSV('event')">Export Selected Event (CSV)</button>
+    <div class="panel" id="p-export">
+      <div class="fs">
+        <div class="fs-title">Export Registration Data</div>
+        <div class="fgrid">
+          <div class="fg"><label>Filter by Event</label><select id="expEvent"><option value="">All Events</option></select></div>
+          <div class="fg"><label>Filter by Status</label><select id="expStatus"><option value="">All Status</option><option value="selected">Selected</option><option value="audition_pending">Audition Pending</option><option value="rejected">Rejected</option></select></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-prim" onclick="exportCSV()">Export CSV</button>
         </div>
       </div>
     </div>
@@ -543,580 +550,514 @@ tr:hover td{background:var(--bg-card-hover);}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, collection, query, where, orderBy, getDocs, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, collection, query, where, getDocs, orderBy, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBKeQxNTRaGsry7vpHZOBOD6CCuvZhBpU0",
-  authDomain: "critically-yours-v5.firebaseapp.com",
-  projectId: "critically-yours-v5",
-  storageBucket: "critically-yours-v5.firebasestorage.app",
-  messagingSenderId: "436240015995",
-  appId: "1:436240015995:web:e646abe16d80d7eab9f8de"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+const FC={apiKey:"AIzaSyBKeQxNTRaGsry7vpHZOBOD6CCuvZhBpU0",authDomain:"critically-yours-v5.firebaseapp.com",projectId:"critically-yours-v5",storageBucket:"critically-yours-v5.firebasestorage.app",messagingSenderId:"436240015995",appId:"1:436240015995:web:e646abe16d80d7eab9f8de"};
+const app=initializeApp(FC);
+const db=getFirestore(app);
+const auth=getAuth(app);
+const ADMIN_EMAIL='aaravhfs@gmail.com';
+const ALLOWED=['admin','it_team'];
 
-const ALLOWED_ROLES = ['admin','it_team'];
-const ADMIN_EMAIL = 'aaravhfs@gmail.com';
+/* THEME */
+const themeBtn=document.getElementById('themeBtn');
+const applyT=t=>{document.documentElement.setAttribute('data-theme',t);themeBtn.textContent=t==='dark'?'\u2600':'\u263E';localStorage.setItem('cy_theme',t);};
+applyT(localStorage.getItem('cy_theme')||'dark');
+themeBtn.addEventListener('click',()=>applyT(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'));
 
-// THEME
-const themeToggle = document.getElementById('themeToggle');
-const saved = localStorage.getItem('cy_theme') || 'dark';
-document.documentElement.setAttribute('data-theme', saved);
-themeToggle.textContent = saved === 'dark' ? '☀' : '☾';
-themeToggle.addEventListener('click', () => {
-  const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', t);
-  localStorage.setItem('cy_theme', t);
-  themeToggle.textContent = t === 'dark' ? '☀' : '☾';
-});
+let evCache=[],clCache=[],authUser=null;
+let slideshowImgs=[];
 
-// AUTH GUARD
-onAuthStateChanged(auth, async user => {
-  if (!user) { window.location.href = 'login.html'; return; }
-  const email = user.email;
-  let allowed = email === ADMIN_EMAIL;
-  if (!allowed) {
-    const usersSnap = await getDocs(query(collection(db,'users'), where('email','==',email)));
-    if (!usersSnap.empty) {
-      const roles = usersSnap.docs[0].data().roles || [usersSnap.docs[0].data().role];
-      allowed = roles.some(r => ALLOWED_ROLES.includes(r));
-    }
+/* AUTH GUARD */
+onAuthStateChanged(auth,async user=>{
+  if(!user){window.location.href='login.html';return;}
+  const email=user.email.toLowerCase();
+  let allowed=email===ADMIN_EMAIL;
+  if(!allowed){
+    const snap=await getDocs(query(collection(db,'users'),where('email','==',email)));
+    if(!snap.empty){const roles=snap.docs[0].data().roles||[snap.docs[0].data().role];allowed=roles.some(r=>ALLOWED.includes(r));}
   }
-  if (!allowed) { alert('Access denied. You do not have permission to view this page.'); window.location.href = 'login.html'; return; }
-  document.getElementById('sbAvatar').src = user.photoURL || '';
-  document.getElementById('sbName').textContent = user.displayName || user.email;
-  document.getElementById('sbRole').textContent = email === ADMIN_EMAIL ? 'Administrator' : 'IT Team';
+  if(!allowed){alert('Access denied: Admin / IT Team role required.');window.location.href='login.html';return;}
+  authUser=user;
+  document.getElementById('sbAv').src=user.photoURL||'';
+  document.getElementById('sbUN').textContent=user.displayName||user.email;
+  document.getElementById('sbUR').textContent=email===ADMIN_EMAIL?'Administrator':'IT Team';
   initAdmin();
 });
 
-let eventsCache = [];
-
-async function initAdmin() {
+async function initAdmin(){
   await loadSettings();
+  await loadEventsData();
   loadDashboard();
-  loadEvents();
   loadUsers();
-  loadRegistrations();
-  loadClasses();
+  loadRegs();
+  loadAnnouncements();
   loadTimeline();
   loadRules();
-  loadAnnouncements();
   loadTickets();
-}
-
-// PANEL NAVIGATION
-window.showPanel = (id) => {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-' + id).classList.add('active');
-  event.currentTarget.classList.add('active');
-  document.getElementById('topbarTitle').textContent = event.currentTarget.textContent.trim();
-};
-window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('open');
-
-// DASHBOARD
-async function loadDashboard() {
-  try {
-    const snap = await getDocs(collection(db,'registrations'));
-    let total=0, pending=0, selected=0, rejected=0;
-    const recent = [];
-    snap.forEach(d => {
-      const r = d.data(); total++;
-      if (r.status==='audition_pending') pending++;
-      if (r.status==='selected') selected++;
-      if (r.status==='rejected') rejected++;
-      recent.push({id: d.id, ...r});
-    });
-    document.getElementById('statTotal').textContent = total;
-    document.getElementById('statPending').textContent = pending;
-    document.getElementById('statSelected').textContent = selected;
-    document.getElementById('statRejected').textContent = rejected;
-    recent.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
-    const tbody = document.getElementById('recentRegsBody');
-    tbody.innerHTML = '';
-    recent.slice(0,10).forEach(r => {
-      const evName = eventsCache.find(e=>e.id===r.eventId)?.name || r.eventId || '--';
-      const date = r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString('en-IN') : '';
-      tbody.innerHTML += `<tr><td>${r.name||''}</td><td>${evName}</td><td>${r.class||''} ${r.section||''}</td><td>${statusBadge(r.status)}</td><td>${date}</td></tr>`;
-    });
-  } catch(e) { console.error(e); }
-}
-
-function statusBadge(s) {
-  if (s==='selected') return '<span class="badge badge-selected">Selected</span>';
-  if (s==='rejected') return '<span class="badge badge-rejected">Rejected</span>';
-  return '<span class="badge badge-pending">Audition Pending</span>';
-}
-
-// EVENTS
-async function loadEvents() {
-  const tbody = document.getElementById('eventsBody');
-  try {
-    const snap = await getDocs(query(collection(db,'events'), orderBy('order','asc')));
-    eventsCache = [];
-    snap.forEach(d => eventsCache.push({id: d.id, ...d.data()}));
-    tbody.innerHTML = '';
-    if (snap.empty) { tbody.innerHTML = '<tr class="loading-row"><td colspan="6">No events added yet.</td></tr>'; }
-    snap.forEach(d => {
-      const ev = d.data();
-      tbody.innerHTML += `<tr>
-        <td>${ev.order||''}</td><td>${ev.name||''}</td><td>${ev.category||''}</td><td>${ev.venue||''}</td><td>${ev.maxParticipants||''}</td>
-        <td><button class="action-btn primary" onclick="editEvent('${d.id}')">Edit</button> <button class="action-btn danger" onclick="deleteEvent('${d.id}')">Delete</button></td>
-      </tr>`;
-    });
-    // Populate event selects
-    const evSel = document.getElementById('uEvent');
-    const expSel = document.getElementById('exportEventSelect');
-    evSel.innerHTML = '<option value="">None</option>';
-    expSel.innerHTML = '<option value="">All Events</option>';
-    eventsCache.forEach(ev => {
-      evSel.innerHTML += `<option value="${ev.id}">${ev.name}</option>`;
-      expSel.innerHTML += `<option value="${ev.id}">${ev.name}</option>`;
-    });
-  } catch(e) { tbody.innerHTML = '<tr class="loading-row"><td colspan="6">Error loading events.</td></tr>'; }
-}
-
-window.saveEvent = async () => {
-  const editId = document.getElementById('evEditId').value;
-  const data = {
-    name: document.getElementById('evName').value.trim(),
-    category: document.getElementById('evCategory').value.trim(),
-    logoFile: document.getElementById('evLogo').value.trim(),
-    venue: document.getElementById('evVenue').value.trim(),
-    maxParticipants: parseInt(document.getElementById('evMax').value)||null,
-    description: document.getElementById('evDesc').value.trim(),
-    order: parseInt(document.getElementById('evOrder').value)||99,
-    updatedAt: serverTimestamp()
-  };
-  if (!data.name) { showMsg('evMsg','Event name required.','error'); return; }
-  try {
-    if (editId) { await updateDoc(doc(db,'events',editId), data); }
-    else { await addDoc(collection(db,'events'), {...data, createdAt: serverTimestamp()}); }
-    showMsg('evMsg','Event saved successfully.','success');
-    clearEventForm(); loadEvents();
-  } catch(e) { showMsg('evMsg','Error: '+e.message,'error'); }
-};
-
-window.clearEventForm = () => {
-  ['evName','evCategory','evLogo','evVenue','evMax','evDesc','evOrder','evEditId'].forEach(id => document.getElementById(id).value='');
-};
-window.editEvent = (id) => {
-  const ev = eventsCache.find(e=>e.id===id);
-  if (!ev) return;
-  document.getElementById('evEditId').value = id;
-  document.getElementById('evName').value = ev.name||'';
-  document.getElementById('evCategory').value = ev.category||'';
-  document.getElementById('evLogo').value = ev.logoFile||'';
-  document.getElementById('evVenue').value = ev.venue||'';
-  document.getElementById('evMax').value = ev.maxParticipants||'';
-  document.getElementById('evDesc').value = ev.description||'';
-  document.getElementById('evOrder').value = ev.order||'';
-  showPanel('events');
-};
-window.deleteEvent = async (id) => {
-  if (!confirm('Delete this event?')) return;
-  await deleteDoc(doc(db,'events',id));
-  loadEvents();
-};
-
-// USERS
-async function loadUsers() {
-  const tbody = document.getElementById('usersBody');
-  try {
-    const snap = await getDocs(collection(db,'users'));
-    tbody.innerHTML = '';
-    if (snap.empty) { tbody.innerHTML = '<tr class="loading-row"><td colspan="5">No staff added yet.</td></tr>'; return; }
-    snap.forEach(d => {
-      const u = d.data();
-      const roles = (u.roles||[u.role]).filter(Boolean).join(', ');
-      const evName = eventsCache.find(e=>e.id===u.eventId)?.name || '--';
-      tbody.innerHTML += `<tr>
-        <td>${u.name||''}</td><td>${u.email||''}</td><td>${roles}</td><td>${evName}</td>
-        <td><button class="action-btn danger" onclick="removeUser('${d.id}')">Revoke</button></td>
-      </tr>`;
-    });
-  } catch(e) { tbody.innerHTML = '<tr class="loading-row"><td colspan="5">Error loading users.</td></tr>'; }
-}
-
-window.addUser = async () => {
-  const name = document.getElementById('uName').value.trim();
-  const email = document.getElementById('uEmail').value.trim().toLowerCase();
-  const role = document.getElementById('uRole').value;
-  const eventId = document.getElementById('uEvent').value;
-  if (!name||!email||!role) { showMsg('userMsg','All fields required.','error'); return; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showMsg('userMsg','Invalid email.','error'); return; }
-  try {
-    const existing = await getDocs(query(collection(db,'users'), where('email','==',email)));
-    if (!existing.empty) {
-      await updateDoc(doc(db,'users',existing.docs[0].id), { roles: [...(existing.docs[0].data().roles||[]), role], eventId: eventId||null });
-    } else {
-      await addDoc(collection(db,'users'), { name, email, roles:[role], eventId: eventId||null, createdAt: serverTimestamp() });
-    }
-    showMsg('userMsg','Staff member added.','success');
-    document.getElementById('uName').value=''; document.getElementById('uEmail').value='';
-    loadUsers();
-  } catch(e) { showMsg('userMsg','Error: '+e.message,'error'); }
-};
-window.removeUser = async (id) => {
-  if (!confirm('Revoke access for this user?')) return;
-  await deleteDoc(doc(db,'users',id)); loadUsers();
-};
-
-// REGISTRATIONS
-async function loadRegistrations() {
-  const tbody = document.getElementById('regsBody');
-  const filterStatus = document.getElementById('regFilterStatus').value;
-  tbody.innerHTML = '<tr class="loading-row"><td colspan="8">Loading...</td></tr>';
-  try {
-    let q = query(collection(db,'registrations'), orderBy('createdAt','desc'));
-    const snap = await getDocs(q);
-    tbody.innerHTML = '';
-    let found = 0;
-    snap.forEach(d => {
-      const r = d.data();
-      if (filterStatus && r.status !== filterStatus) return;
-      found++;
-      const evName = eventsCache.find(e=>e.id===r.eventId)?.name || '--';
-      const date = r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString('en-IN') : '';
-      tbody.innerHTML += `<tr>
-        <td>${r.name||''}</td><td>${evName}</td><td>${r.class||''} ${r.section||''}</td>
-        <td>${r.rollNumber||''}</td><td>${r.callingNumber||''}</td>
-        <td>${statusBadge(r.status)}</td><td>${date}</td>
-        <td>
-          <button class="action-btn primary" onclick="changeRegStatus('${d.id}','selected')">Select</button>
-          <button class="action-btn danger" onclick="changeRegStatus('${d.id}','rejected')">Reject</button>
-        </td>
-      </tr>`;
-    });
-    if (!found) tbody.innerHTML = '<tr class="loading-row"><td colspan="8">No registrations found.</td></tr>';
-  } catch(e) { tbody.innerHTML = '<tr class="loading-row"><td colspan="8">Error loading registrations.</td></tr>'; }
-}
-window.loadRegistrations = loadRegistrations;
-window.changeRegStatus = async (id, status) => {
-  if (!confirm(`Mark as ${status}?`)) return;
-  await updateDoc(doc(db,'registrations',id), {status, updatedAt: serverTimestamp()});
-  loadRegistrations(); loadDashboard();
-};
-
-// CLASSES
-let classesCache = [];
-async function loadClasses() {
-  try {
-    const snap = await getDocs(query(collection(db,'classes'), orderBy('order','asc')));
-    classesCache = [];
-    snap.forEach(d => classesCache.push({id:d.id,...d.data()}));
-    const sel = document.getElementById('clSelectClass');
-    sel.innerHTML = '<option value="">Select class</option>';
-    classesCache.forEach(c => sel.innerHTML += `<option value="${c.id}">${c.name}</option>`);
-  } catch(e) {}
-}
-window.addClass = async () => {
-  const name = document.getElementById('clName').value.trim();
-  const order = parseInt(document.getElementById('clOrder').value)||99;
-  if (!name) { showMsg('clMsg','Class name required.','error'); return; }
-  await addDoc(collection(db,'classes'), {name, order, sections:[], createdAt: serverTimestamp()});
-  showMsg('clMsg','Class added.','success');
-  document.getElementById('clName').value='';
   loadClasses();
-};
-window.loadSectionsAdmin = () => {
-  const classId = document.getElementById('clSelectClass').value;
-  const wrap = document.getElementById('sectionsAdmin');
-  const addWrap = document.getElementById('addSectionWrap');
-  if (!classId) { wrap.innerHTML=''; addWrap.style.display='none'; return; }
-  addWrap.style.display='block';
-  const cls = classesCache.find(c=>c.id===classId);
-  if (!cls) return;
-  const sections = cls.sections||[];
-  if (!sections.length) { wrap.innerHTML='<p style="color:var(--text-secondary);font-size:0.8rem;">No sections yet. Add below.</p>'; return; }
-  wrap.innerHTML = `<table style="width:100%"><thead><tr><th>Section</th><th>Class Teacher</th><th>Actions</th></tr></thead><tbody>
-    ${sections.map((s,i)=>`<tr><td>${s.name||s}</td><td>${s.teacher||''}</td><td><button class="action-btn danger" onclick="removeSection('${classId}',${i})">Remove</button></td></tr>`).join('')}
-  </tbody></table>`;
-};
-window.addSection = async () => {
-  const classId = document.getElementById('clSelectClass').value;
-  const name = document.getElementById('secName').value.trim();
-  const teacher = document.getElementById('secTeacher').value.trim();
-  if (!classId||!name||!teacher) { alert('All fields required.'); return; }
-  const cls = classesCache.find(c=>c.id===classId);
-  const sections = [...(cls.sections||[]), {name, teacher}];
-  await updateDoc(doc(db,'classes',classId), {sections});
-  document.getElementById('secName').value=''; document.getElementById('secTeacher').value='';
-  await loadClasses(); loadSectionsAdmin();
-};
-window.removeSection = async (classId, idx) => {
-  const cls = classesCache.find(c=>c.id===classId);
-  const sections = [...(cls.sections||[])];
-  sections.splice(idx,1);
-  await updateDoc(doc(db,'classes',classId), {sections});
-  await loadClasses(); loadSectionsAdmin();
+  loadAttendance();
+}
+
+/* NAVIGATION */
+window.nav=function(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('on'));
+  document.getElementById('p-'+id).classList.add('on');
+  if(btn)btn.classList.add('on');
+  document.getElementById('topTitle').textContent=btn?btn.textContent.trim():id;
+  if(id==='analytics')loadAnalytics();
+  if(id==='attendance')loadAttendance();
+  if(id==='tickets')loadTickets();
+  document.getElementById('sb').classList.remove('open');
 };
 
-// SETTINGS
-async function loadSettings() {
-  try {
-    const snap = await getDoc(doc(db,'settings','global'));
-    if (!snap.exists()) return;
-    const d = snap.data();
-    if (document.getElementById('toggleEnrollment')) document.getElementById('toggleEnrollment').checked = d.enrollmentOpen !== false;
-    if (document.getElementById('toggleNonSchool')) document.getElementById('toggleNonSchool').checked = !!d.allowNonSchoolAccounts;
-    if (document.getElementById('toggleParticipantPortal')) document.getElementById('toggleParticipantPortal').checked = d.participantPortalOpen !== false;
-    if (document.getElementById('toggleVolunteerPortal')) document.getElementById('toggleVolunteerPortal').checked = d.volunteerPortalOpen !== false;
-    if (document.getElementById('secPortalToggle')) document.getElementById('secPortalToggle').checked = !!d.securityPortalOpen;
-    if (d.festDate && document.getElementById('festDate')) {
-      const dt = d.festDate.toDate ? d.festDate.toDate() : new Date(d.festDate);
-      document.getElementById('festDate').value = dt.toISOString().slice(0,16);
+function showMsg(id,msg,type){const el=document.getElementById(id);if(!el)return;el.textContent=msg;el.className='msg '+(type==='s'?'s':'e');setTimeout(()=>{el.className='msg';},5000);}
+
+/* STATUS BADGE */
+function sBadge(s){if(s==='selected')return'<span class="badge b-sel">Selected</span>';if(s==='rejected')return'<span class="badge b-rej">Rejected</span>';return'<span class="badge b-pend">Pending</span>';}
+
+/* SETTINGS LOAD */
+async function loadSettings(){
+  try{
+    const snap=await getDoc(doc(db,'settings','global'));
+    if(!snap.exists())return;
+    const d=snap.data();
+    const checkSet=(id,val)=>{const el=document.getElementById(id);if(el)el.checked=!!val;};
+    checkSet('tgEnroll',d.enrollmentOpen!==false);
+    checkSet('tgVolunteer',d.volunteerOpen);
+    checkSet('tgPartPortal',d.participantPortalOpen!==false);
+    checkSet('tgVolPortal',d.volunteerPortalOpen!==false);
+    checkSet('tgNonSchool',d.allowNonSchoolAccounts);
+    checkSet('tgSlideshow',d.slideshowEnabled!==false);
+    checkSet('tgBanner',d.showUnofficialBanner);
+    checkSet('tgSecurity',d.securityPortalOpen);
+    if(d.festDate){const dt=d.festDate.toDate?d.festDate.toDate():new Date(d.festDate);const el=document.getElementById('festDate');if(el)el.value=dt.toISOString().slice(0,16);}
+    if(d.venue){const vn=document.getElementById('vName');const va=document.getElementById('vAddr');const vh=document.getElementById('vHall');if(vn)vn.value=d.venue.name||'';if(va)va.value=d.venue.address||'';if(vh)vh.value=d.venue.hall||'';}
+    if(d.heroTagline){const el=document.getElementById('heroTagline');if(el)el.value=d.heroTagline;}
+    if(d.securityVolunteer){const el=document.getElementById('secVolEmail');if(el)el.value=d.securityVolunteer;}
+    slideshowImgs=d.slideshowImages||[];
+    renderSlideImgs();
+  }catch(e){console.warn(e);}
+}
+
+window.saveToggle=async function(key,val){
+  try{await setDoc(doc(db,'settings','global'),{[key]:val},{merge:true});}catch(e){alert('Save failed: '+e.message);}
+};
+
+/* EVENTS */
+async function loadEventsData(){
+  const tbody=document.getElementById('evTbody');
+  try{
+    const snap=await getDocs(query(collection(db,'events'),orderBy('order','asc')));
+    evCache=[];snap.forEach(d=>evCache.push({id:d.id,...d.data()}));
+    tbody.innerHTML='';
+    if(snap.empty){tbody.innerHTML='<tr><td colspan="7" class="loading-ph">No events added yet.</td></tr>';return;}
+    snap.forEach(d=>{const ev=d.data();tbody.innerHTML+=`<tr><td>${ev.order||''}</td><td>${ev.name||''}</td><td>${ev.category||''}</td><td style="font-size:.64rem;">${ev.logoFile||'&mdash;'}</td><td>${ev.venue||''}</td><td>${ev.maxParticipants||''}</td><td style="white-space:nowrap;"><button class="ab ab-g" onclick="editEvent('${d.id}')">Edit</button> <button class="ab ab-r" onclick="deleteEvent('${d.id}')">Delete</button></td></tr>`;});
+    /* Populate event selects */
+    ['uEvent','regEvFilter','expEvent'].forEach(selId=>{
+      const sel=document.getElementById(selId);if(!sel)return;
+      const cur=sel.value;
+      const first=selId==='uEvent'?'<option value="">None</option>':'<option value="">All Events</option>';
+      sel.innerHTML=first+evCache.map(ev=>`<option value="${ev.id}">${ev.name}</option>`).join('');
+      sel.value=cur;
+    });
+  }catch(e){tbody.innerHTML='<tr><td colspan="7" class="loading-ph">Error loading events.</td></tr>';}
+}
+window.saveEvent=async function(){
+  const editId=document.getElementById('evEditId').value;
+  const data={name:document.getElementById('evName').value.trim(),category:document.getElementById('evCat').value.trim(),logoFile:document.getElementById('evLogo').value.trim(),venue:document.getElementById('evVenue').value.trim(),maxParticipants:parseInt(document.getElementById('evMax').value)||null,description:document.getElementById('evDesc').value.trim(),order:parseInt(document.getElementById('evOrder').value)||99,updatedAt:serverTimestamp()};
+  if(!data.name){showMsg('evMsg','Event name is required.','e');return;}
+  try{
+    if(editId)await updateDoc(doc(db,'events',editId),data);
+    else await addDoc(collection(db,'events'),{...data,createdAt:serverTimestamp()});
+    showMsg('evMsg','Event saved successfully.','s');
+    clearEvForm();loadEventsData();
+  }catch(e){showMsg('evMsg','Error: '+e.message,'e');}
+};
+window.clearEvForm=function(){document.getElementById('evEditId').value='';['evName','evCat','evLogo','evVenue','evMax','evDesc','evOrder'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('evFormTitle').textContent='Add Event';};
+window.editEvent=function(id){
+  const ev=evCache.find(e=>e.id===id);if(!ev)return;
+  document.getElementById('evEditId').value=id;document.getElementById('evName').value=ev.name||'';document.getElementById('evCat').value=ev.category||'';document.getElementById('evLogo').value=ev.logoFile||'';document.getElementById('evVenue').value=ev.venue||'';document.getElementById('evMax').value=ev.maxParticipants||'';document.getElementById('evDesc').value=ev.description||'';document.getElementById('evOrder').value=ev.order||'';document.getElementById('evFormTitle').textContent='Edit Event';
+  document.getElementById('p-events').scrollTop=0;
+};
+window.deleteEvent=async function(id){if(!confirm('Delete this event? This cannot be undone.'))return;await deleteDoc(doc(db,'events',id));loadEventsData();};
+
+/* DASHBOARD */
+async function loadDashboard(){
+  try{
+    const snap=await getDocs(collection(db,'registrations'));
+    let total=0,pend=0,sel=0,rej=0;const recent=[];
+    snap.forEach(d=>{const r=d.data();total++;if(r.status==='audition_pending')pend++;if(r.status==='selected')sel++;if(r.status==='rejected')rej++;recent.push({id:d.id,...r});});
+    document.getElementById('statRow').innerHTML=`
+      <div class="stat-c"><div class="stat-v">${total}</div><div class="stat-l">Total Registered</div></div>
+      <div class="stat-c"><div class="stat-v" style="color:var(--gold);">${pend}</div><div class="stat-l">Audition Pending</div></div>
+      <div class="stat-c"><div class="stat-v" style="color:var(--green-l);">${sel}</div><div class="stat-l">Selected</div></div>
+      <div class="stat-c"><div class="stat-v" style="color:var(--red-l);">${rej}</div><div class="stat-l">Rejected</div></div>`;
+    recent.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+    const tbody=document.getElementById('recentTbody');tbody.innerHTML='';
+    recent.slice(0,12).forEach(r=>{const evName=evCache.find(e=>e.id===r.eventId)?.name||'--';const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';tbody.innerHTML+=`<tr><td>${r.name||''}</td><td>${evName}</td><td>${r.class||''} ${r.section||''}</td><td>${sBadge(r.status)}</td><td>${date}</td></tr>`;});
+    if(!recent.length)tbody.innerHTML='<tr><td colspan="5" class="loading-ph">No registrations yet.</td></tr>';
+  }catch(e){console.error(e);}
+}
+
+/* ANALYTICS */
+async function loadAnalytics(){
+  const con=document.getElementById('analyticsContent');
+  try{
+    const snap=await getDocs(collection(db,'registrations'));
+    const byEv={};
+    snap.forEach(d=>{const r=d.data();if(!byEv[r.eventId])byEv[r.eventId]={total:0,pend:0,sel:0,rej:0};byEv[r.eventId].total++;if(r.status==='audition_pending')byEv[r.eventId].pend++;if(r.status==='selected')byEv[r.eventId].sel++;if(r.status==='rejected')byEv[r.eventId].rej++;});
+    con.innerHTML='';
+    if(!Object.keys(byEv).length){con.innerHTML='<div class="loading-ph">No registration data yet.</div>';return;}
+    Object.entries(byEv).forEach(([evId,c])=>{const evName=evCache.find(e=>e.id===evId)?.name||evId;con.innerHTML+=`<div class="stat-c"><div style="font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--t1);margin-bottom:10px;">${evName}</div><div style="font-size:.7rem;color:var(--t2);">Total: <b style="color:var(--gold);">${c.total}</b></div><div style="font-size:.7rem;color:var(--t2);">Pending: <b style="color:var(--gold);">${c.pend}</b></div><div style="font-size:.7rem;color:var(--t2);">Selected: <b style="color:var(--green-l);">${c.sel}</b></div><div style="font-size:.7rem;color:var(--t2);">Rejected: <b style="color:var(--red-l);">${c.rej}</b></div></div>`;});
+  }catch(e){con.innerHTML='<div class="loading-ph">Error.</div>';}
+}
+
+/* USERS */
+async function loadUsers(){
+  const tbody=document.getElementById('uTbody');
+  try{
+    const snap=await getDocs(collection(db,'users'));
+    tbody.innerHTML='';
+    if(snap.empty){tbody.innerHTML='<tr><td colspan="5" class="loading-ph">No staff added yet.</td></tr>';return;}
+    snap.forEach(d=>{
+      const u=d.data();const roles=(u.roles||[u.role]).filter(Boolean).join(', ');
+      const evName=evCache.find(e=>e.id===u.eventId)?.name||'&mdash;';
+      tbody.innerHTML+=`<tr><td>${u.name||''}</td><td style="font-size:.66rem;">${u.email||''}</td><td>${roles}</td><td>${evName}</td><td><button class="ab ab-r" onclick="removeUser('${d.id}')">Revoke</button></td></tr>`;
+    });
+  }catch(e){tbody.innerHTML='<tr><td colspan="5" class="loading-ph">Error loading.</td></tr>';}
+}
+window.addUser=async function(){
+  const name=document.getElementById('uName').value.trim();
+  const email=document.getElementById('uEmail').value.trim().toLowerCase();
+  const role=document.getElementById('uRole').value;
+  const eventId=document.getElementById('uEvent').value;
+  if(!name||!email||!role){showMsg('uMsg','All fields required.','e');return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showMsg('uMsg','Invalid email address.','e');return;}
+  try{
+    const existing=await getDocs(query(collection(db,'users'),where('email','==',email)));
+    if(!existing.empty){
+      const cur=existing.docs[0].data().roles||[];
+      if(!cur.includes(role))await updateDoc(doc(db,'users',existing.docs[0].id),{roles:[...cur,role],eventId:eventId||null});
+      else{showMsg('uMsg','This role already exists for this user.','e');return;}
+    }else{
+      await addDoc(collection(db,'users'),{name,email,roles:[role],eventId:eventId||null,createdAt:serverTimestamp()});
     }
-    if (d.venue) {
-      document.getElementById('venueName').value = d.venue.name||'';
-      document.getElementById('venueAddr').value = d.venue.address||'';
-      document.getElementById('venueHall').value = d.venue.hall||'';
-    }
-  } catch(e) {}
-}
-window.saveToggle = async (key, val) => {
-  await setDoc(doc(db,'settings','global'), {[key]:val}, {merge:true});
+    showMsg('uMsg','Staff member added successfully.','s');
+    document.getElementById('uName').value='';document.getElementById('uEmail').value='';
+    loadUsers();
+  }catch(e){showMsg('uMsg','Error: '+e.message,'e');}
 };
-window.saveFestDate = async () => {
-  const val = document.getElementById('festDate').value;
-  if (!val) { showMsg('dateMsg','Select a date.','error'); return; }
-  await setDoc(doc(db,'settings','global'), {festDate: new Date(val)}, {merge:true});
-  showMsg('dateMsg','Date saved.','success');
+window.removeUser=async function(id){if(!confirm('Revoke all access for this user?'))return;await deleteDoc(doc(db,'users',id));loadUsers();};
+
+/* REGISTRATIONS */
+window.loadRegs=async function(){
+  const tbody=document.getElementById('regTbody');
+  tbody.innerHTML='<tr><td colspan="8" class="loading-ph">Loading&hellip;</td></tr>';
+  const evFilter=document.getElementById('regEvFilter').value;
+  const stFilter=document.getElementById('regStFilter').value;
+  try{
+    const snap=await getDocs(query(collection(db,'registrations'),orderBy('createdAt','desc')));
+    tbody.innerHTML='';let found=0;
+    snap.forEach(d=>{
+      const r=d.data();
+      if(evFilter&&r.eventId!==evFilter)return;
+      if(stFilter&&r.status!==stFilter)return;
+      found++;
+      const evName=evCache.find(e=>e.id===r.eventId)?.name||'--';
+      const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';
+      tbody.innerHTML+=`<tr><td>${r.name||''}</td><td>${evName}</td><td>${r.class||''} ${r.section||''}</td><td>${r.rollNumber||''}</td><td style="font-size:.64rem;">${r.callingNumber||''}</td><td>${sBadge(r.status)}</td><td>${date}</td><td style="white-space:nowrap;"><button class="ab ab-gr" onclick="setRegStatus('${d.id}','selected')">Select</button> <button class="ab ab-r" onclick="setRegStatus('${d.id}','rejected')">Reject</button> <button class="ab" onclick="setRegStatus('${d.id}','audition_pending')">Pending</button></td></tr>`;
+    });
+    if(!found)tbody.innerHTML='<tr><td colspan="8" class="loading-ph">No registrations found.</td></tr>';
+  }catch(e){tbody.innerHTML='<tr><td colspan="8" class="loading-ph">Error loading.</td></tr>';}
 };
-window.saveVenue = async () => {
-  const name = document.getElementById('venueName').value.trim();
-  const address = document.getElementById('venueAddr').value.trim();
-  const hall = document.getElementById('venueHall').value.trim();
-  await setDoc(doc(db,'settings','global'), {venue:{name,address,hall}}, {merge:true});
-  showMsg('venueMsg','Venue saved.','success');
-};
-window.saveSecurityToggle = async () => {
-  const val = document.getElementById('secPortalToggle').checked;
-  await setDoc(doc(db,'settings','global'), {securityPortalOpen:val}, {merge:true});
-};
-window.assignSecurity = async () => {
-  const email = document.getElementById('secVolEmail').value.trim();
-  if (!email) { showMsg('secMsg','Email required.','error'); return; }
-  await setDoc(doc(db,'settings','global'), {securityVolunteer: email}, {merge:true});
-  showMsg('secMsg','Security volunteer assigned.','success');
-};
-window.markAdminPresent = async () => {
-  const user = auth.currentUser;
-  if (!user) return;
-  await setDoc(doc(db,'attendance', user.uid), {email:user.email, name:user.displayName, markedAt:serverTimestamp(), markedBy:'admin'}, {merge:true});
-  showMsg('adminAttMsg','Attendance marked.','success');
-};
-window.addNonSchoolAccount = async () => {
-  const email = document.getElementById('nonSchoolEmail').value.trim().toLowerCase();
-  const role = document.getElementById('nonSchoolRole').value;
-  if (!email||!role) { showMsg('nonSchoolMsg','All fields required.','error'); return; }
-  const existing = await getDocs(query(collection(db,'users'), where('email','==',email)));
-  if (!existing.empty) { await updateDoc(doc(db,'users',existing.docs[0].id), {roles:[...new Set([...(existing.docs[0].data().roles||[]),role])]}); }
-  else { await addDoc(collection(db,'users'), {email, name: email.split('@')[0], roles:[role], nonSchool:true, createdAt:serverTimestamp()}); }
-  showMsg('nonSchoolMsg','Account added.','success');
-  document.getElementById('nonSchoolEmail').value='';
-  loadUsers();
+window.setRegStatus=async function(id,status){
+  if(!confirm(`Set status to "${status}"?`))return;
+  await updateDoc(doc(db,'registrations',id),{status,updatedAt:serverTimestamp()});
+  loadRegs();loadDashboard();
 };
 
-// TIMELINE
-async function loadTimeline() {
-  const tbody = document.getElementById('timelineBody');
-  try {
-    const snap = await getDocs(query(collection(db,'timeline'), orderBy('order','asc')));
-    tbody.innerHTML = '';
-    if (snap.empty) { tbody.innerHTML = '<tr class="loading-row"><td colspan="5">No entries.</td></tr>'; return; }
-    snap.forEach(d => {
-      const t = d.data();
-      tbody.innerHTML += `<tr><td>${t.order||''}</td><td>${t.date||''}</td><td>${t.title||''}</td><td>${t.description||''}</td><td><button class="action-btn danger" onclick="deleteTimeline('${d.id}')">Delete</button></td></tr>`;
-    });
-  } catch(e) { tbody.innerHTML = '<tr class="loading-row"><td colspan="5">Error.</td></tr>'; }
+/* CLASSES */
+async function loadClasses(){
+  try{
+    const snap=await getDocs(query(collection(db,'classes'),orderBy('order','asc')));
+    clCache=[];snap.forEach(d=>clCache.push({id:d.id,...d.data()}));
+    const sel=document.getElementById('clSelect');
+    sel.innerHTML='<option value="">Select class</option>'+clCache.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  }catch(e){}
 }
-window.addTimeline = async () => {
-  const date = document.getElementById('tlDate').value.trim();
-  const title = document.getElementById('tlTitle').value.trim();
-  const description = document.getElementById('tlDesc').value.trim();
-  const order = parseInt(document.getElementById('tlOrder').value)||99;
-  if (!date||!title) { showMsg('tlMsg','Date and title required.','error'); return; }
-  await addDoc(collection(db,'timeline'), {date,title,description,order,createdAt:serverTimestamp()});
-  showMsg('tlMsg','Entry added.','success');
-  ['tlDate','tlTitle','tlDesc','tlOrder'].forEach(id=>document.getElementById(id).value='');
-  loadTimeline();
+window.addClass=async function(){
+  const name=document.getElementById('clName').value.trim();
+  const order=parseInt(document.getElementById('clOrder').value)||99;
+  if(!name){showMsg('clMsg','Class name required.','e');return;}
+  await addDoc(collection(db,'classes'),{name,order,sections:[],createdAt:serverTimestamp()});
+  showMsg('clMsg','Class added.','s');document.getElementById('clName').value='';loadClasses();
 };
-window.deleteTimeline = async (id) => {
-  if (!confirm('Delete?')) return;
-  await deleteDoc(doc(db,'timeline',id)); loadTimeline();
+window.loadSectionsAdmin=function(){
+  const classId=document.getElementById('clSelect').value;
+  const panel=document.getElementById('sectionsPanel');
+  const addPanel=document.getElementById('addSecPanel');
+  if(!classId){panel.innerHTML='';addPanel.style.display='none';return;}
+  addPanel.style.display='block';
+  const cls=clCache.find(c=>c.id===classId);
+  if(!cls){panel.innerHTML='';return;}
+  const secs=cls.sections||[];
+  if(!secs.length){panel.innerHTML='<div style="font-size:.72rem;color:var(--t2);margin-bottom:10px;">No sections yet. Add below.</div>';return;}
+  panel.innerHTML=`<div class="tbl-scroll"><table style="width:100%;"><thead><tr><th>Section</th><th>Class Teacher</th><th>Actions</th></tr></thead><tbody>${secs.map((s,i)=>`<tr><td>${s.name||s}</td><td>${s.teacher||''}</td><td><button class="ab ab-r" onclick="removeSection('${classId}',${i})">Remove</button></td></tr>`).join('')}</tbody></table></div>`;
+};
+window.addSection=async function(){
+  const classId=document.getElementById('clSelect').value;
+  const name=document.getElementById('secName').value.trim();
+  const teacher=document.getElementById('secTeacher').value.trim();
+  if(!classId||!name||!teacher){alert('All fields required.');return;}
+  const cls=clCache.find(c=>c.id===classId);
+  const sections=[...(cls.sections||[]),{name,teacher}];
+  await updateDoc(doc(db,'classes',classId),{sections});
+  document.getElementById('secName').value='';document.getElementById('secTeacher').value='';
+  await loadClasses();loadSectionsAdmin();
+};
+window.removeSection=async function(classId,idx){
+  const cls=clCache.find(c=>c.id===classId);
+  const sections=[...(cls.sections||[])];sections.splice(idx,1);
+  await updateDoc(doc(db,'classes',classId),{sections});
+  await loadClasses();loadSectionsAdmin();
 };
 
-// RULES
-async function loadRules() {
-  const tbody = document.getElementById('rulesBody');
-  try {
-    const snap = await getDocs(query(collection(db,'rules'), orderBy('order','asc')));
-    tbody.innerHTML = '';
-    if (snap.empty) { tbody.innerHTML = '<tr class="loading-row"><td colspan="3">No rules.</td></tr>'; return; }
-    snap.forEach(d => {
-      const r = d.data();
-      tbody.innerHTML += `<tr><td>${r.order||''}</td><td>${r.text||''}</td><td><button class="action-btn danger" onclick="deleteRule('${d.id}')">Delete</button></td></tr>`;
+/* ANNOUNCEMENTS */
+async function loadAnnouncements(){
+  const tbody=document.getElementById('annTbody');
+  try{
+    const snap=await getDocs(query(collection(db,'announcements'),orderBy('createdAt','desc')));
+    tbody.innerHTML='';
+    if(snap.empty){tbody.innerHTML='<tr><td colspan="6" class="loading-ph">No announcements.</td></tr>';return;}
+    snap.forEach(d=>{
+      const a=d.data();const date=a.createdAt?.toDate?a.createdAt.toDate().toLocaleDateString('en-IN'):'';
+      const statusBadge=a.status==='pending_approval'?'<span class="badge b-pend">Pending</span>':'<span class="badge b-sel">Live</span>';
+      tbody.innerHTML+=`<tr><td>${a.title||''}</td><td style="font-size:.64rem;">${(a.targets||[]).join(', ')}</td><td>${a.postedBy||''}</td><td>${statusBadge}</td><td>${date}</td><td><button class="ab ab-r" onclick="deleteAnn('${d.id}')">Delete</button></td></tr>`;
     });
-  } catch(e) {}
+  }catch(e){}
 }
-window.addRule = async () => {
-  const text = document.getElementById('ruleText').value.trim();
-  const order = parseInt(document.getElementById('ruleOrder').value)||99;
-  if (!text) { showMsg('ruleMsg','Rule text required.','error'); return; }
-  await addDoc(collection(db,'rules'), {text,order,createdAt:serverTimestamp()});
-  showMsg('ruleMsg','Rule added.','success');
-  document.getElementById('ruleText').value=''; document.getElementById('ruleOrder').value='';
-  loadRules();
-};
-window.deleteRule = async (id) => {
-  if (!confirm('Delete?')) return;
-  await deleteDoc(doc(db,'rules',id)); loadRules();
-};
-
-// ANNOUNCEMENTS
-async function loadAnnouncements() {
-  const tbody = document.getElementById('annBody2');
-  try {
-    const snap = await getDocs(query(collection(db,'announcements'), orderBy('createdAt','desc')));
-    tbody.innerHTML = '';
-    if (snap.empty) { tbody.innerHTML = '<tr class="loading-row"><td colspan="5">No announcements.</td></tr>'; return; }
-    snap.forEach(d => {
-      const a = d.data();
-      const date = a.createdAt?.toDate ? a.createdAt.toDate().toLocaleDateString('en-IN') : '';
-      tbody.innerHTML += `<tr><td>${a.title||''}</td><td>${(a.targets||[]).join(', ')}</td><td>${a.postedBy||''}</td><td>${date}</td><td><button class="action-btn danger" onclick="deleteAnn('${d.id}')">Delete</button></td></tr>`;
-    });
-  } catch(e) {}
-}
-window.postAnnouncement = async () => {
-  const title = document.getElementById('annTitle').value.trim();
-  const body = document.getElementById('annBody').value.trim();
-  const targets = [...document.querySelectorAll('[type=checkbox]:checked')].map(c=>c.value);
-  if (!title||!body) { showMsg('annMsg','Title and body required.','error'); return; }
-  if (!targets.length) { showMsg('annMsg','Select at least one target.','error'); return; }
-  const user = auth.currentUser;
-  await addDoc(collection(db,'announcements'), {title,body,targets,postedBy: user.displayName||user.email, postedByEmail: user.email, createdAt:serverTimestamp()});
-  showMsg('annMsg','Announcement posted.','success');
-  document.getElementById('annTitle').value=''; document.getElementById('annBody').value='';
-  document.querySelectorAll('[type=checkbox]:checked').forEach(c=>c.checked=false);
+window.postAnn=async function(){
+  const title=document.getElementById('annTitle').value.trim();
+  const body=document.getElementById('annBody').value.trim();
+  const targets=[...document.querySelectorAll('#annTargets [type=checkbox]:checked')].map(c=>c.value);
+  if(!title||!body){showMsg('annMsg','Title and body required.','e');return;}
+  if(!targets.length){showMsg('annMsg','Select at least one target.','e');return;}
+  await addDoc(collection(db,'announcements'),{title,body,targets,status:'approved',postedBy:authUser.displayName||authUser.email,postedByEmail:authUser.email,createdAt:serverTimestamp()});
+  showMsg('annMsg','Announcement posted.','s');
+  document.getElementById('annTitle').value='';document.getElementById('annBody').value='';
+  document.querySelectorAll('#annTargets [type=checkbox]:checked').forEach(c=>c.checked=false);
   loadAnnouncements();
 };
-window.deleteAnn = async (id) => {
-  if (!confirm('Delete?')) return;
-  await deleteDoc(doc(db,'announcements',id)); loadAnnouncements();
+window.deleteAnn=async function(id){if(!confirm('Delete announcement?'))return;await deleteDoc(doc(db,'announcements',id));loadAnnouncements();};
+
+/* TIMELINE */
+async function loadTimeline(){
+  const tbody=document.getElementById('tlTbody');
+  try{
+    const snap=await getDocs(query(collection(db,'timeline'),orderBy('order','asc')));
+    tbody.innerHTML='';
+    if(snap.empty){tbody.innerHTML='<tr><td colspan="5" class="loading-ph">No entries.</td></tr>';return;}
+    snap.forEach(d=>{const t=d.data();tbody.innerHTML+=`<tr><td>${t.order||''}</td><td>${t.date||''}</td><td>${t.title||''}</td><td>${t.description||''}</td><td><button class="ab ab-r" onclick="deleteTl('${d.id}')">Delete</button></td></tr>`;});
+  }catch(e){}
+}
+window.addTimeline=async function(){
+  const date=document.getElementById('tlDate').value.trim();
+  const title=document.getElementById('tlTitle').value.trim();
+  const desc=document.getElementById('tlDesc').value.trim();
+  const order=parseInt(document.getElementById('tlOrder').value)||99;
+  if(!date||!title){showMsg('tlMsg','Date and title required.','e');return;}
+  await addDoc(collection(db,'timeline'),{date,title,description:desc,order,createdAt:serverTimestamp()});
+  showMsg('tlMsg','Entry added.','s');['tlDate','tlTitle','tlDesc','tlOrder'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});loadTimeline();
+};
+window.deleteTl=async function(id){if(!confirm('Delete?'))return;await deleteDoc(doc(db,'timeline',id));loadTimeline();};
+
+/* RULES */
+async function loadRules(){
+  const tbody=document.getElementById('ruleTbody');
+  try{
+    const snap=await getDocs(query(collection(db,'rules'),orderBy('order','asc')));
+    tbody.innerHTML='';
+    if(snap.empty){tbody.innerHTML='<tr><td colspan="3" class="loading-ph">No rules.</td></tr>';return;}
+    snap.forEach(d=>{const r=d.data();tbody.innerHTML+=`<tr><td>${r.order||''}</td><td>${r.text||''}</td><td><button class="ab ab-r" onclick="deleteRule('${d.id}')">Delete</button></td></tr>`;});
+  }catch(e){}
+}
+window.addRule=async function(){
+  const text=document.getElementById('ruleText').value.trim();
+  const order=parseInt(document.getElementById('ruleOrder').value)||99;
+  if(!text){showMsg('ruleMsg','Rule text required.','e');return;}
+  await addDoc(collection(db,'rules'),{text,order,createdAt:serverTimestamp()});
+  showMsg('ruleMsg','Rule added.','s');document.getElementById('ruleText').value='';document.getElementById('ruleOrder').value='';loadRules();
+};
+window.deleteRule=async function(id){if(!confirm('Delete?'))return;await deleteDoc(doc(db,'rules',id));loadRules();};
+
+/* HOMEPAGE SETTINGS */
+window.saveTagline=async function(){
+  const val=document.getElementById('heroTagline').value.trim();
+  if(!val){showMsg('tagMsg','Tagline cannot be empty.','e');return;}
+  await setDoc(doc(db,'settings','global'),{heroTagline:val},{merge:true});
+  showMsg('tagMsg','Tagline saved.','s');
+};
+window.saveFestDate=async function(){
+  const val=document.getElementById('festDate').value;
+  if(!val){showMsg('dateMsg','Select a date and time.','e');return;}
+  await setDoc(doc(db,'settings','global'),{festDate:new Date(val)},{merge:true});
+  showMsg('dateMsg','Date saved.','s');
+};
+window.saveVenue=async function(){
+  const name=document.getElementById('vName').value.trim();
+  const address=document.getElementById('vAddr').value.trim();
+  const hall=document.getElementById('vHall').value.trim();
+  await setDoc(doc(db,'settings','global'),{venue:{name,address,hall}},{merge:true});
+  showMsg('venueMsg','Venue saved.','s');
+};
+window.saveLogo=async function(){
+  const val=document.getElementById('logoFile').value.trim();
+  if(!val){showMsg('logoMsg','Enter a filename.','e');return;}
+  await setDoc(doc(db,'settings','global'),{logoFile:val},{merge:true});
+  showMsg('logoMsg','Logo filename saved. Make sure the file is deployed.','s');
 };
 
-// TICKETS
-async function loadTickets() {
-  const container = document.getElementById('ticketsList');
-  try {
-    const snap = await getDocs(query(collection(db,'tickets'), orderBy('createdAt','desc')));
-    container.innerHTML = '';
-    if (snap.empty) { container.innerHTML = '<div style="color:var(--text-secondary);font-size:0.8rem;padding:20px;">No tickets submitted.</div>'; return; }
-    snap.forEach(d => {
-      const t = d.data();
-      const date = t.createdAt?.toDate ? t.createdAt.toDate().toLocaleString('en-IN') : '';
-      container.innerHTML += `
-        <div class="ticket-card">
-          <div class="ticket-header">
-            <div>
-              <div class="ticket-cat">${t.category||''}</div>
-              <div class="ticket-title">From: ${t.name||''}</div>
-            </div>
-            <span class="badge ${t.status==='resolved'?'badge-selected':'badge-pending'}">${t.status||'open'}</span>
-          </div>
-          <div class="ticket-body">${t.description||''}</div>
-          <div class="ticket-meta">${t.email?'Email: '+t.email+' &bull; ':''} ${date}</div>
-          <div class="ticket-actions">
-            <button class="action-btn primary" onclick="resolveTicket('${d.id}')">Mark Resolved</button>
-            <button class="action-btn" onclick="forwardTicket('${d.id}')">Forward to Teacher</button>
-          </div>
-        </div>`;
-    });
-  } catch(e) {}
+/* SLIDESHOW */
+function renderSlideImgs(){
+  const con=document.getElementById('imgsContainer');
+  if(!con)return;
+  con.innerHTML='';
+  slideshowImgs.forEach((src,i)=>{
+    const tag=document.createElement('div');tag.className='img-tag';
+    tag.innerHTML=`${src} <button onclick="removeSlideImg(${i})">&#10005;</button>`;
+    con.appendChild(tag);
+  });
 }
-window.resolveTicket = async (id) => { await updateDoc(doc(db,'tickets',id), {status:'resolved'}); loadTickets(); };
-window.forwardTicket = async (id) => { await updateDoc(doc(db,'tickets',id), {forwardedToTeacher:true}); alert('Forwarded to Teacher-in-Charge.'); loadTickets(); };
-
-// ANALYTICS
-window.showPanel = (id) => {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-' + id).classList.add('active');
-  if (event && event.currentTarget) { event.currentTarget.classList.add('active'); document.getElementById('topbarTitle').textContent = event.currentTarget.textContent.trim(); }
-  if (id === 'analytics') loadAnalytics();
-  if (id === 'tickets') loadTickets();
+window.addSlideImg=function(){
+  const val=document.getElementById('imgInput').value.trim();
+  if(!val)return;
+  if(!slideshowImgs.includes(val)){slideshowImgs.push(val);renderSlideImgs();}
+  document.getElementById('imgInput').value='';
+};
+window.removeSlideImg=function(i){slideshowImgs.splice(i,1);renderSlideImgs();};
+window.saveSlideshow=async function(){
+  await setDoc(doc(db,'settings','global'),{slideshowImages:slideshowImgs},{merge:true});
+  showMsg('slideMsg','Slideshow images saved.','s');
 };
 
-async function loadAnalytics() {
-  const container = document.getElementById('analyticsData');
-  try {
-    const regSnap = await getDocs(collection(db,'registrations'));
-    const byEvent = {};
-    regSnap.forEach(d => {
-      const r = d.data();
-      if (!byEvent[r.eventId]) byEvent[r.eventId] = {total:0,pending:0,selected:0,rejected:0};
-      byEvent[r.eventId].total++;
-      if (r.status==='audition_pending') byEvent[r.eventId].pending++;
-      if (r.status==='selected') byEvent[r.eventId].selected++;
-      if (r.status==='rejected') byEvent[r.eventId].rejected++;
+/* ATTENDANCE */
+async function loadAttendance(){
+  const dateInput=document.getElementById('attDate');
+  if(dateInput&&!dateInput.value){dateInput.value=new Date().toISOString().split('T')[0];}
+  const selectedDate=dateInput?dateInput.value:new Date().toISOString().split('T')[0];
+  const attHead=document.getElementById('attDateHead');
+  const attGrid=document.getElementById('attGrid');
+  if(!attHead||!attGrid)return;
+  attHead.textContent='Attendance — '+new Date(selectedDate+'T12:00:00').toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  attGrid.innerHTML='<div class="loading-ph">Loading&hellip;</div>';
+  try{
+    /* Get all members */
+    const [usersSnap,regsSnap,attSnap]=await Promise.all([
+      getDocs(collection(db,'users')),
+      getDocs(query(collection(db,'registrations'),where('status','==','selected'))),
+      getDocs(query(collection(db,'attendance'),where('date','==',selectedDate)))
+    ]);
+    const attMap={};
+    attSnap.forEach(d=>{const a=d.data();attMap[a.uid]=a;});
+    attGrid.innerHTML='';
+    /* Admin first */
+    const adminPresent=attMap[authUser.uid];
+    attGrid.innerHTML+=`<div class="att-card"><div class="att-av">&#9670;</div><div style="flex:1;min-width:0;"><div class="att-name">${authUser.displayName||authUser.email}</div><div class="att-role">Administrator</div>${adminPresent?`<div class="att-time">In at ${new Date(adminPresent.markedAt?.toDate()).toLocaleTimeString('en-IN')}</div>`:''}</div>${adminPresent?'<div class="att-present" title="Present"></div>':'<div class="att-absent" title="Absent"></div>'}</div>`;
+    usersSnap.forEach(d=>{
+      const u=d.data();const isPresent=!!attMap[u.email];
+      const roles=(u.roles||[u.role]).filter(Boolean).join(', ');
+      const time=isPresent&&attMap[u.email]?.markedAt?'In at '+new Date(attMap[u.email].markedAt.toDate()).toLocaleTimeString('en-IN'):'';
+      attGrid.innerHTML+=`<div class="att-card"><div class="att-av">&#9671;</div><div style="flex:1;min-width:0;"><div class="att-name">${u.name||u.email}</div><div class="att-role">${roles}</div>${time?`<div class="att-time">${time}</div>`:''}</div>${isPresent?'<div class="att-present" title="Present"></div>':'<div class="att-absent" title="Absent"></div>'}</div>`;
     });
-    let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;">';
-    Object.entries(byEvent).forEach(([evId, counts]) => {
-      const evName = eventsCache.find(e=>e.id===evId)?.name || evId;
-      html += `<div class="stat-card">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--text-primary);margin-bottom:12px;">${evName}</div>
-        <div style="font-size:0.7rem;color:var(--text-secondary);">Total: <b style="color:var(--gold);">${counts.total}</b></div>
-        <div style="font-size:0.7rem;color:var(--text-secondary);">Pending: <b style="color:var(--gold);">${counts.pending}</b></div>
-        <div style="font-size:0.7rem;color:var(--text-secondary);">Selected: <b style="color:var(--green-light);">${counts.selected}</b></div>
-        <div style="font-size:0.7rem;color:var(--text-secondary);">Rejected: <b style="color:#e74c3c;">${counts.rejected}</b></div>
-      </div>`;
+    regsSnap.forEach(d=>{
+      const r=d.data();const isPresent=!!attMap[r.uid||r.email];
+      const evName=evCache.find(e=>e.id===r.eventId)?.name||'Participant';
+      attGrid.innerHTML+=`<div class="att-card"><div class="att-av" style="overflow:hidden;">${r.photoURL?`<img src="${r.photoURL}" alt="" onerror="this.parentElement.textContent='&#9673;'">`:'&#9673;'}</div><div style="flex:1;min-width:0;"><div class="att-name">${r.name||''}</div><div class="att-role">${evName}</div></div>${isPresent?'<div class="att-present" title="Present"></div>':'<div class="att-absent" title="Absent"></div>'}</div>`;
     });
-    html += '</div>';
-    container.innerHTML = html || '<div style="color:var(--text-secondary);">No data yet.</div>';
-  } catch(e) { container.innerHTML = 'Error loading analytics.'; }
+    if(!attGrid.children.length)attGrid.innerHTML='<div class="loading-ph">No members found.</div>';
+  }catch(e){attGrid.innerHTML='<div class="loading-ph">Error loading attendance.</div>';}
 }
+window.startAttendance=async function(){
+  const dateInput=document.getElementById('attDate');
+  const selectedDate=dateInput?dateInput.value:new Date().toISOString().split('T')[0];
+  await setDoc(doc(db,'attendance_sessions',selectedDate),{date:selectedDate,startedAt:serverTimestamp(),startedBy:authUser.email},{merge:true});
+  showMsg('attMsg','Attendance session started for '+selectedDate+'. Security can now scan QR codes.','s');
+  loadAttendance();
+};
+window.markAdminPresent=async function(){
+  const today=new Date().toISOString().split('T')[0];
+  await setDoc(doc(db,'attendance',authUser.uid+'_'+today),{uid:authUser.uid,email:authUser.email,name:authUser.displayName,date:today,role:'admin',markedAt:serverTimestamp(),markedBy:'self'},{merge:true});
+  showMsg('selfAttMsg','Marked present for today.','s');
+  loadAttendance();
+};
+window.loadAttendance=loadAttendance;
 
-// EXPORT
-window.exportCSV = async (type) => {
-  try {
-    const evFilter = type === 'event' ? document.getElementById('exportEventSelect').value : '';
-    const snap = await getDocs(collection(db,'registrations'));
-    const rows = [['Name','Email','Reg No','Class','Section','Roll','Event','Status','Calling','WhatsApp','Class Teacher','Registered On']];
-    snap.forEach(d => {
-      const r = d.data();
-      if (evFilter && r.eventId !== evFilter) return;
-      const evName = eventsCache.find(e=>e.id===r.eventId)?.name || r.eventId || '';
-      const date = r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString('en-IN') : '';
+/* TICKETS */
+async function loadTickets(){
+  const con=document.getElementById('ticketsList');
+  if(!con)return;
+  try{
+    const snap=await getDocs(query(collection(db,'tickets'),orderBy('createdAt','desc')));
+    con.innerHTML='';
+    if(snap.empty){con.innerHTML='<div class="loading-ph">No tickets submitted yet.</div>';return;}
+    snap.forEach(d=>{
+      const t=d.data();const date=t.createdAt?.toDate?t.createdAt.toDate().toLocaleString('en-IN'):'';
+      con.innerHTML+=`<div class="tk-card"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px;"><div><div class="tk-cat">${t.category||''}</div><div class="tk-title">From: ${t.name||'Anonymous'}</div></div><span class="badge ${t.status==='resolved'?'b-sel':'b-open'}">${t.status||'open'}</span></div><div class="tk-body">${t.description||''}</div><div class="tk-meta">${t.email?'Email: '+t.email+' &bull; ':''} ${date}</div><div style="display:flex;gap:8px;margin-top:10px;"><button class="ab ab-gr" onclick="resolveTicket('${d.id}')">Mark Resolved</button><button class="ab" onclick="forwardTicket('${d.id}')">Forward to Teacher</button></div></div>`;
+    });
+  }catch(e){con.innerHTML='<div class="loading-ph">Error loading tickets.</div>';}
+}
+window.resolveTicket=async function(id){await updateDoc(doc(db,'tickets',id),{status:'resolved'});loadTickets();};
+window.forwardTicket=async function(id){await updateDoc(doc(db,'tickets',id),{forwardedToTeacher:true,forwardedAt:serverTimestamp()});alert('Forwarded to Teacher-in-Charge.');loadTickets();};
+
+/* SECURITY SETTINGS */
+window.assignSecurity=async function(){
+  const email=document.getElementById('secVolEmail').value.trim().toLowerCase();
+  if(!email){showMsg('secMsg','Email required.','e');return;}
+  await setDoc(doc(db,'settings','global'),{securityVolunteer:email},{merge:true});
+  showMsg('secMsg','Security volunteer assigned: '+email,'s');
+};
+
+/* GLOBAL SETTINGS SAVE */
+window.addNonSchool=async function(){
+  const email=document.getElementById('nsEmail').value.trim().toLowerCase();
+  const role=document.getElementById('nsRole').value;
+  if(!email||!role){showMsg('nsMsg','All fields required.','e');return;}
+  try{
+    const existing=await getDocs(query(collection(db,'users'),where('email','==',email)));
+    if(!existing.empty){await updateDoc(doc(db,'users',existing.docs[0].id),{roles:[...new Set([...(existing.docs[0].data().roles||[]),role])],nonSchool:true});}
+    else{await addDoc(collection(db,'users'),{email,name:email.split('@')[0],roles:[role],nonSchool:true,createdAt:serverTimestamp()});}
+    showMsg('nsMsg','Account added.','s');document.getElementById('nsEmail').value='';loadUsers();
+  }catch(e){showMsg('nsMsg','Error: '+e.message,'e');}
+};
+
+/* EXPORT */
+window.exportCSV=async function(){
+  try{
+    const evFilter=document.getElementById('expEvent').value;
+    const stFilter=document.getElementById('expStatus').value;
+    const snap=await getDocs(collection(db,'registrations'));
+    const rows=[['Name','Email','Reg No','Class','Section','Roll','Event','Status','Calling','WhatsApp','Class Teacher','Registered On']];
+    snap.forEach(d=>{
+      const r=d.data();
+      if(evFilter&&r.eventId!==evFilter)return;
+      if(stFilter&&r.status!==stFilter)return;
+      const evName=evCache.find(e=>e.id===r.eventId)?.name||r.eventId||'';
+      const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';
       rows.push([r.name,r.email,r.registrationNumber,r.class,r.section,r.rollNumber,evName,r.status,r.callingNumber,r.whatsappNumber,r.classTeacher,date]);
     });
-    const csv = rows.map(r=>r.map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');
-    const blob = new Blob([csv], {type:'text/csv'});
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-    a.download = `cy_registrations_${Date.now()}.csv`; a.click();
-  } catch(e) { alert('Export failed: '+e.message); }
+    const csv=rows.map(r=>r.map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');
+    const blob=new Blob([csv],{type:'text/csv'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`cy_registrations_${new Date().toISOString().split('T')[0]}.csv`;a.click();
+  }catch(e){alert('Export failed: '+e.message);}
 };
 
-// FILTER TABLE
-window.filterTable = (tbodyId, val) => {
-  const rows = document.querySelectorAll('#'+tbodyId+' tr');
-  rows.forEach(row => {
-    row.style.display = row.textContent.toLowerCase().includes(val.toLowerCase()) ? '' : 'none';
-  });
+window.filterTbl=function(tbodyId,val){
+  document.querySelectorAll('#'+tbodyId+' tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(val.toLowerCase())?'':'none';});
 };
-
-// SHOW MSG
-function showMsg(id, msg, type) {
-  const el = document.getElementById(id);
-  el.textContent = msg; el.className = 'msg ' + type;
-  setTimeout(() => { el.className='msg'; }, 4000);
-}
-
-// SIGN OUT
-window.doSignOut = async () => { await signOut(auth); window.location.href='login.html'; };
+window.doSignOut=async function(){await signOut(auth);window.location.href='login.html';};
 </script>
 </body>
 </html>

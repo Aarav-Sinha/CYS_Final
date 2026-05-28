@@ -297,7 +297,7 @@ body::before{
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut as fbSignOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, signInWithPopup, getRedirectResult, GoogleAuthProvider, signOut as fbSignOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBKeQxNTRaGsry7vpHZOBOD6CCuvZhBpU0",
@@ -382,39 +382,35 @@ const ROLE_PORTALS = {
 };
 
 async function processLogin(user) {
-  const email = user.email;
+  const email = user.email.toLowerCase();
   hideStatus();
   showLoading(true);
   hideRoleSelector();
 
   try {
-    // Admin check
     if (email === ADMIN_EMAIL) {
       await handleRoleRedirect(user, ['admin', 'it_team']);
       return;
     }
 
-    // Settings: check allowNonSchool
     const settingsSnap = await getDoc(doc(db, 'settings', 'global'));
     const settings = settingsSnap.exists() ? settingsSnap.data() : {};
     const allowNonSchool = settings.allowNonSchoolAccounts || false;
     const isSchoolEmail = email.endsWith('@dpsmegacity.in');
 
-    if (!isSchoolEmail && !allowNonSchool && email !== ADMIN_EMAIL) {
+    if (!isSchoolEmail && !allowNonSchool) {
       showLoading(false);
       showStatus('Only @dpsmegacity.in school accounts are allowed. Contact the admin if you have a special account.', true);
       await fbSignOut(auth);
       return;
     }
 
-    // Check staff roles first
     const usersRef = collection(db, 'users');
     const q = query(usersRef, where('email', '==', email));
     const snap = await getDocs(q);
 
     if (snap.empty) {
       if (currentTab === 'participant') {
-        // Check participant registration
         const pSnap = await getDocs(query(collection(db,'registrations'), where('email','==',email)));
         if (!pSnap.empty) {
           showLoading(false);
@@ -459,7 +455,6 @@ async function handleRoleRedirect(user, roles, docId) {
     sessionStorage.setItem('cy_user', JSON.stringify({uid: user.uid, email: user.email, name: user.displayName, photo: user.photoURL, role, docId}));
     window.location.href = portal;
   } else {
-    // Show role picker
     const roleList = document.getElementById('roleList');
     roleList.innerHTML = '';
     roles.forEach(role => {
@@ -482,21 +477,39 @@ function roleLabel(role) {
   return map[role] || role;
 }
 
+// Fixed to use PopUp to preserve inline execution loop structure safely
 window.signInWithGoogle = async () => {
   hideStatus();
+  showLoading(true);
   try {
     const result = await signInWithPopup(auth, provider);
     updateUserBar(result.user);
     await processLogin(result.user);
   } catch(e) {
+    showLoading(false);
     if (e.code !== 'auth/popup-closed-by-user') {
       showStatus('Sign-in failed: ' + e.message, true);
     }
   }
 };
 
-onAuthStateChanged(auth, user => {
-  if (user) updateUserBar(user);
+// Auto-checks for redirects on load AND auto-routes authenticated user states
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    updateUserBar(user);
+    await processLogin(user);
+  } else {
+    // Check if we just arrived back from a redirect flow
+    try {
+      const result = await getRedirectResult(auth);
+      if (result && result.user) {
+        updateUserBar(result.user);
+        await processLogin(result.user);
+      }
+    } catch (e) {
+      showStatus('Redirect resolution failed: ' + e.message, true);
+    }
+  }
 });
 </script>
 </body>
