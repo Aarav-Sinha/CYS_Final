@@ -153,7 +153,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
           <div class="uc-email" id="ucEmail"></div>
           <div class="uc-reg" id="ucReg"></div>
         </div>
-        <button class="uc-change" onclick="changeAccount()">Change</button>
+        <button class="uc-change" type="button" id="changeAccountBtn">Change</button>
       </div>
       <button class="g-btn" id="gSignInBtn">
         <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
@@ -182,13 +182,13 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <div class="frow">
         <div class="fg">
           <label>Class <span>*</span></label>
-          <select id="fClass" onchange="loadSections()">
+          <select id="fClass">
             <option value="">Select class</option>
           </select>
         </div>
         <div class="fg">
           <label>Section <span>*</span></label>
-          <select id="fSection" onchange="loadClassTeacher()">
+          <select id="fSection">
             <option value="">Select section</option>
           </select>
         </div>
@@ -205,16 +205,16 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <div class="frow">
         <div class="fg">
           <label>Calling Number <span>*</span></label>
-          <input type="tel" id="fCall" placeholder="10-digit number" maxlength="10" oninput="syncWA()">
+          <input type="tel" id="fCall" placeholder="10-digit number" maxlength="10">
         </div>
         <div class="fg">
           <label>WhatsApp Number <span>*</span></label>
           <input type="tel" id="fWA" placeholder="10-digit number" maxlength="10">
-          <label class="same-cb"><input type="checkbox" id="sameCb" onchange="toggleSameCb()"> Same as calling</label>
+          <label class="same-cb"><input type="checkbox" id="sameCb"> Same as calling</label>
         </div>
       </div>
 
-      <button class="btn-submit" id="submitBtn" onclick="submitEnrollment()">Submit Enrollment</button>
+      <button class="btn-submit" id="submitBtn">Submit Enrollment</button>
       <div class="status" id="formStatus"></div>
     </div>
   </div>
@@ -248,7 +248,7 @@ function setStep(n){
   [1,2,3].forEach(i=>{
     const dot=document.getElementById('sd'+i);
     if(i<n){dot.className='step-dot done';dot.textContent='\u2713';}
-    else if(i===n){dot.className='step-dot active';}
+    else if(i===n){dot.className='step-dot active';dot.textContent=i;}
     else{dot.className='step-dot';dot.textContent=i;}
     if(i<3){const line=document.getElementById('sl'+i);if(line)line.className='step-line'+(i<n?' done':'');}
   });
@@ -263,7 +263,7 @@ function extractRegNo(email){const local=email.split('@')[0];const m=local.match
 async function setupUser(user){
   currentUser=user;
   const email=user.email;
-  /* Check already enrolled */
+  
   const existing=await getDocs(query(collection(db,'registrations'),where('email','==',email)));
   if(!existing.empty){
     showAuthStatus('You have already enrolled. Visit the Participant Portal to check your status.',true);
@@ -292,7 +292,31 @@ async function setupUser(user){
   }
 }
 
-window.changeAccount=async function(){await signOut(auth);location.reload();};
+function resetUIForSignOut() {
+  currentUser = null;
+  document.getElementById('userConfirmed').className='user-confirmed';
+  document.getElementById('gSignInBtn').style.display='flex';
+  document.getElementById('step2').style.display='none';
+  document.getElementById('step3').style.display='none';
+  document.getElementById('fName').value='';
+  document.getElementById('fEmail').value='';
+  document.getElementById('fReg').value='';
+  document.getElementById('authStatus').className='status';
+  setStep(1);
+}
+
+document.getElementById('changeAccountBtn').addEventListener('click', async () => {
+  try {
+    await signOut(auth);
+    resetUIForSignOut();
+    // Re-trigger the authentication screen instantly with explicit account choice selection rules
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({hd:'dpsmegacity.in', prompt:'select_account'});
+    await signInWithRedirect(auth, provider);
+  } catch(e) {
+    showAuthStatus('Account clean migration failed: ' + e.message, true);
+  }
+});
 
 document.getElementById('gSignInBtn').addEventListener('click',async()=>{
   const provider=new GoogleAuthProvider();
@@ -304,18 +328,17 @@ onAuthStateChanged(auth,async user=>{
   if(user){
     if(!user.email.endsWith('@dpsmegacity.in')){
       showAuthStatus('Only @dpsmegacity.in school accounts can enroll.',true);
-      await signOut(auth);return;
+      await signOut(auth);
+      resetUIForSignOut();
+      return;
     }
     try{
       const result=await getRedirectResult(auth);
       if(result&&result.user)await setupUser(result.user);
       else await setupUser(user);
     }catch(e){await setupUser(user);}
-  }else{
-    try{
-      const result=await getRedirectResult(auth);
-      if(result&&result.user)await setupUser(result.user);
-    }catch(e){}
+  } else {
+    resetUIForSignOut();
   }
 });
 
@@ -354,7 +377,7 @@ async function loadClassesForm(){
   }catch(e){}
 }
 
-window.loadSections=function(){
+function loadSections(){
   const classId=document.getElementById('fClass').value;
   const secSel=document.getElementById('fSection');
   document.getElementById('fTeacher').value='';
@@ -368,21 +391,26 @@ window.loadSections=function(){
     secSel.innerHTML+=`<option value="${name}">${name}</option>`;
     classTeacherMap[name]=teacher;
   });
-};
+}
+document.getElementById('fClass').addEventListener('change', loadSections);
 
-window.loadClassTeacher=function(){
+function loadClassTeacher(){
   const sec=document.getElementById('fSection').value;
   document.getElementById('fTeacher').value=classTeacherMap[sec]||'';
-};
+}
+document.getElementById('fSection').addEventListener('change', loadClassTeacher);
 
-window.syncWA=function(){if(document.getElementById('sameCb').checked)document.getElementById('fWA').value=document.getElementById('fCall').value;};
-window.toggleSameCb=function(){
+function syncWA(){if(document.getElementById('sameCb').checked)document.getElementById('fWA').value=document.getElementById('fCall').value;}
+document.getElementById('fCall').addEventListener('input', syncWA);
+
+function toggleSameCb(){
   const wa=document.getElementById('fWA');
   if(document.getElementById('sameCb').checked){wa.value=document.getElementById('fCall').value;wa.readOnly=true;}
   else{wa.readOnly=false;}
-};
+}
+document.getElementById('sameCb').addEventListener('change', toggleSameCb);
 
-window.submitEnrollment=async function(){
+async function submitEnrollment(){
   if(!currentUser){showFormStatus('Please sign in first.',true);return;}
   const name=document.getElementById('fName').value.trim();
   const reg=document.getElementById('fReg').value.trim();
@@ -408,11 +436,9 @@ window.submitEnrollment=async function(){
       showFormStatus('Enrollment is currently closed.',true);btn.disabled=false;btn.innerHTML='Submit Enrollment';return;
     }
 
-    /* Check duplicate */
     const dupSnap=await getDocs(query(collection(db,'registrations'),where('email','==',email)));
     if(!dupSnap.empty){showFormStatus('You have already registered.',true);btn.disabled=false;btn.innerHTML='Submit Enrollment';return;}
 
-    /* Generate unique QR ID */
     const qrId='CY'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,6).toUpperCase();
 
     const data={
@@ -434,7 +460,8 @@ window.submitEnrollment=async function(){
     showFormStatus('Submission failed: '+e.message,true);
     btn.disabled=false;btn.innerHTML='Submit Enrollment';
   }
-};
+}
+document.getElementById('submitBtn').addEventListener('click', submitEnrollment);
 </script>
 </body>
 </html>
