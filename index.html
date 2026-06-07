@@ -322,6 +322,7 @@ footer{position:relative;z-index:1;padding:48px 20px 32px;border-top:1px solid v
   </a>
   <div class="nav-links">
     <a href="#events">Events</a>
+    <a href="#openroles" id="navRolesLink" style="display:none;">Open Roles</a>
     <a href="#announcements">Announcements</a>
     <a href="#timeline">Timeline</a>
     <a href="#rules">Rules</a>
@@ -335,6 +336,7 @@ footer{position:relative;z-index:1;padding:48px 20px 32px;border-top:1px solid v
 </nav>
 <div class="mobile-menu" id="mobileMenu">
   <a href="#events" onclick="closeMobileMenu()">Events</a>
+  <a href="#openroles" id="mobNavRolesLink" style="display:none;" onclick="closeMobileMenu()">Open Roles</a>
   <a href="#announcements" onclick="closeMobileMenu()">Announcements</a>
   <a href="#timeline" onclick="closeMobileMenu()">Timeline</a>
   <a href="#rules" onclick="closeMobileMenu()">Rules</a>
@@ -401,6 +403,18 @@ footer{position:relative;z-index:1;padding:48px 20px 32px;border-top:1px solid v
     <div class="section-line"></div>
   </div>
   <div class="events-grid" id="eventsGrid"><div class="loading-ph"><span class="spinner-ring"></span>Loading events&hellip;</div></div>
+</section>
+
+<div class="fancy-divider"><span class="fancy-divider-gem">&#9670;</span></div>
+
+<section class="section reveal" id="openroles" style="display:none;">
+  <div class="section-header">
+    <div class="section-eyebrow">Get Involved</div>
+    <h2 class="section-title">Open <em>Roles</em></h2>
+    <div class="section-line"></div>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--t2);margin-top:14px;max-width:560px;margin-left:auto;margin-right:auto;">Be part of the team that makes Critically Yours happen. Apply for one of our open volunteer and operations roles below.</p>
+  </div>
+  <div class="events-grid" id="rolesGrid"><div class="loading-ph"><span class="spinner-ring"></span>Loading roles&hellip;</div></div>
 </section>
 
 <div class="fancy-divider"><span class="fancy-divider-gem">&#9670;</span></div>
@@ -592,41 +606,59 @@ function goSlide(i){
 }
 window.closeSlide=function(){clearInterval(slideTimer);document.getElementById('slideOverlay').style.display='none';};
 
-/* EVENTS */
+/* EVENTS & ROLES */
 async function loadEvents(){
   const grid=document.getElementById('eventsGrid');
+  const rolesGrid=document.getElementById('rolesGrid');
   try{
     const settSnap=await getDoc(doc(db,'settings','global'));
     const enrollOpen=settSnap.exists()?(settSnap.data().enrollmentOpen!==false):true;
     const snap=await getDocs(query(collection(db,'events'),orderBy('order','asc')));
     if(snap.empty){grid.innerHTML='<div class="loading-ph">Events will be announced soon.</div>';return;}
     grid.innerHTML='';
+    rolesGrid.innerHTML='';
+    let hasRoles=false;
     snap.forEach(d=>{
       const ev=d.data();
+      const type=ev.entryType||'event';
+      /* Skip internal/backend roles from public view */
+      if(type==='internal_role'||type==='backend_role')return;
+      const isRole=type==='public_role';
+      if(isRole)hasRoles=true;
+      const targetGrid=isRole?rolesGrid:grid;
       const logoHtml=ev.logoFile
-        ?`<img src="${ev.logoFile}" alt="${ev.name}" class="ev-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ev-logo-ph" style="display:none;">\u25C6</div>`
-        :'<div class="ev-logo-ph">\u25C6</div>';
+        ?`<img src="${ev.logoFile}" alt="${ev.name}" class="ev-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ev-logo-ph" style="display:none;">${isRole?'&#9671;':'&#9670;'}</div>`
+        :`<div class="ev-logo-ph">${isRole?'&#9671;':'&#9670;'}</div>`;
       const card=document.createElement('div');
       card.className='ev-card';
+      const btnLabel=isRole?(enrollOpen?'Apply Now &rarr;':'Applications Closed'):(enrollOpen?'Enroll Now &rarr;':'Enrollment Closed');
       card.innerHTML=`${logoHtml}
         <div class="ev-name">${ev.name||''}</div>
-        <div class="ev-tag">${ev.category||'Event'}</div>
+        <div class="ev-tag" style="${isRole?'border-color:rgba(58,125,68,0.4);color:var(--green-light);':''}">${isRole?'Open Role':'Event'} &nbsp;&bull;&nbsp; ${ev.category||''}</div>
         <div class="ev-desc">${ev.description||''}</div>
         <div class="ev-meta">
-          ${ev.maxParticipants?`<span>Max <b>${ev.maxParticipants}</b></span>`:''}
+          ${ev.maxParticipants&&!isRole?`<span>Max <b>${ev.maxParticipants}</b></span>`:''}
           ${ev.venue?`<span>&#9670; <b>${ev.venue}</b></span>`:''}
         </div>
-        <button class="ev-enroll" ${!enrollOpen?'disabled':''}>
-          ${enrollOpen?'Enroll Now &rarr;':'Enrollment Closed'}
+        <button class="ev-enroll" style="${isRole?'border-color:rgba(58,125,68,0.4);color:var(--green-light);':''}" ${!enrollOpen?'disabled':''}>
+          ${btnLabel}
         </button>`;
       const enrollBtn=card.querySelector('.ev-enroll');
       if(enrollOpen){
         card.style.cursor='pointer';
-        card.addEventListener('click',e=>{if(e.target!==enrollBtn)window.location.href=`enroll.html?event=${d.id}`;});
-        if(enrollBtn)enrollBtn.addEventListener('click',e=>{e.stopPropagation();window.location.href=`enroll.html?event=${d.id}`;});
+        const target=`enroll.html?event=${d.id}${isRole?'&type=role':''}`;
+        card.addEventListener('click',e=>{if(e.target!==enrollBtn)window.location.href=target;});
+        if(enrollBtn)enrollBtn.addEventListener('click',e=>{e.stopPropagation();window.location.href=target;});
       }
-      grid.appendChild(card);
+      targetGrid.appendChild(card);
     });
+    if(!grid.children.length)grid.innerHTML='<div class="loading-ph">Events will be announced soon.</div>';
+    if(hasRoles){
+      document.getElementById('openroles').style.display='';
+      const nl=document.getElementById('navRolesLink');if(nl)nl.style.display='';
+      const ml=document.getElementById('mobNavRolesLink');if(ml)ml.style.display='';
+    }
+    if(!rolesGrid.children.length&&hasRoles)rolesGrid.innerHTML='<div class="loading-ph">No open roles at the moment.</div>';
   }catch(e){console.error(e);grid.innerHTML='<div class="loading-ph">Failed to load events.</div>';}
 }
 
