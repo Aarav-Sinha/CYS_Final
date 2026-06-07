@@ -148,6 +148,16 @@ tr:hover td{background:var(--cardh);}
 /* SCROLLABLE TABLE */
 .tbl-scroll{overflow-x:auto;}
 
+/* PERMISSIONS */
+.perm-lbl{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--t2);cursor:pointer;padding:5px 10px;border-radius:5px;border:1px solid var(--b1);background:var(--bg);transition:all .2s;}
+.perm-lbl:hover{border-color:var(--gold);color:var(--t1);}
+.perm-lbl input:checked~*{color:var(--gold);}
+.type-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.54rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;}
+.type-event{background:rgba(201,168,76,0.12);color:var(--gold);border:1px solid rgba(201,168,76,0.3);}
+.type-public_role{background:rgba(58,125,68,0.12);color:var(--green-l);border:1px solid rgba(58,125,68,0.3);}
+.type-internal_role{background:rgba(100,100,200,0.12);color:#9090E0;border:1px solid rgba(100,100,200,0.3);}
+.type-backend_role{background:rgba(192,57,43,0.1);color:var(--red-l);border:1px solid rgba(192,57,43,0.3);}
+
 /* RESPONSIVE */
 @media(max-width:700px){
   body{flex-direction:column;}
@@ -182,7 +192,8 @@ tr:hover td{background:var(--cardh);}
     <div class="sb-sec">Management</div>
     <button class="sb-item" onclick="nav('users',this)">&#9671; User Management</button>
     <button class="sb-item" onclick="nav('registrations',this)">&#9673; Registrations</button>
-    <button class="sb-item" onclick="nav('events',this)">&#9672; Events</button>
+    <button class="sb-item" onclick="nav('events',this)">&#9672; Events &amp; Roles</button>
+    <button class="sb-item" onclick="nav('rolepermissions',this)">&#9881; Role Permissions</button>
     <button class="sb-item" onclick="nav('classes',this)">&#9674; Classes &amp; Sections</button>
     <button class="sb-item" onclick="nav('announcements',this)">&#9670; Announcements</button>
     <div class="sb-sec">Content</div>
@@ -275,24 +286,98 @@ tr:hover td{background:var(--cardh);}
     <!-- EVENTS -->
     <div class="panel" id="p-events">
       <div class="fs">
-        <div class="fs-title" id="evFormTitle">Add Event</div>
+        <div class="fs-title" id="evFormTitle">Add Event / Role</div>
         <div class="fgrid">
-          <div class="fg"><label>Event Name</label><input type="text" id="evName" placeholder="Poetry Slam"></div>
-          <div class="fg"><label>Category</label><input type="text" id="evCat" placeholder="Literary"></div>
+          <div class="fg"><label>Entry Type</label>
+            <select id="evType" onchange="onEvTypeChange()">
+              <option value="event">&#9672; Competitive Event (listed in Events)</option>
+              <option value="public_role">&#9671; Public Role (listed in Open Roles, public enrollment)</option>
+              <option value="internal_role">&#9670; Internal Role (backend only, admin assigns)</option>
+              <option value="backend_role">&#9632; Backend Role (invisible to public, admin only)</option>
+            </select>
+          </div>
+          <div class="fg"><label>Name</label><input type="text" id="evName" placeholder="Poetry Slam / Logistics Head"></div>
+          <div class="fg"><label>Category / Role Label</label><input type="text" id="evCat" placeholder="Literary / Operations"></div>
           <div class="fg"><label>Logo Filename (e.g. poetry_logo.png)</label><input type="text" id="evLogo" placeholder="poetry_logo.png"></div>
           <div class="fg"><label>Venue</label><input type="text" id="evVenue" placeholder="Auditorium Hall A"></div>
-          <div class="fg"><label>Max Participants</label><input type="number" id="evMax" placeholder="20" min="1"></div>
+          <div class="fg ev-only-field"><label>Max Participants</label><input type="number" id="evMax" placeholder="20" min="1"></div>
           <div class="fg"><label>Display Order</label><input type="number" id="evOrder" placeholder="1" min="1"></div>
         </div>
-        <div class="fg"><label>Description</label><textarea id="evDesc" placeholder="Brief description of the event&hellip;"></textarea></div>
+        <div class="fg"><label>Description</label><textarea id="evDesc" placeholder="Brief description&hellip;"></textarea></div>
+        <div class="fg ev-only-field" style="background:rgba(201,168,76,0.04);border:1px solid var(--b1);border-radius:8px;padding:13px;margin-top:4px;">
+          <div style="font-size:.56rem;letter-spacing:2px;color:var(--t2);text-transform:uppercase;margin-bottom:10px;">Portal Features for Head of this Entry</div>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;">
+            <label style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--t2);cursor:pointer;"><input type="checkbox" id="pfParticipants" checked style="accent-color:var(--gold);"> View &amp; Manage Registrations</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--t2);cursor:pointer;"><input type="checkbox" id="pfAnnouncements" checked style="accent-color:var(--gold);"> Post Announcements</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--t2);cursor:pointer;"><input type="checkbox" id="pfTasks" checked style="accent-color:var(--gold);"> Assign Tasks</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--t2);cursor:pointer;"><input type="checkbox" id="pfStatusChange" checked style="accent-color:var(--gold);"> Change Participant Status</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--t2);cursor:pointer;"><input type="checkbox" id="pfRatings" checked style="accent-color:var(--gold);"> Rate &amp; Add Notes</label>
+          </div>
+        </div>
         <input type="hidden" id="evEditId">
-        <div class="btn-row"><button class="btn-prim" onclick="saveEvent()">Save Event</button><button class="btn-sec" onclick="clearEvForm()">Clear</button></div>
+        <div class="btn-row"><button class="btn-prim" onclick="saveEvent()">Save</button><button class="btn-sec" onclick="clearEvForm()">Clear</button></div>
         <div class="msg" id="evMsg"></div>
       </div>
       <div class="tbl-wrap">
-        <div class="tbl-head"><div class="tbl-title">All Events</div></div>
-        <div class="tbl-scroll"><table><thead><tr><th>Order</th><th>Name</th><th>Category</th><th>Logo</th><th>Venue</th><th>Max</th><th>Actions</th></tr></thead>
+        <div class="tbl-head">
+          <div class="tbl-title">All Events &amp; Roles</div>
+          <select class="sel-filter" id="evTypeFilter" onchange="renderEvTable()">
+            <option value="">All Types</option>
+            <option value="event">Events</option>
+            <option value="public_role">Public Roles</option>
+            <option value="internal_role">Internal Roles</option>
+            <option value="backend_role">Backend Roles</option>
+          </select>
+        </div>
+        <div class="tbl-scroll"><table><thead><tr><th>Order</th><th>Type</th><th>Name</th><th>Category</th><th>Venue</th><th>Max</th><th>Actions</th></tr></thead>
         <tbody id="evTbody"><tr><td colspan="7" class="loading-ph">Loading&hellip;</td></tr></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ROLE PERMISSIONS -->
+    <div class="panel" id="p-rolepermissions">
+      <div class="fs">
+        <div class="fs-title">Role Permissions &amp; Portal Features</div>
+        <p style="font-size:.72rem;color:var(--t2);margin-bottom:16px;">Configure what each role's head can access in their event/role portal. Per-entry overrides are set when creating/editing the event above.</p>
+        <div id="rolePermsList"><div class="loading-ph">Loading&hellip;</div></div>
+      </div>
+      <div class="fs">
+        <div class="fs-title">Default Permissions by Type</div>
+        <p style="font-size:.72rem;color:var(--t2);margin-bottom:16px;">These defaults apply when no per-entry override exists.</p>
+        <div id="defaultPermsWrap">
+          <div style="margin-bottom:18px;">
+            <div style="font-size:.66rem;font-weight:600;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">&#9672; Competitive Event Heads</div>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;" id="dpEvent">
+              <label class="perm-lbl"><input type="checkbox" class="dp-ev" data-type="event" data-key="canViewParticipants" style="accent-color:var(--gold);"> View Registrations</label>
+              <label class="perm-lbl"><input type="checkbox" class="dp-ev" data-type="event" data-key="canPostAnnouncements" style="accent-color:var(--gold);"> Post Announcements</label>
+              <label class="perm-lbl"><input type="checkbox" class="dp-ev" data-type="event" data-key="canAssignTasks" style="accent-color:var(--gold);"> Assign Tasks</label>
+              <label class="perm-lbl"><input type="checkbox" class="dp-ev" data-type="event" data-key="canChangeStatus" style="accent-color:var(--gold);"> Change Status</label>
+              <label class="perm-lbl"><input type="checkbox" class="dp-ev" data-type="event" data-key="canRateParticipants" style="accent-color:var(--gold);"> Rate &amp; Notes</label>
+            </div>
+          </div>
+          <div style="margin-bottom:18px;">
+            <div style="font-size:.66rem;font-weight:600;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">&#9671; Public Role Heads</div>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;" id="dpPublicRole">
+              <label class="perm-lbl"><input type="checkbox" class="dp-ev" data-type="public_role" data-key="canViewParticipants" style="accent-color:var(--gold);"> View Applicants</label>
+              <label class="perm-lbl"><input type="checkbox" class="dp-ev" data-type="public_role" data-key="canPostAnnouncements" style="accent-color:var(--gold);"> Post Announcements</label>
+              <label class="perm-lbl"><input type="checkbox" class="dp-ev" data-type="public_role" data-key="canAssignTasks" style="accent-color:var(--gold);"> Assign Tasks</label>
+              <label class="perm-lbl"><input type="checkbox" class="dp-ev" data-type="public_role" data-key="canChangeStatus" style="accent-color:var(--gold);"> Change Status</label>
+              <label class="perm-lbl"><input type="checkbox" class="dp-ev" data-type="public_role" data-key="canRateParticipants" style="accent-color:var(--gold);"> Rate &amp; Notes</label>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:.66rem;font-weight:600;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">&#9670; Internal / Backend Role Heads</div>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;" id="dpInternalRole">
+              <label class="perm-lbl"><input type="checkbox" class="dp-ev" data-type="internal_role" data-key="canViewParticipants" style="accent-color:var(--gold);"> View Members</label>
+              <label class="perm-lbl"><input type="checkbox" class="dp-ev" data-type="internal_role" data-key="canPostAnnouncements" style="accent-color:var(--gold);"> Post Announcements</label>
+              <label class="perm-lbl"><input type="checkbox" class="dp-ev" data-type="internal_role" data-key="canAssignTasks" style="accent-color:var(--gold);"> Assign Tasks</label>
+              <label class="perm-lbl"><input type="checkbox" class="dp-ev" data-type="internal_role" data-key="canChangeStatus" style="accent-color:var(--gold);"> Change Status</label>
+              <label class="perm-lbl"><input type="checkbox" class="dp-ev" data-type="internal_role" data-key="canRateParticipants" style="accent-color:var(--gold);"> Rate &amp; Notes</label>
+            </div>
+          </div>
+        </div>
+        <div class="btn-row" style="margin-top:16px;"><button class="btn-prim" onclick="saveDefaultPerms()">Save Default Permissions</button></div>
+        <div class="msg" id="permMsg"></div>
       </div>
     </div>
 
@@ -413,7 +498,7 @@ tr:hover td{background:var(--cardh);}
       <div class="fs">
         <div class="fs-title">Add Timeline Entry</div>
         <div class="fgrid">
-          <div class="fg"><label>Date Label</label><input type="text" id="tlDate" placeholder="10 Jan 2025"></div>
+          <div class="fg"><label>Date Label</label><input type="text" id="tlDate" placeholder="10 Jan 2026"></div>
           <div class="fg"><label>Title</label><input type="text" id="tlTitle" placeholder="Registrations Open"></div>
           <div class="fg"><label>Description (optional)</label><input type="text" id="tlDesc" placeholder="Additional details"></div>
           <div class="fg"><label>Order</label><input type="number" id="tlOrder" placeholder="1" min="1"></div>
@@ -610,6 +695,7 @@ window.nav=function(id,btn){
   if(id==='analytics')loadAnalytics();
   if(id==='attendance')loadAttendance();
   if(id==='tickets')loadTickets();
+  if(id==='rolepermissions')loadRolePermissions();
   document.getElementById('sb').classList.remove('open');
 };
 
@@ -647,42 +733,163 @@ window.saveToggle=async function(key,val){
 };
 
 /* EVENTS */
+const EV_TYPE_LABELS={event:'Event',public_role:'Public Role',internal_role:'Internal Role',backend_role:'Backend Role'};
+window.onEvTypeChange=function(){
+  const t=document.getElementById('evType').value;
+  const isRole=(t==='internal_role'||t==='backend_role');
+  document.querySelectorAll('.ev-only-field').forEach(el=>{el.style.display=isRole?'none':'';});
+};
 async function loadEventsData(){
   const tbody=document.getElementById('evTbody');
   try{
     const snap=await getDocs(query(collection(db,'events'),orderBy('order','asc')));
     evCache=[];snap.forEach(d=>evCache.push({id:d.id,...d.data()}));
-    tbody.innerHTML='';
-    if(snap.empty){tbody.innerHTML='<tr><td colspan="7" class="loading-ph">No events added yet.</td></tr>';return;}
-    snap.forEach(d=>{const ev=d.data();tbody.innerHTML+=`<tr><td>${ev.order||''}</td><td>${ev.name||''}</td><td>${ev.category||''}</td><td style="font-size:.64rem;">${ev.logoFile||'&mdash;'}</td><td>${ev.venue||''}</td><td>${ev.maxParticipants||''}</td><td style="white-space:nowrap;"><button class="ab ab-g" onclick="editEvent('${d.id}')">Edit</button> <button class="ab ab-r" onclick="deleteEvent('${d.id}')">Delete</button></td></tr>`;});
+    renderEvTable();
     /* Populate event selects */
     ['uEvent','regEvFilter','expEvent'].forEach(selId=>{
       const sel=document.getElementById(selId);if(!sel)return;
       const cur=sel.value;
       const first=selId==='uEvent'?'<option value="">None</option>':'<option value="">All Events</option>';
-      sel.innerHTML=first+evCache.map(ev=>`<option value="${ev.id}">${ev.name}</option>`).join('');
+      sel.innerHTML=first+evCache.map(ev=>`<option value="${ev.id}">${ev.name} (${EV_TYPE_LABELS[ev.entryType||'event']||'Event'})</option>`).join('');
       sel.value=cur;
     });
   }catch(e){tbody.innerHTML='<tr><td colspan="7" class="loading-ph">Error loading events.</td></tr>';}
 }
+window.renderEvTable=function(){
+  const tbody=document.getElementById('evTbody');
+  const typeFilter=document.getElementById('evTypeFilter')?.value||'';
+  const filtered=evCache.filter(ev=>!typeFilter||(ev.entryType||'event')===typeFilter);
+  if(!filtered.length){tbody.innerHTML='<tr><td colspan="7" class="loading-ph">No entries.</td></tr>';return;}
+  tbody.innerHTML='';
+  filtered.forEach(ev=>{
+    const t=ev.entryType||'event';
+    const badge=`<span class="type-badge type-${t}">${EV_TYPE_LABELS[t]||t}</span>`;
+    tbody.innerHTML+=`<tr><td>${ev.order||''}</td><td>${badge}</td><td>${ev.name||''}</td><td>${ev.category||''}</td><td>${ev.venue||''}</td><td>${ev.maxParticipants||'&mdash;'}</td><td style="white-space:nowrap;"><button class="ab ab-g" onclick="editEvent('${ev.id}')">Edit</button> <button class="ab ab-r" onclick="deleteEvent('${ev.id}')">Delete</button></td></tr>`;
+  });
+};
 window.saveEvent=async function(){
   const editId=document.getElementById('evEditId').value;
-  const data={name:document.getElementById('evName').value.trim(),category:document.getElementById('evCat').value.trim(),logoFile:document.getElementById('evLogo').value.trim(),venue:document.getElementById('evVenue').value.trim(),maxParticipants:parseInt(document.getElementById('evMax').value)||null,description:document.getElementById('evDesc').value.trim(),order:parseInt(document.getElementById('evOrder').value)||99,updatedAt:serverTimestamp()};
-  if(!data.name){showMsg('evMsg','Event name is required.','e');return;}
+  const entryType=document.getElementById('evType').value;
+  const portalFeatures={
+    canViewParticipants:document.getElementById('pfParticipants').checked,
+    canPostAnnouncements:document.getElementById('pfAnnouncements').checked,
+    canAssignTasks:document.getElementById('pfTasks').checked,
+    canChangeStatus:document.getElementById('pfStatusChange').checked,
+    canRateParticipants:document.getElementById('pfRatings').checked,
+  };
+  const data={
+    entryType,
+    name:document.getElementById('evName').value.trim(),
+    category:document.getElementById('evCat').value.trim(),
+    logoFile:document.getElementById('evLogo').value.trim(),
+    venue:document.getElementById('evVenue').value.trim(),
+    maxParticipants:parseInt(document.getElementById('evMax').value)||null,
+    description:document.getElementById('evDesc').value.trim(),
+    order:parseInt(document.getElementById('evOrder').value)||99,
+    portalFeatures,
+    updatedAt:serverTimestamp()
+  };
+  if(!data.name){showMsg('evMsg','Name is required.','e');return;}
   try{
     if(editId)await updateDoc(doc(db,'events',editId),data);
     else await addDoc(collection(db,'events'),{...data,createdAt:serverTimestamp()});
-    showMsg('evMsg','Event saved successfully.','s');
+    showMsg('evMsg','Saved successfully.','s');
     clearEvForm();loadEventsData();
   }catch(e){showMsg('evMsg','Error: '+e.message,'e');}
 };
-window.clearEvForm=function(){document.getElementById('evEditId').value='';['evName','evCat','evLogo','evVenue','evMax','evDesc','evOrder'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('evFormTitle').textContent='Add Event';};
+window.clearEvForm=function(){
+  document.getElementById('evEditId').value='';
+  ['evName','evCat','evLogo','evVenue','evMax','evDesc','evOrder'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('evType').value='event';
+  ['pfParticipants','pfAnnouncements','pfTasks','pfStatusChange','pfRatings'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=true;});
+  onEvTypeChange();
+  document.getElementById('evFormTitle').textContent='Add Event / Role';
+};
 window.editEvent=function(id){
   const ev=evCache.find(e=>e.id===id);if(!ev)return;
-  document.getElementById('evEditId').value=id;document.getElementById('evName').value=ev.name||'';document.getElementById('evCat').value=ev.category||'';document.getElementById('evLogo').value=ev.logoFile||'';document.getElementById('evVenue').value=ev.venue||'';document.getElementById('evMax').value=ev.maxParticipants||'';document.getElementById('evDesc').value=ev.description||'';document.getElementById('evOrder').value=ev.order||'';document.getElementById('evFormTitle').textContent='Edit Event';
+  document.getElementById('evEditId').value=id;
+  document.getElementById('evType').value=ev.entryType||'event';
+  document.getElementById('evName').value=ev.name||'';
+  document.getElementById('evCat').value=ev.category||'';
+  document.getElementById('evLogo').value=ev.logoFile||'';
+  document.getElementById('evVenue').value=ev.venue||'';
+  document.getElementById('evMax').value=ev.maxParticipants||'';
+  document.getElementById('evDesc').value=ev.description||'';
+  document.getElementById('evOrder').value=ev.order||'';
+  const pf=ev.portalFeatures||{};
+  const def=(k,d=true)=>pf[k]!==undefined?pf[k]:d;
+  document.getElementById('pfParticipants').checked=def('canViewParticipants');
+  document.getElementById('pfAnnouncements').checked=def('canPostAnnouncements');
+  document.getElementById('pfTasks').checked=def('canAssignTasks');
+  document.getElementById('pfStatusChange').checked=def('canChangeStatus');
+  document.getElementById('pfRatings').checked=def('canRateParticipants');
+  onEvTypeChange();
+  document.getElementById('evFormTitle').textContent='Edit Entry';
   document.getElementById('p-events').scrollTop=0;
 };
-window.deleteEvent=async function(id){if(!confirm('Delete this event? This cannot be undone.'))return;await deleteDoc(doc(db,'events',id));loadEventsData();};
+window.deleteEvent=async function(id){if(!confirm('Delete this entry? This cannot be undone.'))return;await deleteDoc(doc(db,'events',id));loadEventsData();};
+
+/* ROLE PERMISSIONS */
+async function loadRolePermissions(){
+  const list=document.getElementById('rolePermsList');
+  if(!list)return;
+  try{
+    const snap=await getDocs(query(collection(db,'events'),orderBy('order','asc')));
+    if(snap.empty){list.innerHTML='<div class="loading-ph">No events/roles yet.</div>';return;}
+    list.innerHTML='';
+    snap.forEach(d=>{
+      const ev=d.data();const t=ev.entryType||'event';
+      const pf=ev.portalFeatures||{};
+      const chk=(k,def=true)=>pf[k]!==undefined?pf[k]:def;
+      const badge=`<span class="type-badge type-${t}">${EV_TYPE_LABELS[t]||t}</span>`;
+      list.innerHTML+=`
+        <div class="fs" style="margin-bottom:12px;padding:14px 18px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+            ${badge}
+            <span style="font-size:.84rem;font-weight:600;color:var(--t1);">${ev.name||''}</span>
+            <span style="font-size:.6rem;color:var(--t2);">${ev.category||''}</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <label class="perm-lbl"><input type="checkbox" ${chk('canViewParticipants')?'checked':''} onchange="updateEvPerm('${d.id}','canViewParticipants',this.checked)" style="accent-color:var(--gold);"> View Registrations/Members</label>
+            <label class="perm-lbl"><input type="checkbox" ${chk('canPostAnnouncements')?'checked':''} onchange="updateEvPerm('${d.id}','canPostAnnouncements',this.checked)" style="accent-color:var(--gold);"> Post Announcements</label>
+            <label class="perm-lbl"><input type="checkbox" ${chk('canAssignTasks')?'checked':''} onchange="updateEvPerm('${d.id}','canAssignTasks',this.checked)" style="accent-color:var(--gold);"> Assign Tasks</label>
+            <label class="perm-lbl"><input type="checkbox" ${chk('canChangeStatus')?'checked':''} onchange="updateEvPerm('${d.id}','canChangeStatus',this.checked)" style="accent-color:var(--gold);"> Change Status</label>
+            <label class="perm-lbl"><input type="checkbox" ${chk('canRateParticipants')?'checked':''} onchange="updateEvPerm('${d.id}','canRateParticipants',this.checked)" style="accent-color:var(--gold);"> Rate &amp; Notes</label>
+          </div>
+        </div>`;
+    });
+    /* Load default perms */
+    const settSnap=await getDoc(doc(db,'settings','global'));
+    if(settSnap.exists()&&settSnap.data().defaultPermissions){
+      const dp=settSnap.data().defaultPermissions;
+      document.querySelectorAll('.dp-ev').forEach(cb=>{
+        const type=cb.dataset.type;const key=cb.dataset.key;
+        if(dp[type]&&dp[type][key]!==undefined)cb.checked=dp[type][key];
+        else cb.checked=true;
+      });
+    }else{document.querySelectorAll('.dp-ev').forEach(cb=>cb.checked=true);}
+  }catch(e){list.innerHTML='<div class="loading-ph">Error loading.</div>';}
+}
+window.updateEvPerm=async function(id,key,val){
+  try{
+    await updateDoc(doc(db,'events',id),{[`portalFeatures.${key}`]:val});
+    showMsg('permMsg','Permission updated.','s');
+    loadEventsData();
+  }catch(e){showMsg('permMsg','Error: '+e.message,'e');}
+};
+window.saveDefaultPerms=async function(){
+  const dp={event:{},public_role:{},internal_role:{},backend_role:{}};
+  document.querySelectorAll('.dp-ev').forEach(cb=>{
+    const type=cb.dataset.type;const key=cb.dataset.key;
+    if(!dp[type])dp[type]={};
+    dp[type][key]=cb.checked;
+    dp['backend_role'][key]=dp['internal_role'][key]||false;
+  });
+  try{
+    await setDoc(doc(db,'settings','global'),{defaultPermissions:dp},{merge:true});
+    showMsg('permMsg','Default permissions saved.','s');
+  }catch(e){showMsg('permMsg','Error: '+e.message,'e');}
+};
 
 /* DASHBOARD */
 async function loadDashboard(){
