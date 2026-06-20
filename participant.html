@@ -119,16 +119,27 @@ body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(-
 .rejected-msg{background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.3);border-radius:10px;padding:20px 24px;margin-bottom:20px;}
 .rejected-msg p{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--text-secondary);line-height:1.7;}
 
+.mobile-btn{display:none;}
+
 @media(max-width:640px){
   body{flex-direction:column;}
-  .sidebar{width:100%;height:auto;position:sticky;top:0;z-index:100;flex-direction:row;align-items:center;padding:0 16px;overflow:visible;}
-  .sb-logo{padding:14px 0;border:none;flex:1;}
-  .sb-nav,.sb-user,.sb-section,.sb-bottom{display:none;}
-  .sidebar.open .sb-nav,.sidebar.open .sb-bottom,.sidebar.open .sb-user{display:flex;flex-direction:column;position:fixed;top:56px;left:0;right:0;background:var(--bg-sidebar);border-bottom:1px solid var(--border);z-index:99;max-height:80vh;overflow-y:auto;}
-  .sidebar.open .sb-nav,.sidebar.open .sb-bottom{display:block;}
-  .mobile-btn{display:flex;width:34px;height:34px;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--gold);cursor:pointer;font-size:17px;}
+  .sidebar{width:100%;height:60px;position:sticky;top:0;z-index:100;flex-direction:row;align-items:center;justify-content:space-between;padding:0 16px;overflow:visible;border-right:none;border-bottom:1px solid var(--border);}
+  .sb-logo{padding:0;border:none;}
+  .sb-logo span{display:inline;margin-left:6px;margin-top:0;}
+  .sb-user,.sb-nav,.sb-bottom{display:none;}
+  
+  .sidebar.open .sb-user {
+    display: flex; position: fixed; top: 60px; left: 0; right: 0; background: var(--bg-sidebar); padding: 14px 18px; border-bottom: 1px solid var(--border); z-index: 99;
+  }
+  .sidebar.open .sb-nav {
+    display: flex; flex-direction: column; position: fixed; top: 126px; left: 0; right: 0; background: var(--bg-sidebar); padding: 10px 0; z-index: 99; border-bottom: 1px solid var(--border);
+  }
+  .sidebar.open .sb-bottom {
+    display: flex; position: fixed; top: 380px; left: 0; right: 0; background: var(--bg-sidebar); padding: 14px 18px; z-index: 99; border-bottom: 1px solid var(--border);
+  }
+  
+  .mobile-btn{display:flex;width:34px;height:34px;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--gold);cursor:pointer;font-size:18px;}
 }
-.mobile-btn{display:none;}
 </style>
 </head>
 <body>
@@ -163,27 +174,23 @@ body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(-
   </div>
   <div class="content">
 
-    <!-- HOME / STATUS -->
     <div class="panel active" id="panel-home">
       <div id="statusBanner"></div>
       <div class="info-grid" id="infoGrid"></div>
     </div>
 
-    <!-- ANNOUNCEMENTS -->
     <div class="panel" id="panel-announcements">
       <div class="ann-list" id="annList">
         <div class="empty-state"><div class="es-icon">&#9670;</div><p>Loading announcements...</p></div>
       </div>
     </div>
 
-    <!-- TASKS -->
     <div class="panel" id="panel-tasks">
       <div class="task-list" id="taskList">
         <div class="empty-state"><div class="es-icon">&#9636;</div><p>Loading tasks...</p></div>
       </div>
     </div>
 
-    <!-- QR CODE -->
     <div class="panel" id="panel-qr">
       <div class="qr-wrap">
         <div class="qr-title">Identity Card</div>
@@ -194,7 +201,6 @@ body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(-
       </div>
     </div>
 
-    <!-- PROFILE -->
     <div class="panel" id="panel-profile">
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:24px;max-width:500px;">
         <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;">
@@ -211,7 +217,6 @@ body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(-
   </div>
 </div>
 
-<!-- TICKET FAB -->
 <button class="ticket-fab" onclick="document.getElementById('ticketModal').classList.add('active')">&#9873; Raise Ticket</button>
 
 <div class="modal-overlay" id="ticketModal">
@@ -258,6 +263,16 @@ themeToggle.addEventListener('click',()=>{
 
 let myReg = null;
 let myUser = null;
+
+// Helper to convert Firebase Class IDs to Readable Roman Numerals
+function getClassDisplay(classId) {
+  const classMap = {
+    'uG0Ws6m9bwhfO9qx287g': 'IX',
+    'QZB5Rsr266mScA4HMCLI': 'X',
+    '40k6FtJzbOXqKVYteeDf': 'XI'
+  };
+  return classMap[classId] || classId || '';
+}
 
 // AUTH GUARD
 onAuthStateChanged(auth, async user => {
@@ -317,9 +332,10 @@ function loadStatus() {
 
   // Info cards
   const eventName = myReg.eventId || '--';
+  const readableClass = getClassDisplay(myReg.class);
   grid.innerHTML = `
     <div class="info-card"><div class="info-label">Event</div><div class="info-val" id="eventNameCard">Loading...</div></div>
-    <div class="info-card"><div class="info-label">Class</div><div class="info-val">${myReg.class||''} &ndash; ${myReg.section||''}</div></div>
+    <div class="info-card"><div class="info-label">Class</div><div class="info-val">${readableClass} &ndash; ${myReg.section||''}</div></div>
     <div class="info-card"><div class="info-label">Roll Number</div><div class="info-val">${myReg.rollNumber||''}</div></div>
     <div class="info-card"><div class="info-label">Registered On</div><div class="info-val">${myReg.createdAt?.toDate?myReg.createdAt.toDate().toLocaleDateString('en-IN'):''}</div></div>
   `;
@@ -394,10 +410,12 @@ function loadProfile() {
   document.getElementById('profileAvatar').src = myReg.photoURL || myUser.photoURL || '';
   document.getElementById('profileName').textContent = myReg.name || '';
   document.getElementById('profileEmail').textContent = myReg.email || '';
+  
+  const readableClass = getClassDisplay(myReg.class);
   document.getElementById('profileDetails').innerHTML = `
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
       ${infoRow('Registration No.', myReg.registrationNumber)}
-      ${infoRow('Class', (myReg.class||'') + ' \u2013 ' + (myReg.section||''))}
+      ${infoRow('Class', (readableClass) + ' \u2013 ' + (myReg.section||''))}
       ${infoRow('Roll Number', myReg.rollNumber)}
       ${infoRow('Class Teacher', myReg.classTeacher)}
       ${infoRow('Calling No.', myReg.callingNumber)}
@@ -417,6 +435,8 @@ window.showPanel = (id, btn) => {
   document.getElementById('panel-'+id).classList.add('active');
   if (btn) btn.classList.add('active');
   document.getElementById('topbarTitle').textContent = btn ? btn.textContent.trim() : id;
+  
+  document.getElementById('sidebar').classList.remove('open');
 };
 
 window.submitTicket = async () => {
