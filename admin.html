@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Admin — Critically Yours</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Josefin+Sans:wght@200;300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Josefin+Sans:wght=200;300;400;600&display=swap" rel="stylesheet">
 <style>
 :root{--gold:#C9A84C;--gold-dim:#8B6914;--gold-g:rgba(201,168,76,0.15);--green:#3A7D44;--green-l:#5BAD6F;--green-d:#1E4D28;--red:#C0392B;--red-l:#e74c3c;--bg:#06080A;--bg2:#090C07;--bg3:#0C0F0A;--card:rgba(255,255,255,0.03);--cardh:rgba(255,255,255,0.06);--glass:rgba(201,168,76,0.06);--t1:#F0E8D0;--t2:#9A8050;--t3:#6A5830;--b1:rgba(201,168,76,0.15);--b2:rgba(58,125,68,0.18);}
 [data-theme="light"]{--bg:#F5F0E8;--bg2:#EDE8DC;--bg3:#E5DFD0;--card:rgba(0,0,0,0.03);--cardh:rgba(0,0,0,0.06);--glass:rgba(201,168,76,0.08);--t1:#1A1208;--t2:#5A4010;--t3:#8A6830;--b1:rgba(201,168,76,0.25);--b2:rgba(58,125,68,0.25);}
@@ -13,7 +13,7 @@ html,body{height:100%;overflow-x:hidden;}
 body{font-family:'Josefin Sans',sans-serif;background:var(--bg);color:var(--t1);display:flex;height:100vh;transition:background .4s,color .4s;}
 
 /* SIDEBAR */
-.sb{width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--b1);display:flex;flex-direction:column;height:100vh;position:sticky;top:0;overflow-y:auto;transition:background .4s;}
+.sb{width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--b1);display:flex;flex-direction:column;height:100vh;position:sticky;top:0;overflow-y:auto;transition:background .4s,transform .3s ease;z-index:100;}
 .sb-head{padding:18px 16px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:10px;}
 .sb-logo-img{width:32px;height:32px;object-fit:contain;border-radius:6px;}
 .sb-logo-fb{width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#06080A;font-weight:700;flex-shrink:0;}
@@ -30,7 +30,8 @@ body{font-family:'Josefin Sans',sans-serif;background:var(--bg);color:var(--t1);
 .sb-foot{padding:12px 16px;border-top:1px solid var(--b1);}
 .sb-out{width:100%;padding:8px;border-radius:6px;background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.3);color:var(--red-l);font-family:'Josefin Sans',sans-serif;font-size:.6rem;letter-spacing:1.5px;cursor:pointer;transition:all .2s;}
 .sb-out:hover{background:rgba(192,57,43,0.2);}
-.mob-sb-btn{display:none;width:32px;height:32px;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--b1);border-radius:4px;color:var(--gold);cursor:pointer;font-size:16px;flex-shrink:0;}
+.mob-sb-btn{display:none;width:34px;height:34px;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--b1);border-radius:6px;color:var(--gold);cursor:pointer;font-size:16px;flex-shrink:0;transition:all .2s;}
+.mob-sb-btn:active{background:var(--glass);}
 
 /* MAIN */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
@@ -143,7 +144,7 @@ tr:hover td{background:var(--cardh);}
 .tk-meta{font-size:.6rem;color:var(--t3);}
 
 /* LOADING */
-.loading-ph{text-align:center;padding:30px;color:var(--t2);font-size:.75rem;}
+.loading-ph">text-align:center;padding:30px;color:var(--t2);font-size:.75rem;}
 
 /* SCROLLABLE TABLE */
 .tbl-scroll{overflow-x:auto;}
@@ -158,22 +159,60 @@ tr:hover td{background:var(--cardh);}
 .type-internal_role{background:rgba(100,100,200,0.12);color:#9090E0;border:1px solid rgba(100,100,200,0.3);}
 .type-backend_role{background:rgba(192,57,43,0.1);color:var(--red-l);border:1px solid rgba(192,57,43,0.3);}
 
-/* RESPONSIVE */
+/* MOBILE GLASS OVERLAY SIDEBAR */
+.sb-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 8, 10, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 98;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.sb-overlay.on {
+  display: block;
+  opacity: 1;
+}
+
+/* PHONE ADAPTIVE STYLES */
 @media(max-width:700px){
   body{flex-direction:column;}
-  .sb{width:100%;height:52px;flex-direction:row;align-items:center;padding:0 14px;overflow:visible;position:sticky;top:0;z-index:100;gap:10px;}
-  .sb-head{padding:0;border:none;flex:1;}
-  .sb-brand small{display:none;}
-  .sb-nav,.sb-user,.sb-sec,.sb-foot{display:none;}
-  .sb.open .sb-nav,.sb.open .sb-foot,.sb.open .sb-user{display:flex;flex-direction:column;position:fixed;top:52px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--b1);z-index:99;max-height:80vh;overflow-y:auto;}
-  .sb.open .sb-nav,.sb.open .sb-foot{display:block;}
-  .mob-sb-btn{display:flex;}
-  .main{height:calc(100vh - 52px);}
+  .sb{
+    position:fixed;
+    top:0;
+    left:0;
+    height:100vh;
+    width:260px;
+    transform:translateX(-100%);
+    box-shadow:20px 0 40px rgba(0,0,0,0.6);
+    z-index:99;
+  }
+  .sb.open{
+    transform:translateX(0);
+  }
+  .sb-nav, .sb-user, .sb-sec, .sb-foot{display:flex; flex-direction:column;}
+  .sb-nav{flex:1;}
+  .topbar{
+    height:56px;
+    padding:0 16px;
+    background:var(--bg2);
+    border-bottom:1px solid var(--b1);
+  }
+  .mob-sb-btn{
+    display:flex;
+  }
+  .main{height:calc(100vh - 56px);}
+  .content-area{padding:16px;}
   .fgrid{grid-template-columns:1fr;}
+  .stat-row{grid-template-columns:repeat(2, 1fr);}
 }
 </style>
 </head>
 <body>
+
+<div class="sb-overlay" id="sbOverlay" onclick="toggleMobileSidebar(false)"></div>
 
 <div class="sb" id="sb">
   <div class="sb-head">
@@ -210,11 +249,11 @@ tr:hover td{background:var(--cardh);}
   <div class="sb-foot">
     <button class="sb-out" onclick="doSignOut()">Sign Out</button>
   </div>
-  <button class="mob-sb-btn" onclick="document.getElementById('sb').classList.toggle('open')">&#9776;</button>
 </div>
 
 <div class="main">
   <div class="topbar">
+    <button class="mob-sb-btn" onclick="toggleMobileSidebar(true)">&#9776;</button>
     <div class="topbar-title" id="topTitle">Dashboard</div>
     <div class="tb-right">
       <button class="theme-btn" id="themeBtn">&#9790;</button>
@@ -222,7 +261,6 @@ tr:hover td{background:var(--cardh);}
   </div>
   <div class="content-area">
 
-    <!-- DASHBOARD -->
     <div class="panel on" id="p-dashboard">
       <div class="stat-row" id="statRow"><div class="loading-ph">Loading&hellip;</div></div>
       <div class="tbl-wrap">
@@ -232,12 +270,10 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
-    <!-- ANALYTICS -->
     <div class="panel" id="p-analytics">
       <div id="analyticsContent" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;"></div>
     </div>
 
-    <!-- USER MANAGEMENT -->
     <div class="panel" id="p-users">
       <div class="fs">
         <div class="fs-title">Add Staff / Team Member</div>
@@ -262,12 +298,11 @@ tr:hover td{background:var(--cardh);}
       </div>
       <div class="tbl-wrap">
         <div class="tbl-head"><div class="tbl-title">All Staff Members</div><input class="search" placeholder="Search&hellip;" oninput="filterTbl('uTbody',this.value)"></div>
-        <div class="tbl-scroll"><table><thead><tr><th>Name</th><th>Email</th><th>Role(s)</th><th>Event</th><th>Actions</th></tr></thead>
-        <tbody id="uTbody"><tr><td colspan="5" class="loading-ph">Loading&hellip;</td></tr></tbody></table></div>
+        <div class="tbl-scroll"><table><thead><tr><th>Name</th><th>Email</th><th>Role(s)</th><th>Actions</th></tr></thead>
+        <tbody id="uTbody"><tr><td colspan="4" class="loading-ph">Loading&hellip;</td></tr></tbody></table></div>
       </div>
     </div>
 
-    <!-- REGISTRATIONS -->
     <div class="panel" id="p-registrations">
       <div class="tbl-wrap">
         <div class="tbl-head">
@@ -283,7 +318,6 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
-    <!-- EVENTS -->
     <div class="panel" id="p-events">
       <div class="fs">
         <div class="fs-title" id="evFormTitle">Add Event / Role</div>
@@ -334,7 +368,6 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
-    <!-- ROLE PERMISSIONS -->
     <div class="panel" id="p-rolepermissions">
       <div class="fs">
         <div class="fs-title">Role Permissions &amp; Portal Features</div>
@@ -381,7 +414,6 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
-    <!-- CLASSES -->
     <div class="panel" id="p-classes">
       <div class="fs">
         <div class="fs-title">Add Class</div>
@@ -406,7 +438,6 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
-    <!-- ANNOUNCEMENTS -->
     <div class="panel" id="p-announcements">
       <div class="fs">
         <div class="fs-title">Post Announcement</div>
@@ -433,7 +464,6 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
-    <!-- HOMEPAGE & SLIDESHOW -->
     <div class="panel" id="p-homepage">
       <div class="fs">
         <div class="fs-title">Hero Tagline</div>
@@ -493,7 +523,6 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
-    <!-- TIMELINE -->
     <div class="panel" id="p-timeline">
       <div class="fs">
         <div class="fs-title">Add Timeline Entry</div>
@@ -513,7 +542,6 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
-    <!-- RULES -->
     <div class="panel" id="p-rules">
       <div class="fs">
         <div class="fs-title">Add Rule</div>
@@ -531,7 +559,6 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
-    <!-- ATTENDANCE -->
     <div class="panel" id="p-attendance">
       <div class="fs">
         <div class="fs-title">Attendance Management</div>
@@ -552,12 +579,10 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
-    <!-- TICKETS -->
     <div class="panel" id="p-tickets">
       <div id="ticketsList"><div class="loading-ph">Loading&hellip;</div></div>
     </div>
 
-    <!-- SECURITY SETTINGS -->
     <div class="panel" id="p-security">
       <div class="fs">
         <div class="fs-title">Security Portal Access</div>
@@ -573,7 +598,6 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
-    <!-- GLOBAL SETTINGS -->
     <div class="panel" id="p-settings">
       <div class="fs">
         <div class="fs-title">Feature Toggles</div>
@@ -598,25 +622,8 @@ tr:hover td{background:var(--cardh);}
           <label class="ts"><input type="checkbox" id="tgNonSchool" onchange="saveToggle('allowNonSchoolAccounts',this.checked)"><span class="tsl"></span></label>
         </div>
       </div>
-      <div class="fs">
-        <div class="fs-title">Add Non-School Account</div>
-        <div class="fgrid">
-          <div class="fg"><label>Email</label><input type="email" id="nsEmail" placeholder="external@gmail.com"></div>
-          <div class="fg"><label>Role</label>
-            <select id="nsRole">
-              <option value="it_team">IT Team</option>
-              <option value="core">Core Team</option>
-              <option value="media">Media Team</option>
-              <option value="volunteer">Volunteer</option>
-            </select>
-          </div>
-        </div>
-        <div class="btn-row"><button class="btn-prim" onclick="addNonSchool()">Add Account</button></div>
-        <div class="msg" id="nsMsg"></div>
-      </div>
     </div>
 
-    <!-- EXPORT -->
     <div class="panel" id="p-export">
       <div class="fs">
         <div class="fs-title">Export Registration Data</div>
@@ -653,6 +660,20 @@ themeBtn.addEventListener('click',()=>applyT(document.documentElement.getAttribu
 
 let evCache=[],clCache=[],authUser=null;
 let slideshowImgs=[];
+let allowNonSchoolGlobal = false;
+
+/* MOBILE SIDEBAR CONTROLLER */
+window.toggleMobileSidebar = function(open) {
+  const sb = document.getElementById('sb');
+  const overlay = document.getElementById('sbOverlay');
+  if (open) {
+    sb.classList.add('open');
+    overlay.classList.add('on');
+  } else {
+    sb.classList.remove('open');
+    overlay.classList.remove('on');
+  }
+}
 
 /* AUTH GUARD */
 onAuthStateChanged(auth,async user=>{
@@ -696,7 +717,7 @@ window.nav=function(id,btn){
   if(id==='attendance')loadAttendance();
   if(id==='tickets')loadTickets();
   if(id==='rolepermissions')loadRolePermissions();
-  document.getElementById('sb').classList.remove('open');
+  toggleMobileSidebar(false);
 };
 
 function showMsg(id,msg,type){const el=document.getElementById(id);if(!el)return;el.textContent=msg;el.className='msg '+(type==='s'?'s':'e');setTimeout(()=>{el.className='msg';},5000);}
@@ -716,6 +737,7 @@ async function loadSettings(){
     checkSet('tgPartPortal',d.participantPortalOpen!==false);
     checkSet('tgVolPortal',d.volunteerPortalOpen!==false);
     checkSet('tgNonSchool',d.allowNonSchoolAccounts);
+    allowNonSchoolGlobal = !!d.allowNonSchoolAccounts;
     checkSet('tgSlideshow',d.slideshowEnabled!==false);
     checkSet('tgBanner',d.showUnofficialBanner);
     checkSet('tgSecurity',d.securityPortalOpen);
@@ -729,7 +751,12 @@ async function loadSettings(){
 }
 
 window.saveToggle=async function(key,val){
-  try{await setDoc(doc(db,'settings','global'),{[key]:val},{merge:true});}catch(e){alert('Save failed: '+e.message);}
+  try{
+    await setDoc(doc(db,'settings','global'),{[key]:val},{merge:true});
+    if(key === 'allowNonSchoolAccounts') {
+      allowNonSchoolGlobal = val;
+    }
+  }catch(e){alert('Save failed: '+e.message);}
 };
 
 /* EVENTS */
@@ -745,7 +772,6 @@ async function loadEventsData(){
     const snap=await getDocs(query(collection(db,'events'),orderBy('order','asc')));
     evCache=[];snap.forEach(d=>evCache.push({id:d.id,...d.data()}));
     renderEvTable();
-    /* Populate event selects */
     ['uEvent','regEvFilter','expEvent'].forEach(selId=>{
       const sel=document.getElementById(selId);if(!sel)return;
       const cur=sel.value;
@@ -858,7 +884,6 @@ async function loadRolePermissions(){
           </div>
         </div>`;
     });
-    /* Load default perms */
     const settSnap=await getDoc(doc(db,'settings','global'));
     if(settSnap.exists()&&settSnap.data().defaultPermissions){
       const dp=settSnap.data().defaultPermissions;
@@ -922,48 +947,46 @@ async function loadAnalytics(){
   }catch(e){con.innerHTML='<div class="loading-ph">Error.</div>';}
 }
 
-/* USERS */
+/* USERS & AUTO-DETECTION */
 async function loadUsers() {
   const tbody = document.getElementById('uTbody');
   try {
     const snap = await getDocs(collection(db, 'users'));
     tbody.innerHTML = '';
     if (snap.empty) {
-      tbody.innerHTML = '<tr><td colspan="5" class="loading-ph">No staff added yet.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="4" class="loading-ph">No staff added yet.</td></tr>';
       return;
     }
     
     snap.forEach(d => {
       const u = d.data();
-      
-      // Derive active assignments cleanly
       let assignments = u.eventAssignments || [];
       if (assignments.length === 0) {
-        // Fallback reconstruction for legacy users
         const legacyRole = u.roles ? u.roles[0] : u.role;
         assignments.push({ role: legacyRole, eventId: u.eventId || null });
       }
       
-      // Map assignments out to structured dynamic labels
       const rolesDisplay = assignments.map(a => {
         const rLabel = document.getElementById('uRole').querySelector(`option[value="${a.role}"]`)?.textContent || a.role;
         const eName = evCache.find(e => e.id === a.eventId)?.name;
         return eName ? `${rLabel} (${eName})` : rLabel;
       }).join('<br>');
       
+      const nonSchoolBadge = u.nonSchool ? ' <span class="badge b-pend" style="font-size:0.5rem; padding:1px 5px; margin-left:4px;">External</span>' : '';
+      
       tbody.innerHTML += `
         <tr>
-          <td>${u.name || ''}</td>
+          <td>${u.name || ''}${nonSchoolBadge}</td>
           <td style="font-size:.66rem;">${u.email || ''}</td>
-          <td style="line-height: 1.4;">${rolesDisplay}</td>
-          <td>&mdash; <small style="color:var(--t3); display:block;">Handled in roles column</small></td>
+          <td style="line-height: 1.4; font-size:0.68rem;">${rolesDisplay}</td>
           <td><button class="ab ab-r" onclick="removeUser('${d.id}')">Revoke All</button></td>
         </tr>`;
     });
   } catch (e) {
-    tbody.innerHTML = '<tr><td colspan="5" class="loading-ph">Error loading staff listings.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="4" class="loading-ph">Error loading staff listings.</td></tr>';
   }
 }
+
 window.addUser = async function() {
   const name = document.getElementById('uName').value.trim();
   const email = document.getElementById('uEmail').value.trim().toLowerCase();
@@ -978,6 +1001,13 @@ window.addUser = async function() {
     showMsg('uMsg', 'Invalid email address.', 'e');
     return;
   }
+
+  /* AUTOMATIC NON-SCHOOL DOMAIN DETECTOR GUARD */
+  const isNonSchool = !email.endsWith('@dpsmegacity.in');
+  if (isNonSchool && !allowNonSchoolGlobal) {
+    showMsg('uMsg', 'Error: External accounts are blocked. Turn on "Allow Non-School Accounts" in Global Settings first.', 'e');
+    return;
+  }
   
   try {
     const existing = await getDocs(query(collection(db, 'users'), where('email', '==', email)));
@@ -986,37 +1016,29 @@ window.addUser = async function() {
       const docId = existing.docs[0].id;
       const curData = existing.docs[0].data();
       const curRoles = curData.roles || [curData.role];
-      
-      // Initialize or get structural array for tracking multi-event headers
       let eventAssignments = curData.eventAssignments || [];
+      
       if (curData.eventId) {
-        // Migrate old singular eventId format if it exists
         eventAssignments.push({ role: curData.role || 'event_head', eventId: curData.eventId });
       }
       
-      // Check if this specific configuration is already added
       const isDuplicate = eventAssignments.some(a => a.role === role && a.eventId === (eventId || null));
-      
       if (isDuplicate) {
         showMsg('uMsg', 'This specific role and event assignment already exists.', 'e');
         return;
       }
       
-      // Append the new assignment
       eventAssignments.push({ role, eventId: eventId || null });
-      
-      // Ensure role array includes the added role signature
       const newRoles = [...new Set([...curRoles, role])];
       
       await updateDoc(doc(db, 'users', docId), {
         roles: newRoles,
         eventAssignments: eventAssignments,
-        // Keep fallback eventId pointing to the latest added event for backwards compatibility
         eventId: eventId || null, 
+        nonSchool: isNonSchool,
         updatedAt: serverTimestamp()
       });
     } else {
-      // Clean creation structure for a brand new user row
       const eventAssignments = [{ role, eventId: eventId || null }];
       await addDoc(collection(db, 'users'), {
         name,
@@ -1024,11 +1046,12 @@ window.addUser = async function() {
         roles: [role],
         eventAssignments,
         eventId: eventId || null,
+        nonSchool: isNonSchool,
         createdAt: serverTimestamp()
       });
     }
     
-    showMsg('uMsg', 'Staff role/event assignment updated successfully.', 's');
+    showMsg('uMsg', isNonSchool ? 'External staff account registered successfully.' : 'Staff assignment configuration registered successfully.', 's');
     document.getElementById('uName').value = '';
     document.getElementById('uEmail').value = '';
     loadUsers();
@@ -1036,6 +1059,7 @@ window.addUser = async function() {
     showMsg('uMsg', 'Error: ' + e.message, 'e');
   }
 };
+
 window.removeUser=async function(id){if(!confirm('Revoke all access for this user?'))return;await deleteDoc(doc(db,'users',id));loadUsers();};
 
 /* REGISTRATIONS */
@@ -1240,7 +1264,6 @@ async function loadAttendance(){
   attHead.textContent='Attendance — '+new Date(selectedDate+'T12:00:00').toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   attGrid.innerHTML='<div class="loading-ph">Loading&hellip;</div>';
   try{
-    /* Get all members */
     const [usersSnap,regsSnap,attSnap]=await Promise.all([
       getDocs(collection(db,'users')),
       getDocs(query(collection(db,'registrations'),where('status','==','selected'))),
@@ -1249,7 +1272,6 @@ async function loadAttendance(){
     const attMap={};
     attSnap.forEach(d=>{const a=d.data();attMap[a.uid]=a;});
     attGrid.innerHTML='';
-    /* Admin first */
     const adminPresent=attMap[authUser.uid];
     attGrid.innerHTML+=`<div class="att-card"><div class="att-av">&#9670;</div><div style="flex:1;min-width:0;"><div class="att-name">${authUser.displayName||authUser.email}</div><div class="att-role">Administrator</div>${adminPresent?`<div class="att-time">In at ${new Date(adminPresent.markedAt?.toDate()).toLocaleTimeString('en-IN')}</div>`:''}</div>${adminPresent?'<div class="att-present" title="Present"></div>':'<div class="att-absent" title="Absent"></div>'}</div>`;
     usersSnap.forEach(d=>{
@@ -1304,43 +1326,6 @@ window.assignSecurity=async function(){
   if(!email){showMsg('secMsg','Email required.','e');return;}
   await setDoc(doc(db,'settings','global'),{securityVolunteer:email},{merge:true});
   showMsg('secMsg','Security volunteer assigned: '+email,'s');
-};
-
-/* GLOBAL SETTINGS SAVE */
-window.addNonSchool = async function() {
-  const email = document.getElementById('nsEmail').value.trim().toLowerCase();
-  const role = document.getElementById('nsRole').value;
-  if (!email || !role) { showMsg('nsMsg', 'All fields required.', 'e'); return; }
-  
-  try {
-    const existing = await getDocs(query(collection(db, 'users'), where('email', '==', email)));
-    if (!existing.empty) {
-      const curData = existing.docs[0].id;
-      const curRoles = existing.docs[0].data().roles || [];
-      let assignments = existing.docs[0].data().eventAssignments || [];
-      
-      assignments.push({ role, eventId: null });
-      await updateDoc(doc(db, 'users', existing.docs[0].id), {
-        roles: [...new Set([...curRoles, role])],
-        eventAssignments: assignments,
-        nonSchool: true
-      });
-    } else {
-      await addDoc(collection(db, 'users'), {
-        email,
-        name: email.split('@')[0],
-        roles: [role],
-        eventAssignments: [{ role, eventId: null }],
-        nonSchool: true,
-        createdAt: serverTimestamp()
-      });
-    }
-    showMsg('nsMsg', 'Account saved.', 's');
-    document.getElementById('nsEmail').value = '';
-    loadUsers();
-  } catch (e) {
-    showMsg('nsMsg', 'Error: ' + e.message, 'e');
-  }
 };
 
 /* EXPORT */
