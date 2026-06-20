@@ -118,16 +118,28 @@ body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(-
 .qr-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:28px;text-align:center;max-width:280px;margin:0 auto;}
 .qr-wrap canvas{border-radius:8px;margin:16px auto;display:block;}
 
+.mobile-btn{display:none;}
+
 @media(max-width:640px){
   body{flex-direction:column;}
-  .sidebar{width:100%;height:56px;flex-direction:row;align-items:center;padding:0 16px;overflow:visible;position:sticky;top:0;z-index:100;}
-  .sb-logo{padding:0;border:none;flex:1;font-size:0.9rem;}
-  .sb-nav,.sb-user,.sb-section,.sb-bottom{display:none;}
-  .sidebar.open .sb-nav,.sidebar.open .sb-bottom,.sidebar.open .sb-user{display:flex;flex-direction:column;position:fixed;top:56px;left:0;right:0;background:var(--bg-sidebar);border-bottom:1px solid var(--border);z-index:99;max-height:80vh;overflow-y:auto;}
-  .sidebar.open .sb-nav,.sidebar.open .sb-bottom{display:block;}
-  .mobile-btn{display:flex;}
+  .sidebar{width:100%;height:60px;position:sticky;top:0;z-index:100;flex-direction:row;align-items:center;justify-content:space-between;padding:0 16px;overflow:visible;border-right:none;border-bottom:1px solid var(--border);}
+  .sb-logo{padding:0;border:none;}
+  .sb-logo span{display:inline;margin-left:6px;margin-top:0;}
+  .sb-user,.sb-nav,.sb-bottom{display:none;}
+  
+  /* Responsive Mobile Menu Drawer Containers */
+  .sidebar.open .sb-user {
+    display: flex; position: fixed; top: 60px; left: 0; right: 0; background: var(--bg-sidebar); padding: 14px 18px; border-bottom: 1px solid var(--border); z-index: 99;
+  }
+  .sidebar.open .sb-nav {
+    display: flex; flex-direction: column; position: fixed; top: 126px; left: 0; right: 0; background: var(--bg-sidebar); padding: 10px 0; z-index: 99; border-bottom: 1px solid var(--border);
+  }
+  .sidebar.open .sb-bottom {
+    display: flex; position: fixed; top: 334px; left: 0; right: 0; background: var(--bg-sidebar); padding: 14px 18px; z-index: 99; border-bottom: 1px solid var(--border);
+  }
+  
+  .mobile-btn{display:flex;width:34px;height:34px;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--gold);cursor:pointer;font-size:18px;}
 }
-.mobile-btn{display:none;width:34px;height:34px;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--gold);cursor:pointer;font-size:17px;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 </head>
@@ -252,6 +264,16 @@ let currentFilter = 'all';
 let myAuthUser = null;
 let structuredAssignments = [];
 
+// Helper to convert Firebase Class IDs to Readable Roman Numerals
+function getClassDisplay(classId) {
+  const classMap = {
+    'uG0Ws6m9bwhfO9qx287g': 'IX',
+    'QZB5Rsr266mScA4HMCLI': 'X',
+    '40k6FtJzbOXqKVYteeDf': 'XI'
+  };
+  return classMap[classId] || classId || '';
+}
+
 onAuthStateChanged(auth, async user => {
   if (!user) { window.location.href='login.html'; return; }
   myAuthUser = user;
@@ -360,11 +382,12 @@ function renderParticipants() {
     const row = document.createElement('div');
     row.className = 'participant-row';
     row.setAttribute('data-id', p.id);
+    const readableClass = getClassDisplay(p.class);
     row.innerHTML = `
       <img class="p-avatar" src="${p.photoURL||''}" onerror="this.style.display='none'" alt="">
       <div class="p-info">
         <div class="p-name">${p.name||''} <span class="badge badge-${p.status==='audition_pending'?'pending':p.status}">${statusLabel(p.status)}</span></div>
-        <div class="p-meta">${p.class||''} ${p.section||''} &bull; Roll ${p.rollNumber||''} &bull; Reg ${p.registrationNumber||''}</div>
+        <div class="p-meta">${readableClass} ${p.section||''} &bull; Roll ${p.rollNumber||''} &bull; Reg ${p.registrationNumber||''}</div>
         <div class="p-contact">&#9743; ${p.callingNumber||''}</div>
         <div class="p-rating" id="stars-${p.id}">${buildStars(p.id, p.rating||0)}</div>
       </div>
@@ -419,7 +442,10 @@ function populateTaskSelect() {
   const sel = document.getElementById('taskParticipant');
   sel.innerHTML = '<option value="">Select participant</option>';
   const selected = allParticipants.filter(p=>p.status==='selected');
-  selected.forEach(p => sel.innerHTML += `<option value="${p.id}">${p.name} (${p.class} ${p.section})</option>`);
+  selected.forEach(p => {
+    const readableClass = getClassDisplay(p.class);
+    sel.innerHTML += `<option value="${p.id}">${p.name} (${readableClass} ${p.section})</option>`;
+  });
 }
 
 window.assignTask = async () => {
@@ -500,6 +526,9 @@ window.showPanel = (id, btn) => {
   document.getElementById('panel-'+id).classList.add('active');
   if (btn) btn.classList.add('active');
   document.getElementById('topbarTitle').textContent = btn?btn.textContent.trim():id;
+  
+  // Cleanly closes mobile menu drawer container view when tapped
+  document.getElementById('sidebar').classList.remove('open');
 };
 
 window.doSignOut = async () => { await signOut(auth); window.location.href='login.html'; };
