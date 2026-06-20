@@ -61,7 +61,6 @@ body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(-
 #panel-settings label input:checked + span::before {
   transform: translateX(20px);
 }
-
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:24px;}
 .stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:18px;}
 .stat-val{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;color:var(--gold);line-height:1;}
@@ -72,7 +71,22 @@ body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(-
 .table-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--text-primary);}
 .search-box{padding:7px 11px;border-radius:6px;background:var(--bg-dark);border:1px solid var(--border);color:var(--text-primary);font-family:'Josefin Sans',sans-serif;font-size:0.72rem;outline:none;width:180px;}
 .search-box:focus{border-color:var(--gold);}
-table{width:100%;border-collapse:collapse;}
+
+/* Hidden Scroll Container Logic */
+.responsive-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.responsive-table-scroll::-webkit-scrollbar {
+  display: none;
+}
+.responsive-table-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+table{width:100%;border-collapse:collapse;min-width:600px;}
 th{font-size:0.58rem;letter-spacing:2px;color:var(--text-secondary);text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);}
 td{font-size:0.76rem;padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text-primary);vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
@@ -122,6 +136,11 @@ tr:hover td{background:var(--bg-card-hover);}
 
 .empty-state{text-align:center;padding:40px;color:var(--text-secondary);font-size:0.8rem;}
 
+/* TASK FORM */
+.participant-select{width:100%;padding:10px 12px;border-radius:6px;background:var(--bg-dark);border:1px solid var(--border);color:var(--text-primary);font-family:'Josefin Sans',sans-serif;font-size:0.82rem;outline:none;margin-bottom:12px;}
+.participant-select:focus{border-color:var(--gold);}
+.participant-select option{background:var(--bg-dark);}
+
 .mobile-btn{display:none;}
 
 @media(max-width:640px){
@@ -135,7 +154,7 @@ tr:hover td{background:var(--bg-card-hover);}
     display: flex; position: fixed; top: 60px; left: 0; right: 0; background: var(--bg-sidebar); padding: 14px 18px; border-bottom: 1px solid var(--border); z-index: 99;
   }
   .sidebar.open .sb-nav {
-    display: flex; flex-direction: column; position: fixed; top: 126px; left: 0; right: 0; background: var(--bg-sidebar); padding: 10px 0; z-index: 99; border-bottom: 1px solid var(--border); max-height: 50vh; overflow-y: auto;
+    display: flex; flex-direction: column; position: fixed; top: 126px; left: 0; right: 0; background: var(--bg-sidebar); padding: 10px 0; z-index: 99; border-bottom: 1px solid var(--border); max-height: 55vh; overflow-y: auto;
   }
   .sidebar.open .sb-bottom {
     display: flex; position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-sidebar); padding: 14px 18px; z-index: 99; border-top: 1px solid var(--border);
@@ -189,8 +208,10 @@ tr:hover td{background:var(--bg-card-hover);}
       <div class="stat-grid" id="statGrid"></div>
       <div class="table-wrap">
         <div class="table-header"><div class="table-title">Recent Activity</div></div>
-        <table><thead><tr><th>Name</th><th>Event</th><th>Class</th><th>Status</th><th>Date</th></tr></thead>
-        <tbody id="recentBody"><tr><td colspan="5" style="text-align:center;color:var(--text-secondary);padding:24px;">Loading...</td></tr></tbody></table>
+        <div class="responsive-table-scroll">
+          <table><thead><tr><th>Name</th><th>Event</th><th>Class</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody id="recentBody"><tr><td colspan="5" style="text-align:center;color:var(--text-secondary);padding:24px;">Loading...</td></tr></tbody></table>
+        </div>
       </div>
     </div>
 
@@ -206,7 +227,7 @@ tr:hover td{background:var(--bg-card-hover);}
             <input class="search-box" placeholder="Search..." oninput="filterTable('allRegsBody',this.value)">
           </div>
         </div>
-        <div style="overflow-x:auto;">
+        <div class="responsive-table-scroll">
           <table><thead><tr><th>Name</th><th>Email</th><th>Event</th><th>Class</th><th>Roll</th><th>Status</th><th>Action</th></tr></thead>
           <tbody id="allRegsBody"><tr><td colspan="7" style="text-align:center;color:var(--text-secondary);padding:24px;">Loading...</td></tr></tbody></table>
         </div>
@@ -260,8 +281,10 @@ tr:hover td{background:var(--bg-card-hover);}
       </div>
       <div class="table-wrap">
         <div class="table-header"><div class="table-title">Events</div></div>
-        <table><thead><tr><th>Order</th><th>Name</th><th>Category</th><th>Venue</th><th>Actions</th></tr></thead>
-        <tbody id="eventsBody"><tr><td colspan="5" style="text-align:center;color:var(--text-secondary);padding:24px;">Loading...</td></tr></tbody></table>
+        <div class="responsive-table-scroll">
+          <table><thead><tr><th>Order</th><th>Name</th><th>Category</th><th>Venue</th><th>Actions</th></tr></thead>
+          <tbody id="eventsBody"><tr><td colspan="5" style="text-align:center;color:var(--text-secondary);padding:24px;">Loading...</td></tr></tbody></table>
+        </div>
       </div>
     </div>
 
@@ -352,7 +375,6 @@ themeToggle.addEventListener('click',()=>{const t=document.documentElement.getAt
 let authUser = null;
 let eventsCache = [];
 
-// Helper to convert Firebase Class IDs to Readable Roman Numerals
 function getClassDisplay(classId) {
   const classMap = {
     'uG0Ws6m9bwhfO9qx287g': 'IX',
@@ -506,6 +528,7 @@ async function loadEvents() {
       <td><button style="padding:5px 12px;border-radius:4px;font-family:'Josefin Sans',sans-serif;font-size:0.6rem;cursor:pointer;border:1px solid var(--gold);background:transparent;color:var(--gold);" onclick="editEvent('${d.id}')">Edit</button>
       <button class="btn-danger" style="margin-left:6px;" onclick="deleteEvent('${d.id}')">Delete</button></td></tr>`;
   });
+  // Populate event filter selects
   ['regEventFilter','exportEvent'].forEach(selId=>{
     const sel=document.getElementById(selId);
     if(!sel)return;
@@ -537,7 +560,7 @@ async function loadFlags() {
   const snap=await getDocs(query(collection(db,'registrations'),where('flagged','==',true)));
   if(snap.empty){container.innerHTML='<div class="empty-state">No flagged registrations.</div>';return;}
   container.innerHTML='';
-  snap.forEach(d=> {
+  snap.forEach(d=>{
     const r=d.data();
     const readableClass = getClassDisplay(r.class);
     container.innerHTML+=`<div class="ticket-card"><div class="ticket-cat">Flagged Registration</div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin:4px 0;">${r.name||''} &mdash; ${readableClass} ${r.section||''}</div><div class="ticket-body">Reason: ${r.flagReason||''}</div><div style="font-size:0.65rem;color:var(--text-secondary);">Flagged by: ${r.flaggedBy||''}</div><button style="margin-top:10px;padding:5px 12px;border-radius:4px;font-family:'Josefin Sans',sans-serif;font-size:0.6rem;cursor:pointer;border:1px solid var(--green);background:transparent;color:var(--green-light);" onclick="clearFlag('${d.id}')">Clear Flag</button></div>`;
@@ -601,6 +624,7 @@ function loadQR() {
 
 function showMsg(id,msg,type){const el=document.getElementById(id);el.textContent=msg;el.className='msg '+type;setTimeout(()=>{el.className='msg';},4000);}
 window.filterTable=(tbodyId,val)=>{document.querySelectorAll('#'+tbodyId+' tr').forEach(row=>{row.style.display=row.textContent.toLowerCase().includes(val.toLowerCase())?'':'none';});};
+
 window.showPanel=(id,btn)=>{
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));
@@ -608,9 +632,10 @@ window.showPanel=(id,btn)=>{
   if(btn)btn.classList.add('active');
   document.getElementById('topbarTitle').textContent=btn?btn.textContent.trim():id;
   
-  // Gracefully dismisses the mobile navigation drawer context once executed
+  // Handle mobile drawer dismissal cleanly
   document.getElementById('sidebar').classList.remove('open');
 };
+
 window.doSignOut=async()=>{await signOut(auth);window.location.href='login.html';};
 </script>
 </body>
