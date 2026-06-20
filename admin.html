@@ -923,39 +923,118 @@ async function loadAnalytics(){
 }
 
 /* USERS */
-async function loadUsers(){
-  const tbody=document.getElementById('uTbody');
-  try{
-    const snap=await getDocs(collection(db,'users'));
-    tbody.innerHTML='';
-    if(snap.empty){tbody.innerHTML='<tr><td colspan="5" class="loading-ph">No staff added yet.</td></tr>';return;}
-    snap.forEach(d=>{
-      const u=d.data();const roles=(u.roles||[u.role]).filter(Boolean).join(', ');
-      const evName=evCache.find(e=>e.id===u.eventId)?.name||'&mdash;';
-      tbody.innerHTML+=`<tr><td>${u.name||''}</td><td style="font-size:.66rem;">${u.email||''}</td><td>${roles}</td><td>${evName}</td><td><button class="ab ab-r" onclick="removeUser('${d.id}')">Revoke</button></td></tr>`;
-    });
-  }catch(e){tbody.innerHTML='<tr><td colspan="5" class="loading-ph">Error loading.</td></tr>';}
-}
-window.addUser=async function(){
-  const name=document.getElementById('uName').value.trim();
-  const email=document.getElementById('uEmail').value.trim().toLowerCase();
-  const role=document.getElementById('uRole').value;
-  const eventId=document.getElementById('uEvent').value;
-  if(!name||!email||!role){showMsg('uMsg','All fields required.','e');return;}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showMsg('uMsg','Invalid email address.','e');return;}
-  try{
-    const existing=await getDocs(query(collection(db,'users'),where('email','==',email)));
-    if(!existing.empty){
-      const cur=existing.docs[0].data().roles||[];
-      if(!cur.includes(role))await updateDoc(doc(db,'users',existing.docs[0].id),{roles:[...cur,role],eventId:eventId||null});
-      else{showMsg('uMsg','This role already exists for this user.','e');return;}
-    }else{
-      await addDoc(collection(db,'users'),{name,email,roles:[role],eventId:eventId||null,createdAt:serverTimestamp()});
+async function loadUsers() {
+  const tbody = document.getElementById('uTbody');
+  try {
+    const snap = await getDocs(collection(db, 'users'));
+    tbody.innerHTML = '';
+    if (snap.empty) {
+      tbody.innerHTML = '<tr><td colspan="5" class="loading-ph">No staff added yet.</td></tr>';
+      return;
     }
-    showMsg('uMsg','Staff member added successfully.','s');
-    document.getElementById('uName').value='';document.getElementById('uEmail').value='';
+    
+    snap.forEach(d => {
+      const u = d.data();
+      
+      // Derive active assignments cleanly
+      let assignments = u.eventAssignments || [];
+      if (assignments.length === 0) {
+        // Fallback reconstruction for legacy users
+        const legacyRole = u.roles ? u.roles[0] : u.role;
+        assignments.push({ role: legacyRole, eventId: u.eventId || null });
+      }
+      
+      // Map assignments out to structured dynamic labels
+      const rolesDisplay = assignments.map(a => {
+        const rLabel = document.getElementById('uRole').querySelector(`option[value="${a.role}"]`)?.textContent || a.role;
+        const eName = evCache.find(e => e.id === a.eventId)?.name;
+        return eName ? `${rLabel} (${eName})` : rLabel;
+      }).join('<br>');
+      
+      tbody.innerHTML += `
+        <tr>
+          <td>${u.name || ''}</td>
+          <td style="font-size:.66rem;">${u.email || ''}</td>
+          <td style="line-height: 1.4;">${rolesDisplay}</td>
+          <td>&mdash; <small style="color:var(--t3); display:block;">Handled in roles column</small></td>
+          <td><button class="ab ab-r" onclick="removeUser('${d.id}')">Revoke All</button></td>
+        </tr>`;
+    });
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="5" class="loading-ph">Error loading staff listings.</td></tr>';
+  }
+}
+window.addUser = async function() {
+  const name = document.getElementById('uName').value.trim();
+  const email = document.getElementById('uEmail').value.trim().toLowerCase();
+  const role = document.getElementById('uRole').value;
+  const eventId = document.getElementById('uEvent').value;
+  
+  if (!name || !email || !role) {
+    showMsg('uMsg', 'All fields required.', 'e');
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showMsg('uMsg', 'Invalid email address.', 'e');
+    return;
+  }
+  
+  try {
+    const existing = await getDocs(query(collection(db, 'users'), where('email', '==', email)));
+    
+    if (!existing.empty) {
+      const docId = existing.docs[0].id;
+      const curData = existing.docs[0].data();
+      const curRoles = curData.roles || [curData.role];
+      
+      // Initialize or get structural array for tracking multi-event headers
+      let eventAssignments = curData.eventAssignments || [];
+      if (curData.eventId) {
+        // Migrate old singular eventId format if it exists
+        eventAssignments.push({ role: curData.role || 'event_head', eventId: curData.eventId });
+      }
+      
+      // Check if this specific configuration is already added
+      const isDuplicate = eventAssignments.some(a => a.role === role && a.eventId === (eventId || null));
+      
+      if (isDuplicate) {
+        showMsg('uMsg', 'This specific role and event assignment already exists.', 'e');
+        return;
+      }
+      
+      // Append the new assignment
+      eventAssignments.push({ role, eventId: eventId || null });
+      
+      // Ensure role array includes the added role signature
+      const newRoles = [...new Set([...curRoles, role])];
+      
+      await updateDoc(doc(db, 'users', docId), {
+        roles: newRoles,
+        eventAssignments: eventAssignments,
+        // Keep fallback eventId pointing to the latest added event for backwards compatibility
+        eventId: eventId || null, 
+        updatedAt: serverTimestamp()
+      });
+    } else {
+      // Clean creation structure for a brand new user row
+      const eventAssignments = [{ role, eventId: eventId || null }];
+      await addDoc(collection(db, 'users'), {
+        name,
+        email,
+        roles: [role],
+        eventAssignments,
+        eventId: eventId || null,
+        createdAt: serverTimestamp()
+      });
+    }
+    
+    showMsg('uMsg', 'Staff role/event assignment updated successfully.', 's');
+    document.getElementById('uName').value = '';
+    document.getElementById('uEmail').value = '';
     loadUsers();
-  }catch(e){showMsg('uMsg','Error: '+e.message,'e');}
+  } catch (e) {
+    showMsg('uMsg', 'Error: ' + e.message, 'e');
+  }
 };
 window.removeUser=async function(id){if(!confirm('Revoke all access for this user?'))return;await deleteDoc(doc(db,'users',id));loadUsers();};
 
@@ -1228,16 +1307,40 @@ window.assignSecurity=async function(){
 };
 
 /* GLOBAL SETTINGS SAVE */
-window.addNonSchool=async function(){
-  const email=document.getElementById('nsEmail').value.trim().toLowerCase();
-  const role=document.getElementById('nsRole').value;
-  if(!email||!role){showMsg('nsMsg','All fields required.','e');return;}
-  try{
-    const existing=await getDocs(query(collection(db,'users'),where('email','==',email)));
-    if(!existing.empty){await updateDoc(doc(db,'users',existing.docs[0].id),{roles:[...new Set([...(existing.docs[0].data().roles||[]),role])],nonSchool:true});}
-    else{await addDoc(collection(db,'users'),{email,name:email.split('@')[0],roles:[role],nonSchool:true,createdAt:serverTimestamp()});}
-    showMsg('nsMsg','Account added.','s');document.getElementById('nsEmail').value='';loadUsers();
-  }catch(e){showMsg('nsMsg','Error: '+e.message,'e');}
+window.addNonSchool = async function() {
+  const email = document.getElementById('nsEmail').value.trim().toLowerCase();
+  const role = document.getElementById('nsRole').value;
+  if (!email || !role) { showMsg('nsMsg', 'All fields required.', 'e'); return; }
+  
+  try {
+    const existing = await getDocs(query(collection(db, 'users'), where('email', '==', email)));
+    if (!existing.empty) {
+      const curData = existing.docs[0].id;
+      const curRoles = existing.docs[0].data().roles || [];
+      let assignments = existing.docs[0].data().eventAssignments || [];
+      
+      assignments.push({ role, eventId: null });
+      await updateDoc(doc(db, 'users', existing.docs[0].id), {
+        roles: [...new Set([...curRoles, role])],
+        eventAssignments: assignments,
+        nonSchool: true
+      });
+    } else {
+      await addDoc(collection(db, 'users'), {
+        email,
+        name: email.split('@')[0],
+        roles: [role],
+        eventAssignments: [{ role, eventId: null }],
+        nonSchool: true,
+        createdAt: serverTimestamp()
+      });
+    }
+    showMsg('nsMsg', 'Account saved.', 's');
+    document.getElementById('nsEmail').value = '';
+    loadUsers();
+  } catch (e) {
+    showMsg('nsMsg', 'Error: ' + e.message, 'e');
+  }
 };
 
 /* EXPORT */
