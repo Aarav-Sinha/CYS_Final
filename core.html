@@ -43,7 +43,22 @@ body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(-
 .table-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--text-primary);}
 .search-box{padding:7px 11px;border-radius:6px;background:var(--bg-dark);border:1px solid var(--border);color:var(--text-primary);font-family:'Josefin Sans',sans-serif;font-size:0.72rem;outline:none;width:180px;}
 .search-box:focus{border-color:var(--gold);}
-table{width:100%;border-collapse:collapse;}
+
+/* Hidden Custom Mobile Scroll Container */
+.responsive-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.responsive-table-scroll::-webkit-scrollbar {
+  display: none;
+}
+.responsive-table-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+table{width:100%;border-collapse:collapse;min-width:600px;}
 th{font-size:0.58rem;letter-spacing:2px;color:var(--text-secondary);text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);}
 td{font-size:0.76rem;padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text-primary);vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
@@ -97,16 +112,28 @@ tr:hover td{background:var(--bg-card-hover);}
 
 .empty-state{text-align:center;padding:40px;color:var(--text-secondary);font-size:0.8rem;}
 
+.mobile-btn{display:none;}
+
 @media(max-width:640px){
   body{flex-direction:column;}
-  .sidebar{width:100%;height:56px;flex-direction:row;align-items:center;padding:0 16px;overflow:visible;position:sticky;top:0;z-index:100;}
-  .sb-logo{padding:0;border:none;flex:1;}
-  .sb-nav,.sb-user,.sb-section,.sb-bottom{display:none;}
-  .sidebar.open .sb-nav,.sidebar.open .sb-bottom,.sidebar.open .sb-user{display:flex;flex-direction:column;position:fixed;top:56px;left:0;right:0;background:var(--bg-sidebar);border-bottom:1px solid var(--border);z-index:99;max-height:80vh;overflow-y:auto;}
-  .sidebar.open .sb-nav,.sidebar.open .sb-bottom{display:block;}
-  .mobile-btn{display:flex;}
+  .sidebar{width:100%;height:60px;position:sticky;top:0;z-index:100;flex-direction:row;align-items:center;justify-content:space-between;padding:0 16px;overflow:visible;border-right:none;border-bottom:1px solid var(--border);}
+  .sb-logo{padding:0;border:none;}
+  .sb-logo span{display:inline;margin-left:6px;margin-top:0;}
+  .sb-user,.sb-nav,.sb-bottom{display:none;}
+  
+  /* Mobile Menu Trays Layout */
+  .sidebar.open .sb-user {
+    display: flex; position: fixed; top: 60px; left: 0; right: 0; background: var(--bg-sidebar); padding: 14px 18px; border-bottom: 1px solid var(--border); z-index: 99;
+  }
+  .sidebar.open .sb-nav {
+    display: flex; flex-direction: column; position: fixed; top: 126px; left: 0; right: 0; background: var(--bg-sidebar); padding: 10px 0; z-index: 99; border-bottom: 1px solid var(--border); max-height: 55vh; overflow-y: auto;
+  }
+  .sidebar.open .sb-bottom {
+    display: flex; position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-sidebar); padding: 14px 18px; z-index: 99; border-top: 1px solid var(--border);
+  }
+  
+  .mobile-btn{display:flex;width:34px;height:34px;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--gold);cursor:pointer;font-size:18px;}
 }
-.mobile-btn{display:none;width:34px;height:34px;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--gold);cursor:pointer;font-size:17px;}
 </style>
 </head>
 <body>
@@ -147,22 +174,21 @@ tr:hover td{background:var(--bg-card-hover);}
   </div>
   <div class="content">
 
-    <!-- DASHBOARD -->
     <div class="panel active" id="panel-dashboard">
       <div class="stat-grid" id="statGrid"></div>
       <div class="table-wrap">
         <div class="table-header"><div class="table-title">Recent Registrations</div></div>
-        <table><thead><tr><th>Name</th><th>Event</th><th>Class</th><th>Status</th><th>Date</th></tr></thead>
-        <tbody id="recentBody"><tr><td colspan="5" style="text-align:center;color:var(--text-secondary);padding:24px;">Loading...</td></tr></tbody></table>
+        <div class="responsive-table-scroll">
+          <table><thead><tr><th>Name</th><th>Event</th><th>Class</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody id="recentBody"><tr><td colspan="5" style="text-align:center;color:var(--text-secondary);padding:24px;">Loading...</td></tr></tbody></table>
+        </div>
       </div>
     </div>
 
-    <!-- ANALYTICS -->
     <div class="panel" id="panel-analytics">
       <div class="ev-breakdown" id="evBreakdown"></div>
     </div>
 
-    <!-- REGISTRATIONS -->
     <div class="panel" id="panel-registrations">
       <div class="table-wrap">
         <div class="table-header">
@@ -172,14 +198,13 @@ tr:hover td{background:var(--bg-card-hover);}
             <input class="search-box" placeholder="Search..." oninput="filterTable('allRegsBody',this.value)">
           </div>
         </div>
-        <div style="overflow-x:auto;">
+        <div class="responsive-table-scroll">
           <table><thead><tr><th>Name</th><th>Event</th><th>Class</th><th>Roll</th><th>Status</th><th>Registered</th></tr></thead>
           <tbody id="allRegsBody"><tr><td colspan="6" style="text-align:center;color:var(--text-secondary);padding:20px;">Loading...</td></tr></tbody></table>
         </div>
       </div>
     </div>
 
-    <!-- ANNOUNCEMENTS -->
     <div class="panel" id="panel-announcements">
       <div class="form-section">
         <div class="form-title">Post Announcement</div>
@@ -202,7 +227,6 @@ tr:hover td{background:var(--bg-card-hover);}
       <div id="annList"></div>
     </div>
 
-    <!-- EVENTS -->
     <div class="panel" id="panel-events">
       <div class="form-section">
         <div class="form-title">Add / Edit Event</div>
@@ -221,17 +245,17 @@ tr:hover td{background:var(--bg-card-hover);}
       </div>
       <div class="table-wrap">
         <div class="table-header"><div class="table-title">Events</div></div>
-        <table><thead><tr><th>Order</th><th>Name</th><th>Category</th><th>Venue</th><th>Actions</th></tr></thead>
-        <tbody id="eventsBody"></tbody></table>
+        <div class="responsive-table-scroll">
+          <table><thead><tr><th>Order</th><th>Name</th><th>Category</th><th>Venue</th><th>Actions</th></tr></thead>
+          <tbody id="eventsBody"></tbody></table>
+        </div>
       </div>
     </div>
 
-    <!-- TICKETS -->
     <div class="panel" id="panel-tickets">
       <div id="ticketsList"><div class="empty-state">Loading tickets...</div></div>
     </div>
 
-    <!-- SETTINGS -->
     <div class="panel" id="panel-settings">
       <div class="form-section">
         <div class="form-title">Feature Toggles</div>
@@ -250,7 +274,6 @@ tr:hover td{background:var(--bg-card-hover);}
       </div>
     </div>
 
-    <!-- EXPORT -->
     <div class="panel" id="panel-export">
       <div class="form-section">
         <div class="form-title">Export Data</div>
@@ -260,7 +283,6 @@ tr:hover td{background:var(--bg-card-hover);}
       </div>
     </div>
 
-    <!-- QR -->
     <div class="panel" id="panel-qr">
       <div class="qr-wrap">
         <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--text-primary);margin-bottom:4px;">Identity Card</div>
@@ -292,6 +314,16 @@ themeToggle.addEventListener('click',()=>{const t=document.documentElement.getAt
 
 let authUser = null;
 let eventsCache = [];
+
+// Helper to convert Firebase Class ID hashes to Readable Roman Numerals
+function getClassDisplay(classId) {
+  const classMap = {
+    'uG0Ws6m9bwhfO9qx287g': 'IX',
+    'QZB5Rsr266mScA4HMCLI': 'X',
+    '40k6FtJzbOXqKVYteeDf': 'XI'
+  };
+  return classMap[classId] || classId || '';
+}
 
 onAuthStateChanged(auth, async user => {
   if (!user) { window.location.href='login.html'; return; }
@@ -338,7 +370,8 @@ async function loadDashboard() {
   recent.slice(0,10).forEach(r=>{
     const evName=eventsCache.find(e=>e.id===r.eventId)?.name||'--';
     const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';
-    tbody.innerHTML+=`<tr><td>${r.name||''}</td><td>${evName}</td><td>${r.class||''} ${r.section||''}</td><td>${statusBadge(r.status)}</td><td>${date}</td></tr>`;
+    const readableClass = getClassDisplay(r.class);
+    tbody.innerHTML+=`<tr><td>${r.name||''}</td><td>${evName}</td><td>${readableClass} ${r.section||''}</td><td>${statusBadge(r.status)}</td><td>${date}</td></tr>`;
   });
 }
 
@@ -355,7 +388,8 @@ async function loadAllRegs() {
     found++;
     const evName=eventsCache.find(e=>e.id===r.eventId)?.name||'--';
     const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';
-    tbody.innerHTML+=`<tr><td>${r.name||''}</td><td>${evName}</td><td>${r.class||''} ${r.section||''}</td><td>${r.rollNumber||''}</td><td>${statusBadge(r.status)}</td><td>${date}</td></tr>`;
+    const readableClass = getClassDisplay(r.class);
+    tbody.innerHTML+=`<tr><td>${r.name||''}</td><td>${evName}</td><td>${readableClass} ${r.section||''}</td><td>${r.rollNumber||''}</td><td>${statusBadge(r.status)}</td><td>${date}</td></tr>`;
   });
   if(!found)tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text-secondary);padding:20px;">No registrations found.</td></tr>';
 }
@@ -466,7 +500,14 @@ window.exportCSV=async()=>{
   const statusFilter=document.getElementById('exportStatus').value;
   const snap=await getDocs(collection(db,'registrations'));
   const rows=[['Name','Email','Reg No','Class','Section','Roll','Event','Status','Calling','WhatsApp']];
-  snap.forEach(d=>{const r=d.data();if(evFilter&&r.eventId!==evFilter)return;if(statusFilter&&r.status!==statusFilter)return;const evName=eventsCache.find(e=>e.id===r.eventId)?.name||r.eventId||'';rows.push([r.name,r.email,r.registrationNumber,r.class,r.section,r.rollNumber,evName,r.status,r.callingNumber,r.whatsappNumber]);});
+  snap.forEach(d=>{
+    const r=d.data();
+    if(evFilter&&r.eventId!==evFilter)return;
+    if(statusFilter&&r.status!==statusFilter)return;
+    const evName=eventsCache.find(e=>e.id===r.eventId)?.name||r.eventId||'';
+    const readableClass = getClassDisplay(r.class);
+    rows.push([r.name,r.email,r.registrationNumber,readableClass,r.section,r.rollNumber,evName,r.status,r.callingNumber,r.whatsappNumber]);
+  });
   const csv=rows.map(r=>r.map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');
   const blob=new Blob([csv],{type:'text/csv'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`cy_core_export_${Date.now()}.csv`;a.click();
@@ -481,7 +522,19 @@ function loadQR() {
 
 function showMsg(id,msg,type){const el=document.getElementById(id);el.textContent=msg;el.className='msg '+type;setTimeout(()=>{el.className='msg';},4000);}
 window.filterTable=(tbodyId,val)=>{document.querySelectorAll('#'+tbodyId+' tr').forEach(row=>{row.style.display=row.textContent.toLowerCase().includes(val.toLowerCase())?'':'none';});};
-window.showPanel=(id,btn)=>{document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));document.getElementById('panel-'+id).classList.add('active');if(btn)btn.classList.add('active');document.getElementById('topbarTitle').textContent=btn?btn.textContent.trim():id;if(id==='analytics')loadAnalytics();};
+
+window.showPanel=(id,btn)=>{
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  document.getElementById('topbarTitle').textContent=btn?btn.textContent.trim():id;
+  if(id==='analytics')loadAnalytics();
+  
+  // Closes the menu drawer trigger safely when viewport size changes or items are clicked
+  document.getElementById('sidebar').classList.remove('open');
+};
+
 window.doSignOut=async()=>{await signOut(auth);window.location.href='login.html';};
 </script>
 </body>
