@@ -32,9 +32,7 @@ body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(-
 .content{padding:24px;flex:1;}
 .panel{display:none;}.panel.active{display:block;animation:fadeUp 0.4s ease;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
-/* --- Add this to your existing stylesheet --- */
 
-/* The slider container track */
 #panel-settings label span {
   position: absolute;
   cursor: pointer;
@@ -42,12 +40,10 @@ body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(-
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--border); /* Dim color when off */
+  background-color: var(--border);
   border-radius: 24px;
   transition: background-color 0.3s ease;
 }
-
-/* The round active circle inside the slider */
 #panel-settings label span::before {
   content: "";
   position: absolute;
@@ -59,16 +55,13 @@ body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(-
   border-radius: 50%;
   transition: transform 0.3s ease;
 }
-
-/* Track background when checkbox is checked */
 #panel-settings label input:checked + span {
-  background-color: var(--green); /* Turns emerald green when open */
+  background-color: var(--green);
 }
-
-/* Move the inner circle right when checked */
 #panel-settings label input:checked + span::before {
   transform: translateX(20px);
 }
+
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:24px;}
 .stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:18px;}
 .stat-val{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;color:var(--gold);line-height:1;}
@@ -111,7 +104,7 @@ tr:hover td{background:var(--bg-card-hover);}
 .approval-from{font-size:0.65rem;color:var(--gold);}
 .approval-body{font-family:'Cormorant Garamond',serif;font-size:0.92rem;color:var(--text-secondary);line-height:1.6;margin-bottom:12px;}
 .approval-actions{display:flex;gap:8px;}
-.btn-approve{padding:6px 16px;border-radius:4px;background:rgba(74,124,89,0.15);border:1px solid rgba(74,124,89,0.35);color:var(--green-light);font-family:'Josefin Sans',sans-serif;font-size:0.62px;cursor:pointer;font-size:0.62rem;letter-spacing:1px;}
+.btn-approve{padding:6px 16px;border-radius:4px;background:rgba(74,124,89,0.15);border:1px solid rgba(74,124,89,0.35);color:var(--green-light);font-family:'Josefin Sans',sans-serif;cursor:pointer;font-size:0.62rem;letter-spacing:1px;}
 .btn-approve:hover{background:rgba(74,124,89,0.25);}
 
 .ticket-card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:10px;}
@@ -129,16 +122,27 @@ tr:hover td{background:var(--bg-card-hover);}
 
 .empty-state{text-align:center;padding:40px;color:var(--text-secondary);font-size:0.8rem;}
 
+.mobile-btn{display:none;}
+
 @media(max-width:640px){
   body{flex-direction:column;}
-  .sidebar{width:100%;height:56px;flex-direction:row;align-items:center;padding:0 16px;overflow:visible;position:sticky;top:0;z-index:100;}
-  .sb-logo{padding:0;border:none;flex:1;}
-  .sb-nav,.sb-user,.sb-section,.sb-bottom{display:none;}
-  .sidebar.open .sb-nav,.sidebar.open .sb-bottom,.sidebar.open .sb-user{display:flex;flex-direction:column;position:fixed;top:56px;left:0;right:0;background:var(--bg-sidebar);border-bottom:1px solid var(--border);z-index:99;max-height:80vh;overflow-y:auto;}
-  .sidebar.open .sb-nav,.sidebar.open .sb-bottom{display:block;}
-  .mobile-btn{display:flex;}
+  .sidebar{width:100%;height:60px;position:sticky;top:0;z-index:100;flex-direction:row;align-items:center;justify-content:space-between;padding:0 16px;overflow:visible;border-right:none;border-bottom:1px solid var(--border);}
+  .sb-logo{padding:0;border:none;}
+  .sb-logo span{display:inline;margin-left:6px;margin-top:0;}
+  .sb-user,.sb-nav,.sb-bottom{display:none;}
+  
+  .sidebar.open .sb-user {
+    display: flex; position: fixed; top: 60px; left: 0; right: 0; background: var(--bg-sidebar); padding: 14px 18px; border-bottom: 1px solid var(--border); z-index: 99;
+  }
+  .sidebar.open .sb-nav {
+    display: flex; flex-direction: column; position: fixed; top: 126px; left: 0; right: 0; background: var(--bg-sidebar); padding: 10px 0; z-index: 99; border-bottom: 1px solid var(--border); max-height: 50vh; overflow-y: auto;
+  }
+  .sidebar.open .sb-bottom {
+    display: flex; position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-sidebar); padding: 14px 18px; z-index: 99; border-top: 1px solid var(--border);
+  }
+  
+  .mobile-btn{display:flex;width:34px;height:34px;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--gold);cursor:pointer;font-size:18px;}
 }
-.mobile-btn{display:none;width:34px;height:34px;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--gold);cursor:pointer;font-size:17px;}
 </style>
 </head>
 <body>
@@ -348,6 +352,16 @@ themeToggle.addEventListener('click',()=>{const t=document.documentElement.getAt
 let authUser = null;
 let eventsCache = [];
 
+// Helper to convert Firebase Class IDs to Readable Roman Numerals
+function getClassDisplay(classId) {
+  const classMap = {
+    'uG0Ws6m9bwhfO9qx287g': 'IX',
+    'QZB5Rsr266mScA4HMCLI': 'X',
+    '40k6FtJzbOXqKVYteeDf': 'XI'
+  };
+  return classMap[classId] || classId || '';
+}
+
 onAuthStateChanged(auth, async user => {
   if (!user) { window.location.href='login.html'; return; }
   const usersSnap = await getDocs(query(collection(db,'users'), where('email','==',user.email)));
@@ -388,7 +402,8 @@ async function loadDashboard() {
   recent.slice(0,10).forEach(r=>{
     const evName=eventsCache.find(e=>e.id===r.eventId)?.name||'--';
     const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';
-    tbody.innerHTML+=`<tr><td>${r.name||''}</td><td>${evName}</td><td>${r.class||''} ${r.section||''}</td><td>${statusBadge(r.status)}</td><td>${date}</td></tr>`;
+    const readableClass = getClassDisplay(r.class);
+    tbody.innerHTML+=`<tr><td>${r.name||''}</td><td>${evName}</td><td>${readableClass} ${r.section||''}</td><td>${statusBadge(r.status)}</td><td>${date}</td></tr>`;
   });
 }
 function statusBadge(s){if(s==='selected')return'<span class="badge badge-selected">Selected</span>';if(s==='rejected')return'<span class="badge badge-rejected">Rejected</span>';return'<span class="badge badge-pending">Pending</span>';}
@@ -406,7 +421,8 @@ window.loadAllRegs = async () => {
     if(evFilter&&r.eventId!==evFilter)return;
     found++;
     const evName=eventsCache.find(e=>e.id===r.eventId)?.name||'--';
-    tbody.innerHTML+=`<tr><td>${r.name||''}</td><td style="font-size:0.68rem;">${r.email||''}</td><td>${evName}</td><td>${r.class||''} ${r.section||''}</td><td>${r.rollNumber||''}</td><td>${statusBadge(r.status)}</td>
+    const readableClass = getClassDisplay(r.class);
+    tbody.innerHTML+=`<tr><td>${r.name||''}</td><td style="font-size:0.68rem;">${r.email||''}</td><td>${evName}</td><td>${readableClass} ${r.section||''}</td><td>${r.rollNumber||''}</td><td>${statusBadge(r.status)}</td>
       <td><button class="btn-danger" onclick="flagReg('${d.id}')">Flag</button></td></tr>`;
   });
   if(!found) tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--text-secondary);padding:20px;">No registrations found.</td></tr>';
@@ -490,7 +506,6 @@ async function loadEvents() {
       <td><button style="padding:5px 12px;border-radius:4px;font-family:'Josefin Sans',sans-serif;font-size:0.6rem;cursor:pointer;border:1px solid var(--gold);background:transparent;color:var(--gold);" onclick="editEvent('${d.id}')">Edit</button>
       <button class="btn-danger" style="margin-left:6px;" onclick="deleteEvent('${d.id}')">Delete</button></td></tr>`;
   });
-  // Populate event filter selects
   ['regEventFilter','exportEvent'].forEach(selId=>{
     const sel=document.getElementById(selId);
     if(!sel)return;
@@ -512,7 +527,7 @@ window.editEvent = (id) => {
   const ev=eventsCache.find(e=>e.id===id);if(!ev)return;
   document.getElementById('evEditId').value=id;
   document.getElementById('evName').value=ev.name||'';document.getElementById('evCategory').value=ev.category||'';document.getElementById('evLogo').value=ev.logoFile||'';document.getElementById('evVenue').value=ev.venue||'';document.getElementById('evMax').value=ev.maxParticipants||'';document.getElementById('evDesc').value=ev.description||'';document.getElementById('evOrder').value=ev.order||'';
-  showPanel('events',document.querySelector('.sb-item:nth-child(8)'));
+  showPanel('events',document.querySelector('.sb-item:nth-child(5)'));
 };
 window.deleteEvent = async (id) => {if(!confirm('Delete?'))return;await deleteDoc(doc(db,'events',id));loadEvents();};
 
@@ -522,9 +537,10 @@ async function loadFlags() {
   const snap=await getDocs(query(collection(db,'registrations'),where('flagged','==',true)));
   if(snap.empty){container.innerHTML='<div class="empty-state">No flagged registrations.</div>';return;}
   container.innerHTML='';
-  snap.forEach(d=>{
+  snap.forEach(d=> {
     const r=d.data();
-    container.innerHTML+=`<div class="ticket-card"><div class="ticket-cat">Flagged Registration</div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin:4px 0;">${r.name||''} &mdash; ${r.class||''} ${r.section||''}</div><div class="ticket-body">Reason: ${r.flagReason||''}</div><div style="font-size:0.65rem;color:var(--text-secondary);">Flagged by: ${r.flaggedBy||''}</div><button style="margin-top:10px;padding:5px 12px;border-radius:4px;font-family:'Josefin Sans',sans-serif;font-size:0.6rem;cursor:pointer;border:1px solid var(--green);background:transparent;color:var(--green-light);" onclick="clearFlag('${d.id}')">Clear Flag</button></div>`;
+    const readableClass = getClassDisplay(r.class);
+    container.innerHTML+=`<div class="ticket-card"><div class="ticket-cat">Flagged Registration</div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin:4px 0;">${r.name||''} &mdash; ${readableClass} ${r.section||''}</div><div class="ticket-body">Reason: ${r.flagReason||''}</div><div style="font-size:0.65rem;color:var(--text-secondary);">Flagged by: ${r.flaggedBy||''}</div><button style="margin-top:10px;padding:5px 12px;border-radius:4px;font-family:'Josefin Sans',sans-serif;font-size:0.6rem;cursor:pointer;border:1px solid var(--green);background:transparent;color:var(--green-light);" onclick="clearFlag('${d.id}')">Clear Flag</button></div>`;
   });
 }
 window.clearFlag = async (id) => {await updateDoc(doc(db,'registrations',id),{flagged:false,flagReason:null});loadFlags();};
@@ -567,7 +583,8 @@ window.exportCSV = async () => {
     if(evFilter&&r.eventId!==evFilter)return;
     if(statusFilter&&r.status!==statusFilter)return;
     const evName=eventsCache.find(e=>e.id===r.eventId)?.name||r.eventId||'';
-    rows.push([r.name,r.email,r.registrationNumber,r.class,r.section,r.rollNumber,evName,r.status,r.callingNumber,r.whatsappNumber,r.classTeacher]);
+    const readableClass = getClassDisplay(r.class);
+    rows.push([r.name,r.email,r.registrationNumber,readableClass,r.section,r.rollNumber,evName,r.status,r.callingNumber,r.whatsappNumber,r.classTeacher]);
   });
   const csv=rows.map(r=>r.map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');
   const blob=new Blob([csv],{type:'text/csv'});
@@ -584,7 +601,16 @@ function loadQR() {
 
 function showMsg(id,msg,type){const el=document.getElementById(id);el.textContent=msg;el.className='msg '+type;setTimeout(()=>{el.className='msg';},4000);}
 window.filterTable=(tbodyId,val)=>{document.querySelectorAll('#'+tbodyId+' tr').forEach(row=>{row.style.display=row.textContent.toLowerCase().includes(val.toLowerCase())?'':'none';});};
-window.showPanel=(id,btn)=>{document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));document.getElementById('panel-'+id).classList.add('active');if(btn)btn.classList.add('active');document.getElementById('topbarTitle').textContent=btn?btn.textContent.trim():id;};
+window.showPanel=(id,btn)=>{
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  document.getElementById('topbarTitle').textContent=btn?btn.textContent.trim():id;
+  
+  // Gracefully dismisses the mobile navigation drawer context once executed
+  document.getElementById('sidebar').classList.remove('open');
+};
 window.doSignOut=async()=>{await signOut(auth);window.location.href='login.html';};
 </script>
 </body>
