@@ -145,7 +145,7 @@ tr:hover td{background:var(--cardh);}
 .tk-meta{font-size:.6rem;color:var(--t3);}
 
 /* LOADING */
-.loading-ph"{text-align:center;padding:30px;color:var(--t2);font-size:.75rem;}
+.loading-ph{text-align:center;padding:30px;color:var(--t2);font-size:.75rem;}
 
 /* SCROLLABLE TABLE */
 .tbl-scroll{overflow-x:auto;}
@@ -314,8 +314,8 @@ tr:hover td{background:var(--cardh);}
             <input class="search" placeholder="Search&hellip;" oninput="filterTbl('regTbody',this.value)">
           </div>
         </div>
-        <div class="tbl-scroll"><table><thead><tr><th>Name</th><th>Event</th><th>Class</th><th>Roll</th><th>Contact</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
-        <tbody id="regTbody"><tr><td colspan="8" class="loading-ph">Loading&hellip;</td></tr></tbody></table></div>
+        <div class="tbl-scroll"><table><thead><tr><th>Name</th><th>Event</th><th>Class</th><th>Roll</th><th>Calling No</th><th>WhatsApp No</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+        <tbody id="regTbody"><tr><td colspan="9" class="loading-ph">Loading&hellip;</td></tr></tbody></table></div>
       </div>
     </div>
 
@@ -1066,7 +1066,7 @@ window.removeUser=async function(id){if(!confirm('Revoke all access for this use
 /* REGISTRATIONS */
 window.loadRegs=async function(){
   const tbody=document.getElementById('regTbody');
-  tbody.innerHTML='<tr><td colspan="8" class="loading-ph">Loading&hellip;</td></tr>';
+  tbody.innerHTML='<tr><td colspan="9" class="loading-ph">Loading&hellip;</td></tr>';
   const evFilter=document.getElementById('regEvFilter').value;
   const stFilter=document.getElementById('regStFilter').value;
   try{
@@ -1079,10 +1079,10 @@ window.loadRegs=async function(){
       found++;
       const evName=evCache.find(e=>e.id===r.eventId)?.name||'--';
       const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';
-      tbody.innerHTML+=`<tr><td>${r.name||''}</td><td>${evName}</td><td>${r.class||''} ${r.section||''}</td><td>${r.rollNumber||''}</td><td style="font-size:.64rem;">${r.callingNumber||''}</td><td>${sBadge(r.status)}</td><td>${date}</td><td style="white-space:nowrap;"><button class="ab ab-gr" onclick="setRegStatus('${d.id}','selected')">Select</button> <button class="ab ab-r" onclick="setRegStatus('${d.id}','rejected')">Reject</button> <button class="ab" onclick="setRegStatus('${d.id}','audition_pending')">Pending</button></td></tr>`;
+      tbody.innerHTML+=`<tr><td>${r.name||''}</td><td>${evName}</td><td>${r.class||''} ${r.section||''}</td><td>${r.rollNumber||''}</td><td style="font-size:.64rem;">${r.callingNumber||''}</td><td style="font-size:.64rem;">${r.whatsappNumber||''}</td><td>${sBadge(r.status)}</td><td>${date}</td><td style="white-space:nowrap;"><button class="ab ab-gr" onclick="setRegStatus('${d.id}','selected')">Select</button> <button class="ab ab-r" onclick="setRegStatus('${d.id}','rejected')">Reject</button> <button class="ab" onclick="setRegStatus('${d.id}','audition_pending')">Pending</button></td></tr>`;
     });
-    if(!found)tbody.innerHTML='<tr><td colspan="8" class="loading-ph">No registrations found.</td></tr>';
-  }catch(e){tbody.innerHTML='<tr><td colspan="8" class="loading-ph">Error loading.</td></tr>';}
+    if(!found)tbody.innerHTML='<tr><td colspan="9" class="loading-ph">No registrations found.</td></tr>';
+  }catch(e){tbody.innerHTML='<tr><td colspan="9" class="loading-ph">Error loading.</td></tr>';}
 };
 window.setRegStatus=async function(id,status){
   if(!confirm(`Set status to "${status}"?`))return;
