@@ -278,6 +278,18 @@ footer{position:relative;z-index:1;padding:48px 20px 32px;border-top:1px solid v
 .btn-sm-cancel{padding:11px 18px;border-radius:7px;background:transparent;border:1px solid var(--border);color:var(--t2);font-family:'Josefin Sans',sans-serif;font-size:.68rem;cursor:pointer;transition:all .2s;}
 .btn-sm-cancel:hover{border-color:var(--gold);color:var(--gold);}
 
+/* Auth Box styling */
+.auth-display-box {
+  display:none; align-items:center; justify-content:space-between;
+  padding:10px 13px; border-radius:7px; background:var(--bg-card);
+  border:1px dashed var(--border); font-size:0.8rem; color:var(--gold-light);
+}
+.auth-disconnect-btn {
+  font-size:0.62rem; color:var(--t2); text-decoration:underline;
+  cursor:pointer; letter-spacing:1px; text-transform:uppercase; transition:color 0.2s;
+}
+.auth-disconnect-btn:hover { color:var(--gold); }
+
 /* ── LOADING ── */
 .loading-ph{text-align:center;padding:44px;color:var(--t2);font-size:.73rem;letter-spacing:2px;width:100%;}
 .spinner-ring{width:20px;height:20px;border:2px solid transparent;border-top:2px solid var(--gold);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:8px;}
@@ -290,7 +302,6 @@ footer{position:relative;z-index:1;padding:48px 20px 32px;border-top:1px solid v
 
 /* ── RESPONSIVE TYPOGRAPHY & LAYOUTS ── */
 @media(max-width:900px){
-  /* Keep Portal Login separate at all cost */
   nav .nav-portal { display: inline-block; }
 }
 @media(max-width:768px){
@@ -299,7 +310,6 @@ footer{position:relative;z-index:1;padding:48px 20px 32px;border-top:1px solid v
   nav{padding:0 12px;}
   .nav-title { font-size: 0.95rem; letter-spacing: 1px; }
   .nav-brand { gap: 6px; }
-  /* Condense portal login button to fit gracefully without overflow */
   .nav-portal { padding: 6px 14px; font-size: 0.58rem; letter-spacing: 1px; }
   .nav-portal::after { content: 'LOGIN'; }
   .nav-right { gap: 8px; }
@@ -515,6 +525,27 @@ footer{position:relative;z-index:1;padding:48px 20px 32px;border-top:1px solid v
     <h3>Raise a Ticket</h3>
     <p>Report any issue — technical, conduct, or event-related.</p>
     <div class="fg"><label>Your Name</label><input type="text" id="tName" placeholder="Full name"></div>
+    
+    <div class="fg">
+      <label>Email Identity</label>
+      <button type="button" class="btn-outline" id="tGoogleAuthBtn" style="width:100%; padding:10px; font-size:0.7rem; font-weight:600; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.24 10.285V13.4h6.887c-.275 1.565-1.88 4.604-6.887 4.604-4.33 0-7.866-3.577-7.866-8s3.536-8 7.866-8c2.46 0 4.105 1.025 5.047 1.926l2.427-2.334C17.955 2.192 15.34 1 12.24 1c-6.075 0-11 4.925-11 11s4.925 11 11 11c6.34 0 10.556-4.43 10.556-10.714 0-.726-.075-1.272-.165-1.714H12.24z"/></svg>
+        Verify Google Account
+      </button>
+      <div class="auth-display-box" id="tAuthDisplay">
+        <span id="tUserEmailText"></span>
+        <span class="auth-disconnect-btn" id="tSignOutBtn">Disconnect</span>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label>Contact Number</label>
+      <div style="display:flex; gap:6px;">
+        <span style="background:var(--bg-card); border:1px solid var(--border); color:var(--t2); padding:10px 12px; border-radius:7px; font-size:0.8rem; display:flex; align-items:center; font-weight:600;">+91</span>
+        <input type="tel" id="tPhone" placeholder="10-digit mobile layout" pattern="[6-9][0-9]{9}" maxlength="10" style="flex:1;">
+      </div>
+    </div>
+
     <div class="fg"><label>Category</label>
       <select id="tCat">
         <option value="">Select category</option>
@@ -526,7 +557,7 @@ footer{position:relative;z-index:1;padding:48px 20px 32px;border-top:1px solid v
       </select>
     </div>
     <div class="fg"><label>Description</label><textarea id="tDesc" placeholder="Describe your issue…"></textarea></div>
-    <div class="fg"><label>Email (optional)</label><input type="email" id="tEmail" placeholder="For follow-up"></div>
+    
     <div class="modal-row">
       <button class="btn-sm-cancel" onclick="document.getElementById('ticketModal').classList.remove('on')">Cancel</button>
       <button class="btn-sm-gold" onclick="submitTicket()">Submit Ticket</button>
@@ -537,10 +568,15 @@ footer{position:relative;z-index:1;padding:48px 20px 32px;border-top:1px solid v
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, doc, getDoc, collection, getDocs, addDoc, query, orderBy, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const FC={apiKey:"AIzaSyBKeQxNTRaGsry7vpHZOBOD6CCuvZhBpU0",authDomain:"critically-yours-v5.firebaseapp.com",projectId:"critically-yours-v5",storageBucket:"critically-yours-v5.firebasestorage.app",messagingSenderId:"436240015995",appId:"1:436240015995:web:e646abe16d80d7eab9f8de"};
 const app=initializeApp(FC);
 const db=getFirestore(app);
+const auth=getAuth(app);
+const provider=new GoogleAuthProvider();
+
+let verifiedEmail = null;
 
 /* THEME */
 const themeBtn=document.getElementById('themeBtn');
@@ -559,6 +595,38 @@ document.getElementById('ticketModal').addEventListener('click',e=>{if(e.target=
 const revealEls=document.querySelectorAll('.reveal');
 const revealObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});},{threshold:0.06});
 revealEls.forEach(el=>revealObs.observe(el));
+
+/* FIREBASE OAUTH PIPELINE */
+const authBtn=document.getElementById('tGoogleAuthBtn');
+const authDisplay=document.getElementById('tAuthDisplay');
+const emailText=document.getElementById('tUserEmailText');
+const logOutBtn=document.getElementById('tSignOutBtn');
+
+authBtn.addEventListener('click', async () => {
+  try {
+    await signInWithPopup(auth, provider);
+  } catch(e) {
+    alert('OAuth interface interrupted: ' + e.message);
+  }
+});
+
+logOutBtn.addEventListener('click', async () => {
+  await signOut(auth);
+});
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    verifiedEmail = user.email;
+    emailText.textContent = user.email;
+    authBtn.style.display = 'none';
+    authDisplay.style.display = 'flex';
+  } else {
+    verifiedEmail = null;
+    emailText.textContent = '';
+    authBtn.style.display = 'flex';
+    authDisplay.style.display = 'none';
+  }
+});
 
 /* SETTINGS */
 async function loadSettings(){
@@ -774,20 +842,41 @@ async function loadVenue(){
   }
 }
 
-/* TICKET */
+/* TICKET ARTIFACT MUTATION AND DB TRANSACTION */
 window.submitTicket=async function(){
-  const name=document.getElementById('tName').value.trim();
+  const baseName=document.getElementById('tName').value.trim();
   const cat=document.getElementById('tCat').value;
   const desc=document.getElementById('tDesc').value.trim();
-  const email=document.getElementById('tEmail').value.trim();
-  if(!name||!cat||!desc){alert('Please fill Name, Category, and Description.');return;}
+  const rawPhone=document.getElementById('tPhone').value.trim();
+  
+  if(!baseName||!cat||!desc){alert('Please fill Name, Category, and Description.');return;}
+  if(!verifiedEmail){alert('Google verification required. Select account above.');return;}
+  
+  const targetPattern=/^[6-9]\d{9}$/;
+  if(!targetPattern.test(rawPhone)){alert('Please enter a standard 10-digit Indian phone structure.');return;}
+
+  // Appends contact profile inline directly beside the name field string for dashboards
+  const structuredAdminName=`${baseName} (+91${rawPhone})`;
+
   try{
-    await addDoc(collection(db,'tickets'),{name,category:cat,description:desc,email:email||null,status:'open',source:'index',createdAt:serverTimestamp()});
+    await addDoc(collection(db,'tickets'),{
+      name:structuredAdminName,
+      category:cat,
+      description:desc,
+      email:verifiedEmail,
+      status:'open',
+      source:'index',
+      createdAt:serverTimestamp()
+    });
+    
     document.getElementById('ticketModal').classList.remove('on');
-    document.getElementById('tName').value='';document.getElementById('tCat').value='';
-    document.getElementById('tDesc').value='';document.getElementById('tEmail').value='';
-    alert('Ticket submitted. We will look into it.');
-  }catch(e){alert('Failed: '+e.message);}
+    document.getElementById('tName').value='';
+    document.getElementById('tCat').value='';
+    document.getElementById('tDesc').value='';
+    document.getElementById('tPhone').value='';
+    
+    alert('Ticket submitted successfully.');
+  }catch(e){alert('Payload target execution failed: '+e.message);}
 };
 
 /* INIT */
