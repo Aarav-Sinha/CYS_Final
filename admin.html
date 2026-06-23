@@ -160,54 +160,31 @@ tr:hover td{background:var(--cardh);}
 .type-internal_role{background:rgba(100,100,200,0.12);color:#9090E0;border:1px solid rgba(100,100,200,0.3);}
 .type-backend_role{background:rgba(192,57,43,0.1);color:var(--red-l);border:1px solid rgba(192,57,43,0.3);}
 
+/* ── TEAM PREVIEW CARDS (admin panel) ── */
+.team-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-top:16px;}
+.team-preview-card{background:var(--bg);border:1px solid var(--b1);border-radius:10px;padding:16px 12px;text-align:center;}
+.team-preview-av{width:52px;height:52px;border-radius:50%;border:2px solid var(--b1);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--gold);background:var(--glass);overflow:hidden;}
+.team-preview-av img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.team-preview-name{font-size:.72rem;font-weight:600;color:var(--t1);margin-bottom:3px;}
+.team-preview-role{font-size:.55rem;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase;}
+
 /* MOBILE GLASS OVERLAY SIDEBAR */
-.sb-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(6, 8, 10, 0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 98;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-.sb-overlay.on {
-  display: block;
-  opacity: 1;
-}
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(6,8,10,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:98;opacity:0;transition:opacity 0.3s ease;}
+.sb-overlay.on{display:block;opacity:1;}
 
 /* PHONE ADAPTIVE STYLES */
 @media(max-width:700px){
   body{flex-direction:column;}
-  .sb{
-    position:fixed;
-    top:0;
-    left:0;
-    height:100vh;
-    width:260px;
-    transform:translateX(-100%);
-    box-shadow:20px 0 40px rgba(0,0,0,0.6);
-    z-index:99;
-  }
-  .sb.open{
-    transform:translateX(0);
-  }
-  .sb-nav, .sb-user, .sb-sec, .sb-foot{display:flex; flex-direction:column;}
+  .sb{position:fixed;top:0;left:0;height:100vh;width:260px;transform:translateX(-100%);box-shadow:20px 0 40px rgba(0,0,0,0.6);z-index:99;}
+  .sb.open{transform:translateX(0);}
+  .sb-nav,.sb-user,.sb-sec,.sb-foot{display:flex;flex-direction:column;}
   .sb-nav{flex:1;}
-  .topbar{
-    height:56px;
-    padding:0 16px;
-    background:var(--bg2);
-    border-bottom:1px solid var(--b1);
-  }
-  .mob-sb-btn{
-    display:flex;
-  }
+  .topbar{height:56px;padding:0 16px;background:var(--bg2);border-bottom:1px solid var(--b1);}
+  .mob-sb-btn{display:flex;}
   .main{height:calc(100vh - 56px);}
   .content-area{padding:16px;}
   .fgrid{grid-template-columns:1fr;}
-  .stat-row{grid-template-columns:repeat(2, 1fr);}
+  .stat-row{grid-template-columns:repeat(2,1fr);}
 }
 </style>
 </head>
@@ -232,6 +209,7 @@ tr:hover td{background:var(--cardh);}
     <div class="sb-sec">Management</div>
     <button class="sb-item" onclick="nav('users',this)">&#9671; User Management</button>
     <button class="sb-item" onclick="nav('registrations',this)">&#9673; Registrations</button>
+    <button class="sb-item" onclick="nav('addparticipant',this)">&#9651; Add Participant</button>
     <button class="sb-item" onclick="nav('events',this)">&#9672; Events &amp; Roles</button>
     <button class="sb-item" onclick="nav('rolepermissions',this)">&#9881; Role Permissions</button>
     <button class="sb-item" onclick="nav('classes',this)">&#9674; Classes &amp; Sections</button>
@@ -240,6 +218,7 @@ tr:hover td{background:var(--cardh);}
     <button class="sb-item" onclick="nav('homepage',this)">&#9670; Homepage &amp; Slideshow</button>
     <button class="sb-item" onclick="nav('timeline',this)">&#9670; Timeline</button>
     <button class="sb-item" onclick="nav('rules',this)">&#9670; Rules</button>
+    <button class="sb-item" onclick="nav('team',this)">&#9671; Our Team</button>
     <div class="sb-sec">Operations</div>
     <button class="sb-item" onclick="nav('attendance',this)">&#9632; Attendance</button>
     <button class="sb-item" onclick="nav('tickets',this)">&#9873; Tickets</button>
@@ -262,6 +241,7 @@ tr:hover td{background:var(--cardh);}
   </div>
   <div class="content-area">
 
+    <!-- DASHBOARD -->
     <div class="panel on" id="p-dashboard">
       <div class="stat-row" id="statRow"><div class="loading-ph">Loading&hellip;</div></div>
       <div class="tbl-wrap">
@@ -271,10 +251,12 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
+    <!-- ANALYTICS -->
     <div class="panel" id="p-analytics">
       <div id="analyticsContent" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;"></div>
     </div>
 
+    <!-- USERS -->
     <div class="panel" id="p-users">
       <div class="fs">
         <div class="fs-title">Add Staff / Team Member</div>
@@ -304,6 +286,7 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
+    <!-- REGISTRATIONS -->
     <div class="panel" id="p-registrations">
       <div class="tbl-wrap">
         <div class="tbl-head">
@@ -319,6 +302,90 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
+    <!-- ADD PARTICIPANT -->
+    <div class="panel" id="p-addparticipant">
+      <div class="fs">
+        <div class="fs-title">Add Participant Manually</div>
+        <p style="font-size:.72rem;color:var(--t2);margin-bottom:4px;line-height:1.7;">For students who cannot use their school Google account. Their <strong style="color:var(--gold);">personal email</strong> will be their portal login &mdash; they sign in with Google using that email on <code style="font-size:.68rem;color:var(--t2);background:var(--bg);padding:1px 5px;border-radius:3px;">login.html</code>.</p>
+        <div style="background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:10px 14px;font-size:.68rem;color:var(--t2);line-height:1.7;margin-bottom:18px;margin-top:10px;">
+          <strong style="color:var(--gold);">&#9670; Note:</strong> Duplicate email check is enforced. If the student already enrolled via enroll.html, submission will be blocked.
+        </div>
+        <div class="fgrid">
+          <div class="fg">
+            <label>Full Name <span style="color:var(--red-l);">*</span></label>
+            <input type="text" id="apName" placeholder="Student full name">
+          </div>
+          <div class="fg">
+            <label>Personal Email (Portal Login) <span style="color:var(--red-l);">*</span></label>
+            <input type="email" id="apEmail" placeholder="personal@gmail.com">
+            <span style="font-size:.58rem;color:var(--t3);display:block;margin-top:4px;">Student will use this email to sign in to participant portal via Google</span>
+          </div>
+          <div class="fg">
+            <label>Registration Number <span style="color:var(--red-l);">*</span></label>
+            <input type="text" id="apReg" placeholder="e.g. 12345">
+          </div>
+          <div class="fg">
+            <label>Roll Number <span style="color:var(--red-l);">*</span></label>
+            <input type="number" id="apRoll" placeholder="e.g. 18" min="1">
+          </div>
+        </div>
+        <div class="fgrid">
+          <div class="fg">
+            <label>Class <span style="color:var(--red-l);">*</span></label>
+            <select id="apClass" onchange="onApClassChange()">
+              <option value="">Select class</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Section <span style="color:var(--red-l);">*</span></label>
+            <select id="apSection" onchange="onApSectionChange()">
+              <option value="">Select section</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Class Teacher</label>
+            <input type="text" id="apTeacher" readonly placeholder="Auto-detected from section">
+          </div>
+        </div>
+        <div class="fgrid">
+          <div class="fg">
+            <label>Calling Number <span style="color:var(--red-l);">*</span></label>
+            <input type="tel" id="apCall" placeholder="10-digit number" maxlength="10" oninput="if(document.getElementById('apSameCb').checked)document.getElementById('apWA').value=this.value">
+          </div>
+          <div class="fg">
+            <label>WhatsApp Number <span style="color:var(--red-l);">*</span></label>
+            <input type="tel" id="apWA" placeholder="10-digit number" maxlength="10">
+            <label style="display:flex;align-items:center;gap:6px;margin-top:7px;font-size:.7rem;color:var(--t2);cursor:pointer;">
+              <input type="checkbox" id="apSameCb" style="accent-color:var(--gold);" onchange="if(this.checked){document.getElementById('apWA').value=document.getElementById('apCall').value;document.getElementById('apWA').readOnly=true;}else{document.getElementById('apWA').readOnly=false;}">
+              Same as calling
+            </label>
+          </div>
+        </div>
+        <div class="fgrid">
+          <div class="fg">
+            <label>Event <span style="color:var(--red-l);">*</span></label>
+            <select id="apEvEvent">
+              <option value="">Select event&hellip;</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Initial Status</label>
+            <select id="apStatus">
+              <option value="audition_pending">Audition Pending</option>
+              <option value="selected">Selected</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+        </div>
+        <div class="btn-row" style="margin-top:6px;">
+          <button class="btn-prim" onclick="submitAddParticipant()">Add Participant</button>
+          <button class="btn-sec" onclick="clearApForm()">Clear</button>
+        </div>
+        <div class="msg" id="apMsg"></div>
+      </div>
+    </div>
+
+    <!-- EVENTS & ROLES -->
     <div class="panel" id="p-events">
       <div class="fs">
         <div class="fs-title" id="evFormTitle">Add Event / Role</div>
@@ -339,6 +406,15 @@ tr:hover td{background:var(--cardh);}
           <div class="fg"><label>Display Order</label><input type="number" id="evOrder" placeholder="1" min="1"></div>
         </div>
         <div class="fg"><label>Description</label><textarea id="evDesc" placeholder="Brief description&hellip;"></textarea></div>
+        <div style="background:rgba(192,57,43,0.06);border:1px solid rgba(192,57,43,0.22);border-radius:8px;padding:12px 16px;margin-top:2px;margin-bottom:2px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-size:.78rem;font-weight:600;color:var(--t1);">Stop Enrollment for this Entry</div>
+              <div style="font-size:.64rem;color:var(--t2);margin-top:2px;">Overrides the global enrollment toggle. Blocks new registrations for this specific event/role only.</div>
+            </div>
+            <label class="ts" style="flex-shrink:0;margin-left:16px;"><input type="checkbox" id="evEnrollClosed"><span class="tsl"></span></label>
+          </div>
+        </div>
         <div class="fg ev-only-field" style="background:rgba(201,168,76,0.04);border:1px solid var(--b1);border-radius:8px;padding:13px;margin-top:4px;">
           <div style="font-size:.56rem;letter-spacing:2px;color:var(--t2);text-transform:uppercase;margin-bottom:10px;">Portal Features for Head of this Entry</div>
           <div style="display:flex;flex-wrap:wrap;gap:12px;">
@@ -364,11 +440,12 @@ tr:hover td{background:var(--cardh);}
             <option value="backend_role">Backend Roles</option>
           </select>
         </div>
-        <div class="tbl-scroll"><table><thead><tr><th>Order</th><th>Type</th><th>Name</th><th>Category</th><th>Venue</th><th>Max</th><th>Actions</th></tr></thead>
+        <div class="tbl-scroll"><table><thead><tr><th>Order</th><th>Type</th><th>Name</th><th>Category</th><th>Venue</th><th>Max</th><th>Enroll</th><th>Actions</th></tr></thead>
         <tbody id="evTbody"><tr><td colspan="7" class="loading-ph">Loading&hellip;</td></tr></tbody></table></div>
       </div>
     </div>
 
+    <!-- ROLE PERMISSIONS -->
     <div class="panel" id="p-rolepermissions">
       <div class="fs">
         <div class="fs-title">Role Permissions &amp; Portal Features</div>
@@ -415,6 +492,7 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
+    <!-- CLASSES -->
     <div class="panel" id="p-classes">
       <div class="fs">
         <div class="fs-title">Add Class</div>
@@ -439,6 +517,7 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
+    <!-- ANNOUNCEMENTS -->
     <div class="panel" id="p-announcements">
       <div class="fs">
         <div class="fs-title">Post Announcement</div>
@@ -465,6 +544,7 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
+    <!-- HOMEPAGE -->
     <div class="panel" id="p-homepage">
       <div class="fs">
         <div class="fs-title">Hero Tagline</div>
@@ -524,6 +604,7 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
+    <!-- TIMELINE -->
     <div class="panel" id="p-timeline">
       <div class="fs">
         <div class="fs-title">Add Timeline Entry</div>
@@ -543,6 +624,7 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
+    <!-- RULES -->
     <div class="panel" id="p-rules">
       <div class="fs">
         <div class="fs-title">Add Rule</div>
@@ -560,6 +642,63 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
+    <!-- ═══════════════════════ OUR TEAM ═══════════════════════ -->
+    <div class="panel" id="p-team">
+      <!-- TIER MANAGEMENT -->
+      <div class="fs">
+        <div class="fs-title">Manage Tiers</div>
+        <p style="font-size:.72rem;color:var(--t2);margin-bottom:14px;">Tiers group your team on the homepage (e.g. Core Committee, Role Heads, Event Heads). Create tiers first, then add members into them. They appear in display-order on the public page.</p>
+        <div class="fgrid">
+          <div class="fg"><label>Tier Name</label><input type="text" id="tierName" placeholder="Core Committee"></div>
+          <div class="fg"><label>Display Order</label><input type="number" id="tierOrder" placeholder="1" min="1"></div>
+        </div>
+        <div class="btn-row"><button class="btn-prim" onclick="addTier()">Add Tier</button></div>
+        <div class="msg" id="tierMsg"></div>
+      </div>
+      <div class="tbl-wrap" style="margin-bottom:24px;">
+        <div class="tbl-head"><div class="tbl-title">All Tiers</div></div>
+        <div class="tbl-scroll"><table><thead><tr><th>Order</th><th>Name</th><th>Actions</th></tr></thead>
+        <tbody id="tierTbody"><tr><td colspan="3" class="loading-ph">Loading&hellip;</td></tr></tbody></table></div>
+      </div>
+
+      <!-- MEMBER MANAGEMENT -->
+      <div class="fs">
+        <div class="fs-title" id="memberFormTitle">Add Team Member</div>
+        <div class="fgrid">
+          <div class="fg"><label>Full Name</label><input type="text" id="memName" placeholder="Aarav Sinha"></div>
+          <div class="fg"><label>Role / Title</label><input type="text" id="memRole" placeholder="Head of Design"></div>
+          <div class="fg">
+            <label>Photo Filename</label>
+            <input type="text" id="memPhoto" placeholder="aarav_sinha.jpg">
+            <div style="font-size:.58rem;color:var(--t3);margin-top:5px;">Deploy the photo file alongside the HTML files. Leave blank to show initials instead.</div>
+          </div>
+          <div class="fg"><label>Assign to Tier</label><select id="memTier"><option value="">Select tier&hellip;</option></select></div>
+          <div class="fg"><label>Display Order</label><input type="number" id="memOrder" placeholder="1" min="1"></div>
+        </div>
+        <input type="hidden" id="memEditId">
+        <div class="btn-row">
+          <button class="btn-prim" onclick="saveMember()">Save Member</button>
+          <button class="btn-sec" onclick="clearMemberForm()">Clear</button>
+        </div>
+        <div class="msg" id="memMsg"></div>
+      </div>
+
+      <!-- MEMBERS TABLE -->
+      <div class="tbl-wrap">
+        <div class="tbl-head">
+          <div class="tbl-title">All Team Members</div>
+          <div class="tbl-tools">
+            <select class="sel-filter" id="memTierFilter" onchange="loadMembersTable()"><option value="">All Tiers</option></select>
+            <input class="search" placeholder="Search&hellip;" oninput="filterTbl('memTbody',this.value)">
+          </div>
+        </div>
+        <div class="tbl-scroll"><table><thead><tr><th>Photo</th><th>Name</th><th>Role</th><th>Tier</th><th>Order</th><th>Actions</th></tr></thead>
+        <tbody id="memTbody"><tr><td colspan="6" class="loading-ph">Loading&hellip;</td></tr></tbody></table></div>
+      </div>
+    </div>
+    <!-- ══════════════════════════════════════════════════════════ -->
+
+    <!-- ATTENDANCE -->
     <div class="panel" id="p-attendance">
       <div class="fs">
         <div class="fs-title">Attendance Management</div>
@@ -580,10 +719,12 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
+    <!-- TICKETS -->
     <div class="panel" id="p-tickets">
       <div id="ticketsList"><div class="loading-ph">Loading&hellip;</div></div>
     </div>
 
+    <!-- SECURITY -->
     <div class="panel" id="p-security">
       <div class="fs">
         <div class="fs-title">Security Portal Access</div>
@@ -599,6 +740,7 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
+    <!-- SETTINGS -->
     <div class="panel" id="p-settings">
       <div class="fs">
         <div class="fs-title">Feature Toggles</div>
@@ -625,6 +767,7 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
+    <!-- EXPORT -->
     <div class="panel" id="p-export">
       <div class="fs">
         <div class="fs-title">Export Registration Data</div>
@@ -632,14 +775,12 @@ tr:hover td{background:var(--cardh);}
           <div class="fg"><label>Filter by Event</label><select id="expEvent"><option value="">All Events</option></select></div>
           <div class="fg"><label>Filter by Status</label><select id="expStatus"><option value="">All Status</option><option value="selected">Selected</option><option value="audition_pending">Audition Pending</option><option value="rejected">Rejected</option></select></div>
         </div>
-        <div class="btn-row">
-          <button class="btn-prim" onclick="exportCSV()">Export CSV</button>
-        </div>
+        <div class="btn-row"><button class="btn-prim" onclick="exportCSV()">Export CSV</button></div>
       </div>
     </div>
 
-  </div>
-</div>
+  </div><!-- /content-area -->
+</div><!-- /main -->
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -659,22 +800,16 @@ const applyT=t=>{document.documentElement.setAttribute('data-theme',t);themeBtn.
 applyT(localStorage.getItem('cy_theme')||'dark');
 themeBtn.addEventListener('click',()=>applyT(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'));
 
-let evCache=[],clCache=[],authUser=null;
+let evCache=[],clCache=[],authUser=null,tierCache=[];
 let slideshowImgs=[];
-let allowNonSchoolGlobal = false;
+let allowNonSchoolGlobal=false;
 
-/* MOBILE SIDEBAR CONTROLLER */
-window.toggleMobileSidebar = function(open) {
-  const sb = document.getElementById('sb');
-  const overlay = document.getElementById('sbOverlay');
-  if (open) {
-    sb.classList.add('open');
-    overlay.classList.add('on');
-  } else {
-    sb.classList.remove('open');
-    overlay.classList.remove('on');
-  }
-}
+/* MOBILE SIDEBAR */
+window.toggleMobileSidebar=function(open){
+  const sb=document.getElementById('sb');const overlay=document.getElementById('sbOverlay');
+  if(open){sb.classList.add('open');overlay.classList.add('on');}
+  else{sb.classList.remove('open');overlay.classList.remove('on');}
+};
 
 /* AUTH GUARD */
 onAuthStateChanged(auth,async user=>{
@@ -696,6 +831,7 @@ onAuthStateChanged(auth,async user=>{
 async function initAdmin(){
   await loadSettings();
   await loadEventsData();
+  await loadTiers();
   loadDashboard();
   loadUsers();
   loadRegs();
@@ -705,6 +841,7 @@ async function initAdmin(){
   loadTickets();
   loadClasses();
   loadAttendance();
+  loadMembersTable();
 }
 
 /* NAVIGATION */
@@ -718,204 +855,81 @@ window.nav=function(id,btn){
   if(id==='attendance')loadAttendance();
   if(id==='tickets')loadTickets();
   if(id==='rolepermissions')loadRolePermissions();
+  if(id==='team'){loadTiers();loadMembersTable();}
+  if(id==='addparticipant'){populateApClasses();}
   toggleMobileSidebar(false);
 };
 
 function showMsg(id,msg,type){const el=document.getElementById(id);if(!el)return;el.textContent=msg;el.className='msg '+(type==='s'?'s':'e');setTimeout(()=>{el.className='msg';},5000);}
 
-/* STATUS BADGE */
 function sBadge(s){if(s==='selected')return'<span class="badge b-sel">Selected</span>';if(s==='rejected')return'<span class="badge b-rej">Rejected</span>';return'<span class="badge b-pend">Pending</span>';}
 
-/* SETTINGS LOAD */
+/* SETTINGS */
 async function loadSettings(){
   try{
     const snap=await getDoc(doc(db,'settings','global'));
     if(!snap.exists())return;
     const d=snap.data();
     const checkSet=(id,val)=>{const el=document.getElementById(id);if(el)el.checked=!!val;};
-    checkSet('tgEnroll',d.enrollmentOpen!==false);
-    checkSet('tgVolunteer',d.volunteerOpen);
-    checkSet('tgPartPortal',d.participantPortalOpen!==false);
-    checkSet('tgVolPortal',d.volunteerPortalOpen!==false);
-    checkSet('tgNonSchool',d.allowNonSchoolAccounts);
-    allowNonSchoolGlobal = !!d.allowNonSchoolAccounts;
-    checkSet('tgSlideshow',d.slideshowEnabled!==false);
-    checkSet('tgBanner',d.showUnofficialBanner);
-    checkSet('tgSecurity',d.securityPortalOpen);
+    checkSet('tgEnroll',d.enrollmentOpen!==false);checkSet('tgVolunteer',d.volunteerOpen);checkSet('tgPartPortal',d.participantPortalOpen!==false);checkSet('tgVolPortal',d.volunteerPortalOpen!==false);checkSet('tgNonSchool',d.allowNonSchoolAccounts);allowNonSchoolGlobal=!!d.allowNonSchoolAccounts;checkSet('tgSlideshow',d.slideshowEnabled!==false);checkSet('tgBanner',d.showUnofficialBanner);checkSet('tgSecurity',d.securityPortalOpen);
     if(d.festDate){const dt=d.festDate.toDate?d.festDate.toDate():new Date(d.festDate);const el=document.getElementById('festDate');if(el)el.value=dt.toISOString().slice(0,16);}
     if(d.venue){const vn=document.getElementById('vName');const va=document.getElementById('vAddr');const vh=document.getElementById('vHall');if(vn)vn.value=d.venue.name||'';if(va)va.value=d.venue.address||'';if(vh)vh.value=d.venue.hall||'';}
     if(d.heroTagline){const el=document.getElementById('heroTagline');if(el)el.value=d.heroTagline;}
     if(d.securityVolunteer){const el=document.getElementById('secVolEmail');if(el)el.value=d.securityVolunteer;}
-    slideshowImgs=d.slideshowImages||[];
-    renderSlideImgs();
+    slideshowImgs=d.slideshowImages||[];renderSlideImgs();
   }catch(e){console.warn(e);}
 }
 
 window.saveToggle=async function(key,val){
-  try{
-    await setDoc(doc(db,'settings','global'),{[key]:val},{merge:true});
-    if(key === 'allowNonSchoolAccounts') {
-      allowNonSchoolGlobal = val;
-    }
-  }catch(e){alert('Save failed: '+e.message);}
+  try{await setDoc(doc(db,'settings','global'),{[key]:val},{merge:true});if(key==='allowNonSchoolAccounts')allowNonSchoolGlobal=val;}catch(e){alert('Save failed: '+e.message);}
 };
 
 /* EVENTS */
 const EV_TYPE_LABELS={event:'Event',public_role:'Public Role',internal_role:'Internal Role',backend_role:'Backend Role'};
-window.onEvTypeChange=function(){
-  const t=document.getElementById('evType').value;
-  const isRole=(t==='internal_role'||t==='backend_role');
-  document.querySelectorAll('.ev-only-field').forEach(el=>{el.style.display=isRole?'none':'';});
-};
+window.onEvTypeChange=function(){const t=document.getElementById('evType').value;const isRole=(t==='internal_role'||t==='backend_role');document.querySelectorAll('.ev-only-field').forEach(el=>{el.style.display=isRole?'none':'';});};
 async function loadEventsData(){
   const tbody=document.getElementById('evTbody');
   try{
     const snap=await getDocs(query(collection(db,'events'),orderBy('order','asc')));
     evCache=[];snap.forEach(d=>evCache.push({id:d.id,...d.data()}));
     renderEvTable();
-    ['uEvent','regEvFilter','expEvent'].forEach(selId=>{
-      const sel=document.getElementById(selId);if(!sel)return;
-      const cur=sel.value;
-      const first=selId==='uEvent'?'<option value="">None</option>':'<option value="">All Events</option>';
-      sel.innerHTML=first+evCache.map(ev=>`<option value="${ev.id}">${ev.name} (${EV_TYPE_LABELS[ev.entryType||'event']||'Event'})</option>`).join('');
-      sel.value=cur;
-    });
+    ['uEvent','regEvFilter','expEvent'].forEach(selId=>{const sel=document.getElementById(selId);if(!sel)return;const cur=sel.value;const first=selId==='uEvent'?'<option value="">None</option>':'<option value="">All Events</option>';sel.innerHTML=first+evCache.map(ev=>`<option value="${ev.id}">${ev.name} (${EV_TYPE_LABELS[ev.entryType||'event']||'Event'})</option>`).join('');sel.value=cur;});
+    /* populate Add-Participant event selector — events + public roles */
+    const apSel=document.getElementById('apEvEvent');
+    if(apSel){const cur=apSel.value;apSel.innerHTML='<option value="">Select event / role…</option>'+evCache.filter(ev=>['event','public_role'].includes(ev.entryType||'event')).map(ev=>`<option value="${ev.id}">[${EV_TYPE_LABELS[ev.entryType||'event']}] ${ev.name}</option>`).join('');apSel.value=cur;}
   }catch(e){tbody.innerHTML='<tr><td colspan="7" class="loading-ph">Error loading events.</td></tr>';}
 }
-window.renderEvTable=function(){
-  const tbody=document.getElementById('evTbody');
-  const typeFilter=document.getElementById('evTypeFilter')?.value||'';
-  const filtered=evCache.filter(ev=>!typeFilter||(ev.entryType||'event')===typeFilter);
-  if(!filtered.length){tbody.innerHTML='<tr><td colspan="7" class="loading-ph">No entries.</td></tr>';return;}
-  tbody.innerHTML='';
-  filtered.forEach(ev=>{
-    const t=ev.entryType||'event';
-    const badge=`<span class="type-badge type-${t}">${EV_TYPE_LABELS[t]||t}</span>`;
-    tbody.innerHTML+=`<tr><td>${ev.order||''}</td><td>${badge}</td><td>${ev.name||''}</td><td>${ev.category||''}</td><td>${ev.venue||''}</td><td>${ev.maxParticipants||'&mdash;'}</td><td style="white-space:nowrap;"><button class="ab ab-g" onclick="editEvent('${ev.id}')">Edit</button> <button class="ab ab-r" onclick="deleteEvent('${ev.id}')">Delete</button></td></tr>`;
-  });
-};
-window.saveEvent=async function(){
-  const editId=document.getElementById('evEditId').value;
-  const entryType=document.getElementById('evType').value;
-  const portalFeatures={
-    canViewParticipants:document.getElementById('pfParticipants').checked,
-    canPostAnnouncements:document.getElementById('pfAnnouncements').checked,
-    canAssignTasks:document.getElementById('pfTasks').checked,
-    canChangeStatus:document.getElementById('pfStatusChange').checked,
-    canRateParticipants:document.getElementById('pfRatings').checked,
-  };
-  const data={
-    entryType,
-    name:document.getElementById('evName').value.trim(),
-    category:document.getElementById('evCat').value.trim(),
-    logoFile:document.getElementById('evLogo').value.trim(),
-    venue:document.getElementById('evVenue').value.trim(),
-    maxParticipants:parseInt(document.getElementById('evMax').value)||null,
-    description:document.getElementById('evDesc').value.trim(),
-    order:parseInt(document.getElementById('evOrder').value)||99,
-    portalFeatures,
-    updatedAt:serverTimestamp()
-  };
-  if(!data.name){showMsg('evMsg','Name is required.','e');return;}
+window.renderEvTable=function(){const tbody=document.getElementById('evTbody');const typeFilter=document.getElementById('evTypeFilter')?.value||'';const filtered=evCache.filter(ev=>!typeFilter||(ev.entryType||'event')===typeFilter);if(!filtered.length){tbody.innerHTML='<tr><td colspan="8" class="loading-ph">No entries.</td></tr>';return;}tbody.innerHTML='';filtered.forEach(ev=>{const t=ev.entryType||'event';const badge=`<span class="type-badge type-${t}">${EV_TYPE_LABELS[t]||t}</span>`;const enrollClosed=!!ev.enrollmentClosed;const enrollBadge=enrollClosed?'<span class="badge b-rej" style="font-size:.5rem;">Closed</span>':'<span class="badge b-sel" style="font-size:.5rem;">Open</span>';const toggleLabel=enrollClosed?'Open':'Close';const toggleClass=enrollClosed?'ab ab-gr':'ab ab-r';tbody.innerHTML+=`<tr><td>${ev.order||''}</td><td>${badge}</td><td>${ev.name||''}</td><td>${ev.category||''}</td><td>${ev.venue||''}</td><td>${ev.maxParticipants||'&mdash;'}</td><td>${enrollBadge}</td><td style="white-space:nowrap;"><button class="ab ab-g" onclick="editEvent('${ev.id}')">Edit</button> <button class="${toggleClass}" onclick="toggleEvEnroll('${ev.id}',${!enrollClosed})" style="margin-left:4px;">${toggleLabel} Enroll</button> <button class="ab ab-r" onclick="deleteEvent('${ev.id}')" style="margin-left:4px;">Delete</button></td></tr>`;});};
+window.saveEvent=async function(){const editId=document.getElementById('evEditId').value;const entryType=document.getElementById('evType').value;const portalFeatures={canViewParticipants:document.getElementById('pfParticipants').checked,canPostAnnouncements:document.getElementById('pfAnnouncements').checked,canAssignTasks:document.getElementById('pfTasks').checked,canChangeStatus:document.getElementById('pfStatusChange').checked,canRateParticipants:document.getElementById('pfRatings').checked};const enrollmentClosed=document.getElementById('evEnrollClosed').checked;const data={entryType,name:document.getElementById('evName').value.trim(),category:document.getElementById('evCat').value.trim(),logoFile:document.getElementById('evLogo').value.trim(),venue:document.getElementById('evVenue').value.trim(),maxParticipants:parseInt(document.getElementById('evMax').value)||null,description:document.getElementById('evDesc').value.trim(),order:parseInt(document.getElementById('evOrder').value)||99,portalFeatures,enrollmentClosed,updatedAt:serverTimestamp()};if(!data.name){showMsg('evMsg','Name is required.','e');return;}try{if(editId)await updateDoc(doc(db,'events',editId),data);else await addDoc(collection(db,'events'),{...data,createdAt:serverTimestamp()});showMsg('evMsg','Saved successfully.','s');clearEvForm();loadEventsData();}catch(e){showMsg('evMsg','Error: '+e.message,'e');}};
+window.clearEvForm=function(){document.getElementById('evEditId').value='';['evName','evCat','evLogo','evVenue','evMax','evDesc','evOrder'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('evType').value='event';['pfParticipants','pfAnnouncements','pfTasks','pfStatusChange','pfRatings'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=true;});const ecEl=document.getElementById('evEnrollClosed');if(ecEl)ecEl.checked=false;onEvTypeChange();document.getElementById('evFormTitle').textContent='Add Event / Role';};
+window.editEvent=function(id){const ev=evCache.find(e=>e.id===id);if(!ev)return;document.getElementById('evEditId').value=id;document.getElementById('evType').value=ev.entryType||'event';document.getElementById('evName').value=ev.name||'';document.getElementById('evCat').value=ev.category||'';document.getElementById('evLogo').value=ev.logoFile||'';document.getElementById('evVenue').value=ev.venue||'';document.getElementById('evMax').value=ev.maxParticipants||'';document.getElementById('evDesc').value=ev.description||'';document.getElementById('evOrder').value=ev.order||'';const pf=ev.portalFeatures||{};const def=(k,d=true)=>pf[k]!==undefined?pf[k]:d;document.getElementById('pfParticipants').checked=def('canViewParticipants');document.getElementById('pfAnnouncements').checked=def('canPostAnnouncements');document.getElementById('pfTasks').checked=def('canAssignTasks');document.getElementById('pfStatusChange').checked=def('canChangeStatus');document.getElementById('pfRatings').checked=def('canRateParticipants');const ec=document.getElementById('evEnrollClosed');if(ec)ec.checked=!!ev.enrollmentClosed;onEvTypeChange();document.getElementById('evFormTitle').textContent='Edit Entry';document.getElementById('p-events').scrollTop=0;};
+window.deleteEvent=async function(id){if(!confirm('Delete this entry? This cannot be undone.'))return;await deleteDoc(doc(db,'events',id));loadEventsData();};
+window.toggleEvEnroll=async function(id,closedState){
+  const ev=evCache.find(e=>e.id===id);if(!ev)return;
+  const action=closedState?'close enrollment for':'re-open enrollment for';
+  if(!confirm(`This will ${action} "${ev.name}". Continue?`))return;
   try{
-    if(editId)await updateDoc(doc(db,'events',editId),data);
-    else await addDoc(collection(db,'events'),{...data,createdAt:serverTimestamp()});
-    showMsg('evMsg','Saved successfully.','s');
-    clearEvForm();loadEventsData();
+    await updateDoc(doc(db,'events',id),{enrollmentClosed:closedState,updatedAt:serverTimestamp()});
+    await loadEventsData();
+    showMsg('evMsg',`Enrollment ${closedState?'closed':'re-opened'} for "${ev.name}".`,'s');
   }catch(e){showMsg('evMsg','Error: '+e.message,'e');}
 };
-window.clearEvForm=function(){
-  document.getElementById('evEditId').value='';
-  ['evName','evCat','evLogo','evVenue','evMax','evDesc','evOrder'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('evType').value='event';
-  ['pfParticipants','pfAnnouncements','pfTasks','pfStatusChange','pfRatings'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=true;});
-  onEvTypeChange();
-  document.getElementById('evFormTitle').textContent='Add Event / Role';
-};
-window.editEvent=function(id){
-  const ev=evCache.find(e=>e.id===id);if(!ev)return;
-  document.getElementById('evEditId').value=id;
-  document.getElementById('evType').value=ev.entryType||'event';
-  document.getElementById('evName').value=ev.name||'';
-  document.getElementById('evCat').value=ev.category||'';
-  document.getElementById('evLogo').value=ev.logoFile||'';
-  document.getElementById('evVenue').value=ev.venue||'';
-  document.getElementById('evMax').value=ev.maxParticipants||'';
-  document.getElementById('evDesc').value=ev.description||'';
-  document.getElementById('evOrder').value=ev.order||'';
-  const pf=ev.portalFeatures||{};
-  const def=(k,d=true)=>pf[k]!==undefined?pf[k]:d;
-  document.getElementById('pfParticipants').checked=def('canViewParticipants');
-  document.getElementById('pfAnnouncements').checked=def('canPostAnnouncements');
-  document.getElementById('pfTasks').checked=def('canAssignTasks');
-  document.getElementById('pfStatusChange').checked=def('canChangeStatus');
-  document.getElementById('pfRatings').checked=def('canRateParticipants');
-  onEvTypeChange();
-  document.getElementById('evFormTitle').textContent='Edit Entry';
-  document.getElementById('p-events').scrollTop=0;
-};
-window.deleteEvent=async function(id){if(!confirm('Delete this entry? This cannot be undone.'))return;await deleteDoc(doc(db,'events',id));loadEventsData();};
 
 /* ROLE PERMISSIONS */
 async function loadRolePermissions(){
-  const list=document.getElementById('rolePermsList');
-  if(!list)return;
+  const list=document.getElementById('rolePermsList');if(!list)return;
   try{
     const snap=await getDocs(query(collection(db,'events'),orderBy('order','asc')));
     if(snap.empty){list.innerHTML='<div class="loading-ph">No events/roles yet.</div>';return;}
     list.innerHTML='';
-    snap.forEach(d=>{
-      const ev=d.data();const t=ev.entryType||'event';
-      const pf=ev.portalFeatures||{};
-      const chk=(k,def=true)=>pf[k]!==undefined?pf[k]:def;
-      const badge=`<span class="type-badge type-${t}">${EV_TYPE_LABELS[t]||t}</span>`;
-      list.innerHTML+=`
-        <div class="fs" style="margin-bottom:12px;padding:14px 18px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
-            ${badge}
-            <span style="font-size:.84rem;font-weight:600;color:var(--t1);">${ev.name||''}</span>
-            <span style="font-size:.6rem;color:var(--t2);">${ev.category||''}</span>
-          </div>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;">
-            <label class="perm-lbl"><input type="checkbox" ${chk('canViewParticipants')?'checked':''} onchange="updateEvPerm('${d.id}','canViewParticipants',this.checked)" style="accent-color:var(--gold);"> View Registrations/Members</label>
-            <label class="perm-lbl"><input type="checkbox" ${chk('canPostAnnouncements')?'checked':''} onchange="updateEvPerm('${d.id}','canPostAnnouncements',this.checked)" style="accent-color:var(--gold);"> Post Announcements</label>
-            <label class="perm-lbl"><input type="checkbox" ${chk('canAssignTasks')?'checked':''} onchange="updateEvPerm('${d.id}','canAssignTasks',this.checked)" style="accent-color:var(--gold);"> Assign Tasks</label>
-            <label class="perm-lbl"><input type="checkbox" ${chk('canChangeStatus')?'checked':''} onchange="updateEvPerm('${d.id}','canChangeStatus',this.checked)" style="accent-color:var(--gold);"> Change Status</label>
-            <label class="perm-lbl"><input type="checkbox" ${chk('canRateParticipants')?'checked':''} onchange="updateEvPerm('${d.id}','canRateParticipants',this.checked)" style="accent-color:var(--gold);"> Rate &amp; Notes</label>
-          </div>
-        </div>`;
-    });
+    snap.forEach(d=>{const ev=d.data();const t=ev.entryType||'event';const pf=ev.portalFeatures||{};const chk=(k,def=true)=>pf[k]!==undefined?pf[k]:def;const badge=`<span class="type-badge type-${t}">${EV_TYPE_LABELS[t]||t}</span>`;list.innerHTML+=`<div class="fs" style="margin-bottom:12px;padding:14px 18px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">${badge}<span style="font-size:.84rem;font-weight:600;color:var(--t1);">${ev.name||''}</span><span style="font-size:.6rem;color:var(--t2);">${ev.category||''}</span></div><div style="display:flex;flex-wrap:wrap;gap:8px;"><label class="perm-lbl"><input type="checkbox" ${chk('canViewParticipants')?'checked':''} onchange="updateEvPerm('${d.id}','canViewParticipants',this.checked)" style="accent-color:var(--gold);"> View Registrations/Members</label><label class="perm-lbl"><input type="checkbox" ${chk('canPostAnnouncements')?'checked':''} onchange="updateEvPerm('${d.id}','canPostAnnouncements',this.checked)" style="accent-color:var(--gold);"> Post Announcements</label><label class="perm-lbl"><input type="checkbox" ${chk('canAssignTasks')?'checked':''} onchange="updateEvPerm('${d.id}','canAssignTasks',this.checked)" style="accent-color:var(--gold);"> Assign Tasks</label><label class="perm-lbl"><input type="checkbox" ${chk('canChangeStatus')?'checked':''} onchange="updateEvPerm('${d.id}','canChangeStatus',this.checked)" style="accent-color:var(--gold);"> Change Status</label><label class="perm-lbl"><input type="checkbox" ${chk('canRateParticipants')?'checked':''} onchange="updateEvPerm('${d.id}','canRateParticipants',this.checked)" style="accent-color:var(--gold);"> Rate &amp; Notes</label></div></div>`;});
     const settSnap=await getDoc(doc(db,'settings','global'));
-    if(settSnap.exists()&&settSnap.data().defaultPermissions){
-      const dp=settSnap.data().defaultPermissions;
-      document.querySelectorAll('.dp-ev').forEach(cb=>{
-        const type=cb.dataset.type;const key=cb.dataset.key;
-        if(dp[type]&&dp[type][key]!==undefined)cb.checked=dp[type][key];
-        else cb.checked=true;
-      });
-    }else{document.querySelectorAll('.dp-ev').forEach(cb=>cb.checked=true);}
+    if(settSnap.exists()&&settSnap.data().defaultPermissions){const dp=settSnap.data().defaultPermissions;document.querySelectorAll('.dp-ev').forEach(cb=>{const type=cb.dataset.type;const key=cb.dataset.key;if(dp[type]&&dp[type][key]!==undefined)cb.checked=dp[type][key];else cb.checked=true;});}
+    else{document.querySelectorAll('.dp-ev').forEach(cb=>cb.checked=true);}
   }catch(e){list.innerHTML='<div class="loading-ph">Error loading.</div>';}
 }
-window.updateEvPerm=async function(id,key,val){
-  try{
-    await updateDoc(doc(db,'events',id),{[`portalFeatures.${key}`]:val});
-    showMsg('permMsg','Permission updated.','s');
-    loadEventsData();
-  }catch(e){showMsg('permMsg','Error: '+e.message,'e');}
-};
-window.saveDefaultPerms=async function(){
-  const dp={event:{},public_role:{},internal_role:{},backend_role:{}};
-  document.querySelectorAll('.dp-ev').forEach(cb=>{
-    const type=cb.dataset.type;const key=cb.dataset.key;
-    if(!dp[type])dp[type]={};
-    dp[type][key]=cb.checked;
-    dp['backend_role'][key]=dp['internal_role'][key]||false;
-  });
-  try{
-    await setDoc(doc(db,'settings','global'),{defaultPermissions:dp},{merge:true});
-    showMsg('permMsg','Default permissions saved.','s');
-  }catch(e){showMsg('permMsg','Error: '+e.message,'e');}
-};
+window.updateEvPerm=async function(id,key,val){try{await updateDoc(doc(db,'events',id),{[`portalFeatures.${key}`]:val});showMsg('permMsg','Permission updated.','s');loadEventsData();}catch(e){showMsg('permMsg','Error: '+e.message,'e');}};
+window.saveDefaultPerms=async function(){const dp={event:{},public_role:{},internal_role:{},backend_role:{}};document.querySelectorAll('.dp-ev').forEach(cb=>{const type=cb.dataset.type;const key=cb.dataset.key;if(!dp[type])dp[type]={};dp[type][key]=cb.checked;dp['backend_role'][key]=dp['internal_role'][key]||false;});try{await setDoc(doc(db,'settings','global'),{defaultPermissions:dp},{merge:true});showMsg('permMsg','Default permissions saved.','s');}catch(e){showMsg('permMsg','Error: '+e.message,'e');}};
 
 /* DASHBOARD */
 async function loadDashboard(){
@@ -923,11 +937,7 @@ async function loadDashboard(){
     const snap=await getDocs(collection(db,'registrations'));
     let total=0,pend=0,sel=0,rej=0;const recent=[];
     snap.forEach(d=>{const r=d.data();total++;if(r.status==='audition_pending')pend++;if(r.status==='selected')sel++;if(r.status==='rejected')rej++;recent.push({id:d.id,...r});});
-    document.getElementById('statRow').innerHTML=`
-      <div class="stat-c"><div class="stat-v">${total}</div><div class="stat-l">Total Registered</div></div>
-      <div class="stat-c"><div class="stat-v" style="color:var(--gold);">${pend}</div><div class="stat-l">Audition Pending</div></div>
-      <div class="stat-c"><div class="stat-v" style="color:var(--green-l);">${sel}</div><div class="stat-l">Selected</div></div>
-      <div class="stat-c"><div class="stat-v" style="color:var(--red-l);">${rej}</div><div class="stat-l">Rejected</div></div>`;
+    document.getElementById('statRow').innerHTML=`<div class="stat-c"><div class="stat-v">${total}</div><div class="stat-l">Total Registered</div></div><div class="stat-c"><div class="stat-v" style="color:var(--gold);">${pend}</div><div class="stat-l">Audition Pending</div></div><div class="stat-c"><div class="stat-v" style="color:var(--green-l);">${sel}</div><div class="stat-l">Selected</div></div><div class="stat-c"><div class="stat-v" style="color:var(--red-l);">${rej}</div><div class="stat-l">Rejected</div></div>`;
     recent.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
     const tbody=document.getElementById('recentTbody');tbody.innerHTML='';
     recent.slice(0,12).forEach(r=>{const evName=evCache.find(e=>e.id===r.eventId)?.name||'--';const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';tbody.innerHTML+=`<tr><td>${r.name||''}</td><td>${evName}</td><td>${r.class||''} ${r.section||''}</td><td>${sBadge(r.status)}</td><td>${date}</td></tr>`;});
@@ -940,419 +950,419 @@ async function loadAnalytics(){
   const con=document.getElementById('analyticsContent');
   try{
     const snap=await getDocs(collection(db,'registrations'));
-    const byEv={};
-    snap.forEach(d=>{const r=d.data();if(!byEv[r.eventId])byEv[r.eventId]={total:0,pend:0,sel:0,rej:0};byEv[r.eventId].total++;if(r.status==='audition_pending')byEv[r.eventId].pend++;if(r.status==='selected')byEv[r.eventId].sel++;if(r.status==='rejected')byEv[r.eventId].rej++;});
+    const byEv={};snap.forEach(d=>{const r=d.data();if(!byEv[r.eventId])byEv[r.eventId]={total:0,pend:0,sel:0,rej:0};byEv[r.eventId].total++;if(r.status==='audition_pending')byEv[r.eventId].pend++;if(r.status==='selected')byEv[r.eventId].sel++;if(r.status==='rejected')byEv[r.eventId].rej++;});
     con.innerHTML='';
     if(!Object.keys(byEv).length){con.innerHTML='<div class="loading-ph">No registration data yet.</div>';return;}
     Object.entries(byEv).forEach(([evId,c])=>{const evName=evCache.find(e=>e.id===evId)?.name||evId;con.innerHTML+=`<div class="stat-c"><div style="font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--t1);margin-bottom:10px;">${evName}</div><div style="font-size:.7rem;color:var(--t2);">Total: <b style="color:var(--gold);">${c.total}</b></div><div style="font-size:.7rem;color:var(--t2);">Pending: <b style="color:var(--gold);">${c.pend}</b></div><div style="font-size:.7rem;color:var(--t2);">Selected: <b style="color:var(--green-l);">${c.sel}</b></div><div style="font-size:.7rem;color:var(--t2);">Rejected: <b style="color:var(--red-l);">${c.rej}</b></div></div>`;});
   }catch(e){con.innerHTML='<div class="loading-ph">Error.</div>';}
 }
 
-/* USERS & AUTO-DETECTION */
-async function loadUsers() {
-  const tbody = document.getElementById('uTbody');
-  try {
-    const snap = await getDocs(collection(db, 'users'));
-    tbody.innerHTML = '';
-    if (snap.empty) {
-      tbody.innerHTML = '<tr><td colspan="4" class="loading-ph">No staff added yet.</td></tr>';
-      return;
-    }
-    
-    snap.forEach(d => {
-      const u = d.data();
-      let assignments = u.eventAssignments || [];
-      if (assignments.length === 0) {
-        const legacyRole = u.roles ? u.roles[0] : u.role;
-        assignments.push({ role: legacyRole, eventId: u.eventId || null });
-      }
-      
-      const rolesDisplay = assignments.map(a => {
-        const rLabel = document.getElementById('uRole').querySelector(`option[value="${a.role}"]`)?.textContent || a.role;
-        const eName = evCache.find(e => e.id === a.eventId)?.name;
-        return eName ? `${rLabel} (${eName})` : rLabel;
-      }).join('<br>');
-      
-      const nonSchoolBadge = u.nonSchool ? ' <span class="badge b-pend" style="font-size:0.5rem; padding:1px 5px; margin-left:4px;">External</span>' : '';
-      
-      tbody.innerHTML += `
-        <tr>
-          <td>${u.name || ''}${nonSchoolBadge}</td>
-          <td style="font-size:.66rem;">${u.email || ''}</td>
-          <td style="line-height: 1.4; font-size:0.68rem;">${rolesDisplay}</td>
-          <td><button class="ab ab-r" onclick="removeUser('${d.id}')">Revoke All</button></td>
-        </tr>`;
+/* USERS */
+async function loadUsers(){
+  const tbody=document.getElementById('uTbody');
+  try{
+    const snap=await getDocs(collection(db,'users'));tbody.innerHTML='';
+    if(snap.empty){tbody.innerHTML='<tr><td colspan="4" class="loading-ph">No staff added yet.</td></tr>';return;}
+    snap.forEach(d=>{
+      const u=d.data();let assignments=u.eventAssignments||[];
+      if(assignments.length===0){const legacyRole=u.roles?u.roles[0]:u.role;assignments.push({role:legacyRole,eventId:u.eventId||null});}
+      const rolesDisplay=assignments.map(a=>{const rLabel=document.getElementById('uRole').querySelector(`option[value="${a.role}"]`)?.textContent||a.role;const eName=evCache.find(e=>e.id===a.eventId)?.name;return eName?`${rLabel} (${eName})`:rLabel;}).join('<br>');
+      const nonSchoolBadge=u.nonSchool?' <span class="badge b-pend" style="font-size:0.5rem;padding:1px 5px;margin-left:4px;">External</span>':'';
+      tbody.innerHTML+=`<tr><td>${u.name||''}${nonSchoolBadge}</td><td style="font-size:.66rem;">${u.email||''}</td><td style="line-height:1.4;font-size:0.68rem;">${rolesDisplay}</td><td><button class="ab ab-r" onclick="removeUser('${d.id}')">Revoke All</button></td></tr>`;
     });
-  } catch (e) {
-    tbody.innerHTML = '<tr><td colspan="4" class="loading-ph">Error loading staff listings.</td></tr>';
-  }
+  }catch(e){tbody.innerHTML='<tr><td colspan="4" class="loading-ph">Error loading staff.</td></tr>';}
 }
-
-window.addUser = async function() {
-  const name = document.getElementById('uName').value.trim();
-  const email = document.getElementById('uEmail').value.trim().toLowerCase();
-  const role = document.getElementById('uRole').value;
-  const eventId = document.getElementById('uEvent').value;
-  
-  if (!name || !email || !role) {
-    showMsg('uMsg', 'All fields required.', 'e');
-    return;
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    showMsg('uMsg', 'Invalid email address.', 'e');
-    return;
-  }
-
-  /* AUTOMATIC NON-SCHOOL DOMAIN DETECTOR GUARD */
-  const isNonSchool = !email.endsWith('@dpsmegacity.in');
-  if (isNonSchool && !allowNonSchoolGlobal) {
-    showMsg('uMsg', 'Error: External accounts are blocked. Turn on "Allow Non-School Accounts" in Global Settings first.', 'e');
-    return;
-  }
-  
-  try {
-    const existing = await getDocs(query(collection(db, 'users'), where('email', '==', email)));
-    
-    if (!existing.empty) {
-      const docId = existing.docs[0].id;
-      const curData = existing.docs[0].data();
-      const curRoles = curData.roles || [curData.role];
-      let eventAssignments = curData.eventAssignments || [];
-      
-      if (curData.eventId) {
-        eventAssignments.push({ role: curData.role || 'event_head', eventId: curData.eventId });
-      }
-      
-      const isDuplicate = eventAssignments.some(a => a.role === role && a.eventId === (eventId || null));
-      if (isDuplicate) {
-        showMsg('uMsg', 'This specific role and event assignment already exists.', 'e');
-        return;
-      }
-      
-      eventAssignments.push({ role, eventId: eventId || null });
-      const newRoles = [...new Set([...curRoles, role])];
-      
-      await updateDoc(doc(db, 'users', docId), {
-        roles: newRoles,
-        eventAssignments: eventAssignments,
-        eventId: eventId || null, 
-        nonSchool: isNonSchool,
-        updatedAt: serverTimestamp()
-      });
-    } else {
-      const eventAssignments = [{ role, eventId: eventId || null }];
-      await addDoc(collection(db, 'users'), {
-        name,
-        email,
-        roles: [role],
-        eventAssignments,
-        eventId: eventId || null,
-        nonSchool: isNonSchool,
-        createdAt: serverTimestamp()
-      });
+window.addUser=async function(){
+  const name=document.getElementById('uName').value.trim();const email=document.getElementById('uEmail').value.trim().toLowerCase();const role=document.getElementById('uRole').value;const eventId=document.getElementById('uEvent').value;
+  if(!name||!email||!role){showMsg('uMsg','All fields required.','e');return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showMsg('uMsg','Invalid email address.','e');return;}
+  const isNonSchool=!email.endsWith('@dpsmegacity.in');
+  if(isNonSchool&&!allowNonSchoolGlobal){showMsg('uMsg','Error: External accounts are blocked. Turn on "Allow Non-School Accounts" in Global Settings first.','e');return;}
+  try{
+    const existing=await getDocs(query(collection(db,'users'),where('email','==',email)));
+    if(!existing.empty){
+      const docId=existing.docs[0].id;const curData=existing.docs[0].data();const curRoles=curData.roles||[curData.role];let eventAssignments=curData.eventAssignments||[];
+      if(curData.eventId)eventAssignments.push({role:curData.role||'event_head',eventId:curData.eventId});
+      const isDuplicate=eventAssignments.some(a=>a.role===role&&a.eventId===(eventId||null));
+      if(isDuplicate){showMsg('uMsg','This specific role and event assignment already exists.','e');return;}
+      eventAssignments.push({role,eventId:eventId||null});const newRoles=[...new Set([...curRoles,role])];
+      await updateDoc(doc(db,'users',docId),{roles:newRoles,eventAssignments,eventId:eventId||null,nonSchool:isNonSchool,updatedAt:serverTimestamp()});
+    }else{
+      await addDoc(collection(db,'users'),{name,email,roles:[role],eventAssignments:[{role,eventId:eventId||null}],eventId:eventId||null,nonSchool:isNonSchool,createdAt:serverTimestamp()});
     }
-    
-    showMsg('uMsg', isNonSchool ? 'External staff account registered successfully.' : 'Staff assignment configuration registered successfully.', 's');
-    document.getElementById('uName').value = '';
-    document.getElementById('uEmail').value = '';
-    loadUsers();
-  } catch (e) {
-    showMsg('uMsg', 'Error: ' + e.message, 'e');
-  }
+    showMsg('uMsg',isNonSchool?'External staff account registered successfully.':'Staff assignment registered successfully.','s');
+    document.getElementById('uName').value='';document.getElementById('uEmail').value='';loadUsers();
+  }catch(e){showMsg('uMsg','Error: '+e.message,'e');}
 };
-
 window.removeUser=async function(id){if(!confirm('Revoke all access for this user?'))return;await deleteDoc(doc(db,'users',id));loadUsers();};
 
 /* REGISTRATIONS */
 window.loadRegs=async function(){
-  const tbody=document.getElementById('regTbody');
-  tbody.innerHTML='<tr><td colspan="9" class="loading-ph">Loading&hellip;</td></tr>';
-  const evFilter=document.getElementById('regEvFilter').value;
-  const stFilter=document.getElementById('regStFilter').value;
+  const tbody=document.getElementById('regTbody');tbody.innerHTML='<tr><td colspan="9" class="loading-ph">Loading&hellip;</td></tr>';
+  const evFilter=document.getElementById('regEvFilter').value;const stFilter=document.getElementById('regStFilter').value;
   try{
     const snap=await getDocs(query(collection(db,'registrations'),orderBy('createdAt','desc')));
     tbody.innerHTML='';let found=0;
-    snap.forEach(d=>{
-      const r=d.data();
-      if(evFilter&&r.eventId!==evFilter)return;
-      if(stFilter&&r.status!==stFilter)return;
-      found++;
-      const evName=evCache.find(e=>e.id===r.eventId)?.name||'--';
-      const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';
-      tbody.innerHTML+=`<tr><td>${r.name||''}</td><td>${evName}</td><td>${r.class||''} ${r.section||''}</td><td>${r.rollNumber||''}</td><td style="font-size:.64rem;">${r.callingNumber||''}</td><td style="font-size:.64rem;">${r.whatsappNumber||''}</td><td>${sBadge(r.status)}</td><td>${date}</td><td style="white-space:nowrap;"><button class="ab ab-gr" onclick="setRegStatus('${d.id}','selected')">Select</button> <button class="ab ab-r" onclick="setRegStatus('${d.id}','rejected')">Reject</button> <button class="ab" onclick="setRegStatus('${d.id}','audition_pending')">Pending</button></td></tr>`;
-    });
+    snap.forEach(d=>{const r=d.data();if(evFilter&&r.eventId!==evFilter)return;if(stFilter&&r.status!==stFilter)return;found++;const evName=evCache.find(e=>e.id===r.eventId)?.name||'--';const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';tbody.innerHTML+=`<tr><td>${r.name||''}</td><td>${evName}</td><td>${r.class||''} ${r.section||''}</td><td>${r.rollNumber||''}</td><td style="font-size:.64rem;">${r.callingNumber||''}</td><td style="font-size:.64rem;">${r.whatsappNumber||''}</td><td>${sBadge(r.status)}</td><td>${date}</td><td style="white-space:nowrap;"><button class="ab ab-gr" onclick="setRegStatus('${d.id}','selected')">Select</button> <button class="ab ab-r" onclick="setRegStatus('${d.id}','rejected')">Reject</button> <button class="ab" onclick="setRegStatus('${d.id}','audition_pending')">Pending</button></td></tr>`;});
     if(!found)tbody.innerHTML='<tr><td colspan="9" class="loading-ph">No registrations found.</td></tr>';
   }catch(e){tbody.innerHTML='<tr><td colspan="9" class="loading-ph">Error loading.</td></tr>';}
 };
-window.setRegStatus=async function(id,status){
-  if(!confirm(`Set status to "${status}"?`))return;
-  await updateDoc(doc(db,'registrations',id),{status,updatedAt:serverTimestamp()});
-  loadRegs();loadDashboard();
-};
+window.setRegStatus=async function(id,status){if(!confirm(`Set status to "${status}"?`))return;await updateDoc(doc(db,'registrations',id),{status,updatedAt:serverTimestamp()});loadRegs();loadDashboard();};
 
 /* CLASSES */
 async function loadClasses(){
   try{
     const snap=await getDocs(query(collection(db,'classes'),orderBy('order','asc')));
     clCache=[];snap.forEach(d=>clCache.push({id:d.id,...d.data()}));
-    const sel=document.getElementById('clSelect');
-    sel.innerHTML='<option value="">Select class</option>'+clCache.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+    const sel=document.getElementById('clSelect');sel.innerHTML='<option value="">Select class</option>'+clCache.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
   }catch(e){}
 }
-window.addClass=async function(){
-  const name=document.getElementById('clName').value.trim();
-  const order=parseInt(document.getElementById('clOrder').value)||99;
-  if(!name){showMsg('clMsg','Class name required.','e');return;}
-  await addDoc(collection(db,'classes'),{name,order,sections:[],createdAt:serverTimestamp()});
-  showMsg('clMsg','Class added.','s');document.getElementById('clName').value='';loadClasses();
-};
-window.loadSectionsAdmin=function(){
-  const classId=document.getElementById('clSelect').value;
-  const panel=document.getElementById('sectionsPanel');
-  const addPanel=document.getElementById('addSecPanel');
-  if(!classId){panel.innerHTML='';addPanel.style.display='none';return;}
-  addPanel.style.display='block';
-  const cls=clCache.find(c=>c.id===classId);
-  if(!cls){panel.innerHTML='';return;}
-  const secs=cls.sections||[];
-  if(!secs.length){panel.innerHTML='<div style="font-size:.72rem;color:var(--t2);margin-bottom:10px;">No sections yet. Add below.</div>';return;}
-  panel.innerHTML=`<div class="tbl-scroll"><table style="width:100%;"><thead><tr><th>Section</th><th>Class Teacher</th><th>Actions</th></tr></thead><tbody>${secs.map((s,i)=>`<tr><td>${s.name||s}</td><td>${s.teacher||''}</td><td><button class="ab ab-r" onclick="removeSection('${classId}',${i})">Remove</button></td></tr>`).join('')}</tbody></table></div>`;
-};
-window.addSection=async function(){
-  const classId=document.getElementById('clSelect').value;
-  const name=document.getElementById('secName').value.trim();
-  const teacher=document.getElementById('secTeacher').value.trim();
-  if(!classId||!name||!teacher){alert('All fields required.');return;}
-  const cls=clCache.find(c=>c.id===classId);
-  const sections=[...(cls.sections||[]),{name,teacher}];
-  await updateDoc(doc(db,'classes',classId),{sections});
-  document.getElementById('secName').value='';document.getElementById('secTeacher').value='';
-  await loadClasses();loadSectionsAdmin();
-};
-window.removeSection=async function(classId,idx){
-  const cls=clCache.find(c=>c.id===classId);
-  const sections=[...(cls.sections||[])];sections.splice(idx,1);
-  await updateDoc(doc(db,'classes',classId),{sections});
-  await loadClasses();loadSectionsAdmin();
-};
+window.addClass=async function(){const name=document.getElementById('clName').value.trim();const order=parseInt(document.getElementById('clOrder').value)||99;if(!name){showMsg('clMsg','Class name required.','e');return;}await addDoc(collection(db,'classes'),{name,order,sections:[],createdAt:serverTimestamp()});showMsg('clMsg','Class added.','s');document.getElementById('clName').value='';loadClasses();};
+window.loadSectionsAdmin=function(){const classId=document.getElementById('clSelect').value;const panel=document.getElementById('sectionsPanel');const addPanel=document.getElementById('addSecPanel');if(!classId){panel.innerHTML='';addPanel.style.display='none';return;}addPanel.style.display='block';const cls=clCache.find(c=>c.id===classId);if(!cls){panel.innerHTML='';return;}const secs=cls.sections||[];if(!secs.length){panel.innerHTML='<div style="font-size:.72rem;color:var(--t2);margin-bottom:10px;">No sections yet. Add below.</div>';return;}panel.innerHTML=`<div class="tbl-scroll"><table style="width:100%;"><thead><tr><th>Section</th><th>Class Teacher</th><th>Actions</th></tr></thead><tbody>${secs.map((s,i)=>`<tr><td>${s.name||s}</td><td>${s.teacher||''}</td><td><button class="ab ab-r" onclick="removeSection('${classId}',${i})">Remove</button></td></tr>`).join('')}</tbody></table></div>`;};
+window.addSection=async function(){const classId=document.getElementById('clSelect').value;const name=document.getElementById('secName').value.trim();const teacher=document.getElementById('secTeacher').value.trim();if(!classId||!name||!teacher){alert('All fields required.');return;}const cls=clCache.find(c=>c.id===classId);const sections=[...(cls.sections||[]),{name,teacher}];await updateDoc(doc(db,'classes',classId),{sections});document.getElementById('secName').value='';document.getElementById('secTeacher').value='';await loadClasses();loadSectionsAdmin();};
+window.removeSection=async function(classId,idx){const cls=clCache.find(c=>c.id===classId);const sections=[...(cls.sections||[])];sections.splice(idx,1);await updateDoc(doc(db,'classes',classId),{sections});await loadClasses();loadSectionsAdmin();};
 
 /* ANNOUNCEMENTS */
 async function loadAnnouncements(){
   const tbody=document.getElementById('annTbody');
   try{
-    const snap=await getDocs(query(collection(db,'announcements'),orderBy('createdAt','desc')));
-    tbody.innerHTML='';
+    const snap=await getDocs(query(collection(db,'announcements'),orderBy('createdAt','desc')));tbody.innerHTML='';
     if(snap.empty){tbody.innerHTML='<tr><td colspan="6" class="loading-ph">No announcements.</td></tr>';return;}
-    snap.forEach(d=>{
-      const a=d.data();const date=a.createdAt?.toDate?a.createdAt.toDate().toLocaleDateString('en-IN'):'';
-      const statusBadge=a.status==='pending_approval'?'<span class="badge b-pend">Pending</span>':'<span class="badge b-sel">Live</span>';
-      tbody.innerHTML+=`<tr><td>${a.title||''}</td><td style="font-size:.64rem;">${(a.targets||[]).join(', ')}</td><td>${a.postedBy||''}</td><td>${statusBadge}</td><td>${date}</td><td><button class="ab ab-r" onclick="deleteAnn('${d.id}')">Delete</button></td></tr>`;
-    });
+    snap.forEach(d=>{const a=d.data();const date=a.createdAt?.toDate?a.createdAt.toDate().toLocaleDateString('en-IN'):'';const statusBadge=a.status==='pending_approval'?'<span class="badge b-pend">Pending</span>':'<span class="badge b-sel">Live</span>';tbody.innerHTML+=`<tr><td>${a.title||''}</td><td style="font-size:.64rem;">${(a.targets||[]).join(', ')}</td><td>${a.postedBy||''}</td><td>${statusBadge}</td><td>${date}</td><td><button class="ab ab-r" onclick="deleteAnn('${d.id}')">Delete</button></td></tr>`;});
   }catch(e){}
 }
-window.postAnn=async function(){
-  const title=document.getElementById('annTitle').value.trim();
-  const body=document.getElementById('annBody').value.trim();
-  const targets=[...document.querySelectorAll('#annTargets [type=checkbox]:checked')].map(c=>c.value);
-  if(!title||!body){showMsg('annMsg','Title and body required.','e');return;}
-  if(!targets.length){showMsg('annMsg','Select at least one target.','e');return;}
-  await addDoc(collection(db,'announcements'),{title,body,targets,status:'approved',postedBy:authUser.displayName||authUser.email,postedByEmail:authUser.email,createdAt:serverTimestamp()});
-  showMsg('annMsg','Announcement posted.','s');
-  document.getElementById('annTitle').value='';document.getElementById('annBody').value='';
-  document.querySelectorAll('#annTargets [type=checkbox]:checked').forEach(c=>c.checked=false);
-  loadAnnouncements();
-};
+window.postAnn=async function(){const title=document.getElementById('annTitle').value.trim();const body=document.getElementById('annBody').value.trim();const targets=[...document.querySelectorAll('#annTargets [type=checkbox]:checked')].map(c=>c.value);if(!title||!body){showMsg('annMsg','Title and body required.','e');return;}if(!targets.length){showMsg('annMsg','Select at least one target.','e');return;}await addDoc(collection(db,'announcements'),{title,body,targets,status:'approved',postedBy:authUser.displayName||authUser.email,postedByEmail:authUser.email,createdAt:serverTimestamp()});showMsg('annMsg','Announcement posted.','s');document.getElementById('annTitle').value='';document.getElementById('annBody').value='';document.querySelectorAll('#annTargets [type=checkbox]:checked').forEach(c=>c.checked=false);loadAnnouncements();};
 window.deleteAnn=async function(id){if(!confirm('Delete announcement?'))return;await deleteDoc(doc(db,'announcements',id));loadAnnouncements();};
 
 /* TIMELINE */
 async function loadTimeline(){
   const tbody=document.getElementById('tlTbody');
   try{
-    const snap=await getDocs(query(collection(db,'timeline'),orderBy('order','asc')));
-    tbody.innerHTML='';
+    const snap=await getDocs(query(collection(db,'timeline'),orderBy('order','asc')));tbody.innerHTML='';
     if(snap.empty){tbody.innerHTML='<tr><td colspan="5" class="loading-ph">No entries.</td></tr>';return;}
     snap.forEach(d=>{const t=d.data();tbody.innerHTML+=`<tr><td>${t.order||''}</td><td>${t.date||''}</td><td>${t.title||''}</td><td>${t.description||''}</td><td><button class="ab ab-r" onclick="deleteTl('${d.id}')">Delete</button></td></tr>`;});
   }catch(e){}
 }
-window.addTimeline=async function(){
-  const date=document.getElementById('tlDate').value.trim();
-  const title=document.getElementById('tlTitle').value.trim();
-  const desc=document.getElementById('tlDesc').value.trim();
-  const order=parseInt(document.getElementById('tlOrder').value)||99;
-  if(!date||!title){showMsg('tlMsg','Date and title required.','e');return;}
-  await addDoc(collection(db,'timeline'),{date,title,description:desc,order,createdAt:serverTimestamp()});
-  showMsg('tlMsg','Entry added.','s');['tlDate','tlTitle','tlDesc','tlOrder'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});loadTimeline();
-};
+window.addTimeline=async function(){const date=document.getElementById('tlDate').value.trim();const title=document.getElementById('tlTitle').value.trim();const desc=document.getElementById('tlDesc').value.trim();const order=parseInt(document.getElementById('tlOrder').value)||99;if(!date||!title){showMsg('tlMsg','Date and title required.','e');return;}await addDoc(collection(db,'timeline'),{date,title,description:desc,order,createdAt:serverTimestamp()});showMsg('tlMsg','Entry added.','s');['tlDate','tlTitle','tlDesc','tlOrder'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});loadTimeline();};
 window.deleteTl=async function(id){if(!confirm('Delete?'))return;await deleteDoc(doc(db,'timeline',id));loadTimeline();};
 
 /* RULES */
 async function loadRules(){
   const tbody=document.getElementById('ruleTbody');
   try{
-    const snap=await getDocs(query(collection(db,'rules'),orderBy('order','asc')));
-    tbody.innerHTML='';
+    const snap=await getDocs(query(collection(db,'rules'),orderBy('order','asc')));tbody.innerHTML='';
     if(snap.empty){tbody.innerHTML='<tr><td colspan="3" class="loading-ph">No rules.</td></tr>';return;}
     snap.forEach(d=>{const r=d.data();tbody.innerHTML+=`<tr><td>${r.order||''}</td><td>${r.text||''}</td><td><button class="ab ab-r" onclick="deleteRule('${d.id}')">Delete</button></td></tr>`;});
   }catch(e){}
 }
-window.addRule=async function(){
-  const text=document.getElementById('ruleText').value.trim();
-  const order=parseInt(document.getElementById('ruleOrder').value)||99;
-  if(!text){showMsg('ruleMsg','Rule text required.','e');return;}
-  await addDoc(collection(db,'rules'),{text,order,createdAt:serverTimestamp()});
-  showMsg('ruleMsg','Rule added.','s');document.getElementById('ruleText').value='';document.getElementById('ruleOrder').value='';loadRules();
-};
+window.addRule=async function(){const text=document.getElementById('ruleText').value.trim();const order=parseInt(document.getElementById('ruleOrder').value)||99;if(!text){showMsg('ruleMsg','Rule text required.','e');return;}await addDoc(collection(db,'rules'),{text,order,createdAt:serverTimestamp()});showMsg('ruleMsg','Rule added.','s');document.getElementById('ruleText').value='';document.getElementById('ruleOrder').value='';loadRules();};
 window.deleteRule=async function(id){if(!confirm('Delete?'))return;await deleteDoc(doc(db,'rules',id));loadRules();};
 
 /* HOMEPAGE SETTINGS */
-window.saveTagline=async function(){
-  const val=document.getElementById('heroTagline').value.trim();
-  if(!val){showMsg('tagMsg','Tagline cannot be empty.','e');return;}
-  await setDoc(doc(db,'settings','global'),{heroTagline:val},{merge:true});
-  showMsg('tagMsg','Tagline saved.','s');
-};
-window.saveFestDate=async function(){
-  const val=document.getElementById('festDate').value;
-  if(!val){showMsg('dateMsg','Select a date and time.','e');return;}
-  await setDoc(doc(db,'settings','global'),{festDate:new Date(val)},{merge:true});
-  showMsg('dateMsg','Date saved.','s');
-};
-window.saveVenue=async function(){
-  const name=document.getElementById('vName').value.trim();
-  const address=document.getElementById('vAddr').value.trim();
-  const hall=document.getElementById('vHall').value.trim();
-  await setDoc(doc(db,'settings','global'),{venue:{name,address,hall}},{merge:true});
-  showMsg('venueMsg','Venue saved.','s');
-};
-window.saveLogo=async function(){
-  const val=document.getElementById('logoFile').value.trim();
-  if(!val){showMsg('logoMsg','Enter a filename.','e');return;}
-  await setDoc(doc(db,'settings','global'),{logoFile:val},{merge:true});
-  showMsg('logoMsg','Logo filename saved. Make sure the file is deployed.','s');
-};
+window.saveTagline=async function(){const val=document.getElementById('heroTagline').value.trim();if(!val){showMsg('tagMsg','Tagline cannot be empty.','e');return;}await setDoc(doc(db,'settings','global'),{heroTagline:val},{merge:true});showMsg('tagMsg','Tagline saved.','s');};
+window.saveFestDate=async function(){const val=document.getElementById('festDate').value;if(!val){showMsg('dateMsg','Select a date and time.','e');return;}await setDoc(doc(db,'settings','global'),{festDate:new Date(val)},{merge:true});showMsg('dateMsg','Date saved.','s');};
+window.saveVenue=async function(){const name=document.getElementById('vName').value.trim();const address=document.getElementById('vAddr').value.trim();const hall=document.getElementById('vHall').value.trim();await setDoc(doc(db,'settings','global'),{venue:{name,address,hall}},{merge:true});showMsg('venueMsg','Venue saved.','s');};
+window.saveLogo=async function(){const val=document.getElementById('logoFile').value.trim();if(!val){showMsg('logoMsg','Enter a filename.','e');return;}await setDoc(doc(db,'settings','global'),{logoFile:val},{merge:true});showMsg('logoMsg','Logo filename saved. Make sure the file is deployed.','s');};
 
 /* SLIDESHOW */
-function renderSlideImgs(){
-  const con=document.getElementById('imgsContainer');
-  if(!con)return;
-  con.innerHTML='';
-  slideshowImgs.forEach((src,i)=>{
-    const tag=document.createElement('div');tag.className='img-tag';
-    tag.innerHTML=`${src} <button onclick="removeSlideImg(${i})">&#10005;</button>`;
-    con.appendChild(tag);
+function renderSlideImgs(){const con=document.getElementById('imgsContainer');if(!con)return;con.innerHTML='';slideshowImgs.forEach((src,i)=>{const tag=document.createElement('div');tag.className='img-tag';tag.innerHTML=`${src} <button onclick="removeSlideImg(${i})">&#10005;</button>`;con.appendChild(tag);});}
+window.addSlideImg=function(){const val=document.getElementById('imgInput').value.trim();if(!val)return;if(!slideshowImgs.includes(val)){slideshowImgs.push(val);renderSlideImgs();}document.getElementById('imgInput').value='';};
+window.removeSlideImg=function(i){slideshowImgs.splice(i,1);renderSlideImgs();};
+window.saveSlideshow=async function(){await setDoc(doc(db,'settings','global'),{slideshowImages:slideshowImgs},{merge:true});showMsg('slideMsg','Slideshow images saved.','s');};
+
+/* ═══════════════════════════════ OUR TEAM ═══════════════════════════════ */
+
+/* TIERS */
+async function loadTiers(){
+  try{
+    const snap=await getDocs(query(collection(db,'teamTiers'),orderBy('order','asc')));
+    tierCache=[];snap.forEach(d=>tierCache.push({id:d.id,...d.data()}));
+    renderTierTable();
+    /* populate both tier selects */
+    ['memTier','memTierFilter'].forEach(selId=>{
+      const sel=document.getElementById(selId);if(!sel)return;
+      const first=selId==='memTierFilter'?'<option value="">All Tiers</option>':'<option value="">Select tier&hellip;</option>';
+      sel.innerHTML=first+tierCache.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');
+    });
+  }catch(e){console.warn('Tier load error',e);}
+}
+
+function renderTierTable(){
+  const tbody=document.getElementById('tierTbody');if(!tbody)return;
+  if(!tierCache.length){tbody.innerHTML='<tr><td colspan="3" class="loading-ph">No tiers yet. Add one above.</td></tr>';return;}
+  tbody.innerHTML='';
+  tierCache.forEach(t=>{
+    tbody.innerHTML+=`<tr><td>${t.order||''}</td><td>${t.name||''}</td><td><button class="ab ab-r" onclick="deleteTier('${t.id}')">Delete</button></td></tr>`;
   });
 }
-window.addSlideImg=function(){
-  const val=document.getElementById('imgInput').value.trim();
-  if(!val)return;
-  if(!slideshowImgs.includes(val)){slideshowImgs.push(val);renderSlideImgs();}
-  document.getElementById('imgInput').value='';
+
+window.addTier=async function(){
+  const name=document.getElementById('tierName').value.trim();
+  const order=parseInt(document.getElementById('tierOrder').value)||99;
+  if(!name){showMsg('tierMsg','Tier name required.','e');return;}
+  await addDoc(collection(db,'teamTiers'),{name,order,createdAt:serverTimestamp()});
+  showMsg('tierMsg','Tier added.','s');
+  document.getElementById('tierName').value='';document.getElementById('tierOrder').value='';
+  await loadTiers();loadMembersTable();
 };
-window.removeSlideImg=function(i){slideshowImgs.splice(i,1);renderSlideImgs();};
-window.saveSlideshow=async function(){
-  await setDoc(doc(db,'settings','global'),{slideshowImages:slideshowImgs},{merge:true});
-  showMsg('slideMsg','Slideshow images saved.','s');
+
+window.deleteTier=async function(id){
+  if(!confirm('Delete this tier? Members assigned to it will remain in Firestore but will no longer appear under a tier on the homepage.'))return;
+  await deleteDoc(doc(db,'teamTiers',id));await loadTiers();loadMembersTable();
 };
+
+/* MEMBERS */
+async function loadMembersTable(){
+  const tbody=document.getElementById('memTbody');if(!tbody)return;
+  const tierFilter=document.getElementById('memTierFilter')?.value||'';
+  tbody.innerHTML='<tr><td colspan="6" class="loading-ph">Loading&hellip;</td></tr>';
+  try{
+    const snap=await getDocs(query(collection(db,'teamMembers'),orderBy('order','asc')));
+    tbody.innerHTML='';let found=0;
+    snap.forEach(d=>{
+      const m=d.data();
+      if(tierFilter&&m.tierId!==tierFilter)return;
+      found++;
+      const tierName=tierCache.find(t=>t.id===m.tierId)?.name||'&mdash;';
+      const initial=(m.name||'?')[0].toUpperCase();
+      const photoCell=m.photo
+        ?`<img src="${m.photo}" alt="" style="width:34px;height:34px;border-radius:50%;object-fit:cover;border:1px solid var(--b1);display:block;" onerror="this.outerHTML='<div style=\\'width:34px;height:34px;border-radius:50%;background:var(--glass);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--gold);\\'>${initial}</div>'">`
+        :`<div style="width:34px;height:34px;border-radius:50%;background:var(--glass);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--gold);">${initial}</div>`;
+      tbody.innerHTML+=`<tr>
+        <td>${photoCell}</td>
+        <td>${m.name||''}</td>
+        <td style="font-size:.7rem;color:var(--t2);">${m.role||''}</td>
+        <td><span class="badge b-pend" style="font-size:.52rem;">${tierName}</span></td>
+        <td>${m.order||''}</td>
+        <td style="white-space:nowrap;">
+          <button class="ab ab-g" onclick="editMember('${d.id}')">Edit</button>
+          <button class="ab ab-r" onclick="deleteMember('${d.id}')">Delete</button>
+        </td>
+      </tr>`;
+    });
+    if(!found)tbody.innerHTML='<tr><td colspan="6" class="loading-ph">No members found.</td></tr>';
+  }catch(e){tbody.innerHTML='<tr><td colspan="6" class="loading-ph">Error loading members.</td></tr>';}
+}
+
+window.saveMember=async function(){
+  const editId=document.getElementById('memEditId').value;
+  const name=document.getElementById('memName').value.trim();
+  const role=document.getElementById('memRole').value.trim();
+  const photo=document.getElementById('memPhoto').value.trim();
+  const tierId=document.getElementById('memTier').value;
+  const order=parseInt(document.getElementById('memOrder').value)||99;
+  if(!name||!role||!tierId){showMsg('memMsg','Name, Role, and Tier are required.','e');return;}
+  const data={name,role,photo:photo||null,tierId,order,updatedAt:serverTimestamp()};
+  try{
+    if(editId)await updateDoc(doc(db,'teamMembers',editId),data);
+    else await addDoc(collection(db,'teamMembers'),{...data,createdAt:serverTimestamp()});
+    showMsg('memMsg','Member saved successfully.','s');
+    clearMemberForm();loadMembersTable();
+  }catch(e){showMsg('memMsg','Error: '+e.message,'e');}
+};
+
+window.clearMemberForm=function(){
+  document.getElementById('memEditId').value='';
+  ['memName','memRole','memPhoto','memOrder'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const t=document.getElementById('memTier');if(t)t.value='';
+  document.getElementById('memberFormTitle').textContent='Add Team Member';
+};
+
+window.editMember=async function(id){
+  try{
+    const snap=await getDoc(doc(db,'teamMembers',id));
+    if(!snap.exists())return;
+    const m=snap.data();
+    document.getElementById('memEditId').value=id;
+    document.getElementById('memName').value=m.name||'';
+    document.getElementById('memRole').value=m.role||'';
+    document.getElementById('memPhoto').value=m.photo||'';
+    document.getElementById('memTier').value=m.tierId||'';
+    document.getElementById('memOrder').value=m.order||'';
+    document.getElementById('memberFormTitle').textContent='Edit Member';
+    /* scroll to form */
+    document.getElementById('p-team').querySelector('.fs').scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(e){alert('Error loading member: '+e.message);}
+};
+
+window.deleteMember=async function(id){
+  if(!confirm('Remove this team member from the website?'))return;
+  await deleteDoc(doc(db,'teamMembers',id));loadMembersTable();
+};
+/* ════════════════════════════════════════════════════════════════════════ */
 
 /* ATTENDANCE */
 async function loadAttendance(){
   const dateInput=document.getElementById('attDate');
-  if(dateInput&&!dateInput.value){dateInput.value=new Date().toISOString().split('T')[0];}
+  if(dateInput&&!dateInput.value)dateInput.value=new Date().toISOString().split('T')[0];
   const selectedDate=dateInput?dateInput.value:new Date().toISOString().split('T')[0];
-  const attHead=document.getElementById('attDateHead');
-  const attGrid=document.getElementById('attGrid');
+  const attHead=document.getElementById('attDateHead');const attGrid=document.getElementById('attGrid');
   if(!attHead||!attGrid)return;
   attHead.textContent='Attendance — '+new Date(selectedDate+'T12:00:00').toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   attGrid.innerHTML='<div class="loading-ph">Loading&hellip;</div>';
   try{
-    const [usersSnap,regsSnap,attSnap]=await Promise.all([
-      getDocs(collection(db,'users')),
-      getDocs(query(collection(db,'registrations'),where('status','==','selected'))),
-      getDocs(query(collection(db,'attendance'),where('date','==',selectedDate)))
-    ]);
-    const attMap={};
-    attSnap.forEach(d=>{const a=d.data();attMap[a.uid]=a;});
+    const [usersSnap,regsSnap,attSnap]=await Promise.all([getDocs(collection(db,'users')),getDocs(query(collection(db,'registrations'),where('status','==','selected'))),getDocs(query(collection(db,'attendance'),where('date','==',selectedDate)))]);
+    const attMap={};attSnap.forEach(d=>{const a=d.data();attMap[a.uid]=a;});
     attGrid.innerHTML='';
     const adminPresent=attMap[authUser.uid];
     attGrid.innerHTML+=`<div class="att-card"><div class="att-av">&#9670;</div><div style="flex:1;min-width:0;"><div class="att-name">${authUser.displayName||authUser.email}</div><div class="att-role">Administrator</div>${adminPresent?`<div class="att-time">In at ${new Date(adminPresent.markedAt?.toDate()).toLocaleTimeString('en-IN')}</div>`:''}</div>${adminPresent?'<div class="att-present" title="Present"></div>':'<div class="att-absent" title="Absent"></div>'}</div>`;
-    usersSnap.forEach(d=>{
-      const u=d.data();const isPresent=!!attMap[u.email];
-      const roles=(u.roles||[u.role]).filter(Boolean).join(', ');
-      const time=isPresent&&attMap[u.email]?.markedAt?'In at '+new Date(attMap[u.email].markedAt.toDate()).toLocaleTimeString('en-IN'):'';
-      attGrid.innerHTML+=`<div class="att-card"><div class="att-av">&#9671;</div><div style="flex:1;min-width:0;"><div class="att-name">${u.name||u.email}</div><div class="att-role">${roles}</div>${time?`<div class="att-time">${time}</div>`:''}</div>${isPresent?'<div class="att-present" title="Present"></div>':'<div class="att-absent" title="Absent"></div>'}</div>`;
-    });
-    regsSnap.forEach(d=>{
-      const r=d.data();const isPresent=!!attMap[r.uid||r.email];
-      const evName=evCache.find(e=>e.id===r.eventId)?.name||'Participant';
-      attGrid.innerHTML+=`<div class="att-card"><div class="att-av" style="overflow:hidden;">${r.photoURL?`<img src="${r.photoURL}" alt="" onerror="this.parentElement.textContent='&#9673;'">`:'&#9673;'}</div><div style="flex:1;min-width:0;"><div class="att-name">${r.name||''}</div><div class="att-role">${evName}</div></div>${isPresent?'<div class="att-present" title="Present"></div>':'<div class="att-absent" title="Absent"></div>'}</div>`;
-    });
+    usersSnap.forEach(d=>{const u=d.data();const isPresent=!!attMap[u.email];const roles=(u.roles||[u.role]).filter(Boolean).join(', ');const time=isPresent&&attMap[u.email]?.markedAt?'In at '+new Date(attMap[u.email].markedAt.toDate()).toLocaleTimeString('en-IN'):'';attGrid.innerHTML+=`<div class="att-card"><div class="att-av">&#9671;</div><div style="flex:1;min-width:0;"><div class="att-name">${u.name||u.email}</div><div class="att-role">${roles}</div>${time?`<div class="att-time">${time}</div>`:''}</div>${isPresent?'<div class="att-present" title="Present"></div>':'<div class="att-absent" title="Absent"></div>'}</div>`;});
+    regsSnap.forEach(d=>{const r=d.data();const isPresent=!!attMap[r.uid||r.email];const evName=evCache.find(e=>e.id===r.eventId)?.name||'Participant';attGrid.innerHTML+=`<div class="att-card"><div class="att-av" style="overflow:hidden;">${r.photoURL?`<img src="${r.photoURL}" alt="" onerror="this.parentElement.textContent='&#9673;'">`:'&#9673;'}</div><div style="flex:1;min-width:0;"><div class="att-name">${r.name||''}</div><div class="att-role">${evName}</div></div>${isPresent?'<div class="att-present" title="Present"></div>':'<div class="att-absent" title="Absent"></div>'}</div>`;});
     if(!attGrid.children.length)attGrid.innerHTML='<div class="loading-ph">No members found.</div>';
   }catch(e){attGrid.innerHTML='<div class="loading-ph">Error loading attendance.</div>';}
 }
-window.startAttendance=async function(){
-  const dateInput=document.getElementById('attDate');
-  const selectedDate=dateInput?dateInput.value:new Date().toISOString().split('T')[0];
-  await setDoc(doc(db,'attendance_sessions',selectedDate),{date:selectedDate,startedAt:serverTimestamp(),startedBy:authUser.email},{merge:true});
-  showMsg('attMsg','Attendance session started for '+selectedDate+'. Security can now scan QR codes.','s');
-  loadAttendance();
-};
-window.markAdminPresent=async function(){
-  const today=new Date().toISOString().split('T')[0];
-  await setDoc(doc(db,'attendance',authUser.uid+'_'+today),{uid:authUser.uid,email:authUser.email,name:authUser.displayName,date:today,role:'admin',markedAt:serverTimestamp(),markedBy:'self'},{merge:true});
-  showMsg('selfAttMsg','Marked present for today.','s');
-  loadAttendance();
-};
+window.startAttendance=async function(){const dateInput=document.getElementById('attDate');const selectedDate=dateInput?dateInput.value:new Date().toISOString().split('T')[0];await setDoc(doc(db,'attendance_sessions',selectedDate),{date:selectedDate,startedAt:serverTimestamp(),startedBy:authUser.email},{merge:true});showMsg('attMsg','Attendance session started for '+selectedDate+'. Security can now scan QR codes.','s');loadAttendance();};
+window.markAdminPresent=async function(){const today=new Date().toISOString().split('T')[0];await setDoc(doc(db,'attendance',authUser.uid+'_'+today),{uid:authUser.uid,email:authUser.email,name:authUser.displayName,date:today,role:'admin',markedAt:serverTimestamp(),markedBy:'self'},{merge:true});showMsg('selfAttMsg','Marked present for today.','s');loadAttendance();};
 window.loadAttendance=loadAttendance;
 
 /* TICKETS */
 async function loadTickets(){
-  const con=document.getElementById('ticketsList');
-  if(!con)return;
+  const con=document.getElementById('ticketsList');if(!con)return;
   try{
-    const snap=await getDocs(query(collection(db,'tickets'),orderBy('createdAt','desc')));
-    con.innerHTML='';
+    const snap=await getDocs(query(collection(db,'tickets'),orderBy('createdAt','desc')));con.innerHTML='';
     if(snap.empty){con.innerHTML='<div class="loading-ph">No tickets submitted yet.</div>';return;}
-    snap.forEach(d=>{
-      const t=d.data();const date=t.createdAt?.toDate?t.createdAt.toDate().toLocaleString('en-IN'):'';
-      con.innerHTML+=`<div class="tk-card"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px;"><div><div class="tk-cat">${t.category||''}</div><div class="tk-title">From: ${t.name||'Anonymous'}</div></div><span class="badge ${t.status==='resolved'?'b-sel':'b-open'}">${t.status||'open'}</span></div><div class="tk-body">${t.description||''}</div><div class="tk-meta">${t.email?'Email: '+t.email+' &bull; ':''} ${date}</div><div style="display:flex;gap:8px;margin-top:10px;"><button class="ab ab-gr" onclick="resolveTicket('${d.id}')">Mark Resolved</button><button class="ab" onclick="forwardTicket('${d.id}')">Forward to Teacher</button></div></div>`;
-    });
+    snap.forEach(d=>{const t=d.data();const date=t.createdAt?.toDate?t.createdAt.toDate().toLocaleString('en-IN'):'';con.innerHTML+=`<div class="tk-card"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px;"><div><div class="tk-cat">${t.category||''}</div><div class="tk-title">From: ${t.name||'Anonymous'}</div></div><span class="badge ${t.status==='resolved'?'b-sel':'b-open'}">${t.status||'open'}</span></div><div class="tk-body">${t.description||''}</div><div class="tk-meta">${t.email?'Email: '+t.email+' &bull; ':''} ${date}</div><div style="display:flex;gap:8px;margin-top:10px;"><button class="ab ab-gr" onclick="resolveTicket('${d.id}')">Mark Resolved</button><button class="ab" onclick="forwardTicket('${d.id}')">Forward to Teacher</button></div></div>`;});
   }catch(e){con.innerHTML='<div class="loading-ph">Error loading tickets.</div>';}
 }
 window.resolveTicket=async function(id){await updateDoc(doc(db,'tickets',id),{status:'resolved'});loadTickets();};
 window.forwardTicket=async function(id){await updateDoc(doc(db,'tickets',id),{forwardedToTeacher:true,forwardedAt:serverTimestamp()});alert('Forwarded to Teacher-in-Charge.');loadTickets();};
 
-/* SECURITY SETTINGS */
-window.assignSecurity=async function(){
-  const email=document.getElementById('secVolEmail').value.trim().toLowerCase();
-  if(!email){showMsg('secMsg','Email required.','e');return;}
-  await setDoc(doc(db,'settings','global'),{securityVolunteer:email},{merge:true});
-  showMsg('secMsg','Security volunteer assigned: '+email,'s');
-};
+/* SECURITY */
+window.assignSecurity=async function(){const email=document.getElementById('secVolEmail').value.trim().toLowerCase();if(!email){showMsg('secMsg','Email required.','e');return;}await setDoc(doc(db,'settings','global'),{securityVolunteer:email},{merge:true});showMsg('secMsg','Security volunteer assigned: '+email,'s');};
 
 /* EXPORT */
 window.exportCSV=async function(){
   try{
-    const evFilter=document.getElementById('expEvent').value;
-    const stFilter=document.getElementById('expStatus').value;
+    const evFilter=document.getElementById('expEvent').value;const stFilter=document.getElementById('expStatus').value;
     const snap=await getDocs(collection(db,'registrations'));
     const rows=[['Name','Email','Reg No','Class','Section','Roll','Event','Status','Calling','WhatsApp','Class Teacher','Registered On']];
-    snap.forEach(d=>{
-      const r=d.data();
-      if(evFilter&&r.eventId!==evFilter)return;
-      if(stFilter&&r.status!==stFilter)return;
-      const evName=evCache.find(e=>e.id===r.eventId)?.name||r.eventId||'';
-      const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';
-      rows.push([r.name,r.email,r.registrationNumber,r.class,r.section,r.rollNumber,evName,r.status,r.callingNumber,r.whatsappNumber,r.classTeacher,date]);
-    });
+    snap.forEach(d=>{const r=d.data();if(evFilter&&r.eventId!==evFilter)return;if(stFilter&&r.status!==stFilter)return;const evName=evCache.find(e=>e.id===r.eventId)?.name||r.eventId||'';const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';rows.push([r.name,r.email,r.registrationNumber,r.class,r.section,r.rollNumber,evName,r.status,r.callingNumber,r.whatsappNumber,r.classTeacher,date]);});
     const csv=rows.map(r=>r.map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');
-    const blob=new Blob([csv],{type:'text/csv'});
-    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`cy_registrations_${new Date().toISOString().split('T')[0]}.csv`;a.click();
+    const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`cy_registrations_${new Date().toISOString().split('T')[0]}.csv`;a.click();
   }catch(e){alert('Export failed: '+e.message);}
 };
 
-window.filterTbl=function(tbodyId,val){
-  document.querySelectorAll('#'+tbodyId+' tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(val.toLowerCase())?'':'none';});
+
+/* ═══════════════════════════ ADD PARTICIPANT ═══════════════════════════ */
+let apClassesCache=[];
+let apTeacherMap={};
+
+function populateApClasses(){
+  /* re-use clCache which is already loaded; also refresh just in case */
+  const sel=document.getElementById('apClass');if(!sel)return;
+  const src=clCache.length?clCache:[];
+  sel.innerHTML='<option value="">Select class</option>'+src.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  apClassesCache=src;
+  document.getElementById('apSection').innerHTML='<option value="">Select section</option>';
+  document.getElementById('apTeacher').value='';
+}
+
+window.onApClassChange=function(){
+  const classId=document.getElementById('apClass').value;
+  const secSel=document.getElementById('apSection');
+  secSel.innerHTML='<option value="">Select section</option>';
+  document.getElementById('apTeacher').value='';
+  apTeacherMap={};
+  if(!classId)return;
+  const cls=apClassesCache.find(c=>c.id===classId);
+  if(!cls||!cls.sections)return;
+  cls.sections.forEach(s=>{
+    const name=typeof s==='string'?s:(s.name||s);
+    const teacher=typeof s==='string'?'':(s.teacher||'');
+    secSel.innerHTML+=`<option value="${name}">${name}</option>`;
+    apTeacherMap[name]=teacher;
+  });
 };
+
+window.onApSectionChange=function(){
+  const sec=document.getElementById('apSection').value;
+  document.getElementById('apTeacher').value=apTeacherMap[sec]||'';
+};
+
+window.submitAddParticipant=async function(){
+  const name=document.getElementById('apName').value.trim();
+  const email=document.getElementById('apEmail').value.trim().toLowerCase();
+  const reg=document.getElementById('apReg').value.trim();
+  const roll=document.getElementById('apRoll').value.trim();
+  const cls=document.getElementById('apClass').value;
+  const sec=document.getElementById('apSection').value;
+  const teacher=document.getElementById('apTeacher').value.trim();
+  const call=document.getElementById('apCall').value.trim();
+  const wa=document.getElementById('apWA').value.trim();
+  const eventId=document.getElementById('apEvEvent').value;
+  const status=document.getElementById('apStatus').value;
+
+  /* basic validation */
+  if(!name||!email||!reg||!roll||!cls||!sec||!call||!wa||!eventId){
+    showMsg('apMsg','Please fill all required fields (marked *).','e');return;
+  }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    showMsg('apMsg','Enter a valid email address.','e');return;
+  }
+  if(!/^\d{10}$/.test(call)){
+    showMsg('apMsg','Calling number must be exactly 10 digits.','e');return;
+  }
+  if(!/^\d{10}$/.test(wa)){
+    showMsg('apMsg','WhatsApp number must be exactly 10 digits.','e');return;
+  }
+
+  showMsg('apMsg','<span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border:2px solid transparent;border-top:2px solid currentColor;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;"></span>Checking for duplicates&hellip;</span>','');
+
+  try{
+    /* duplicate email check */
+    const dup=await getDocs(query(collection(db,'registrations'),where('email','==',email)));
+    if(!dup.empty){
+      showMsg('apMsg','A registration with this email already exists. Check the Registrations panel.','e');return;
+    }
+
+    /* generate QR ID same format as enroll.html */
+    const qrId='CY'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,5).toUpperCase();
+
+    await addDoc(collection(db,'registrations'),{
+      uid: null,                 /* no firebase auth uid — admin-added */
+      name,
+      registrationNumber: reg,
+      class: cls,
+      section: sec,
+      rollNumber: roll,
+      classTeacher: teacher,
+      email,
+      callingNumber: call,
+      whatsappNumber: wa,
+      photoURL: '',
+      qrId,
+      isVolunteer: false,
+      adminAdded: true,          /* flag so portals can note this was admin-added */
+      eventId,
+      status: status||'audition_pending',
+      createdAt: serverTimestamp()
+    });
+
+    showMsg('apMsg','Participant added successfully. They can now log in via the participant portal using their personal Google account.','s');
+    clearApForm();
+    loadDashboard();
+    loadRegs();
+  }catch(e){
+    showMsg('apMsg','Error: '+e.message,'e');
+  }
+};
+
+window.clearApForm=function(){
+  ['apName','apEmail','apReg','apRoll','apCall','apWA','apTeacher'].forEach(id=>{
+    const el=document.getElementById(id);if(el){el.value='';el.readOnly=(id==='apTeacher');}
+  });
+  const apClass=document.getElementById('apClass');if(apClass)apClass.value='';
+  const apSec=document.getElementById('apSection');if(apSec)apSec.innerHTML='<option value="">Select section</option>';
+  const apEv=document.getElementById('apEvEvent');if(apEv)apEv.value='';
+  const apSt=document.getElementById('apStatus');if(apSt)apSt.value='audition_pending';
+  const cb=document.getElementById('apSameCb');if(cb)cb.checked=false;
+  const waEl=document.getElementById('apWA');if(waEl)waEl.readOnly=false;
+  apTeacherMap={};
+  document.getElementById('apMsg').className='msg';
+};
+/* ════════════════════════════════════════════════════════════════════════ */
+
+window.filterTbl=function(tbodyId,val){document.querySelectorAll('#'+tbodyId+' tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(val.toLowerCase())?'':'none';});};
 window.doSignOut=async function(){await signOut(auth);window.location.href='login.html';};
 </script>
 </body>

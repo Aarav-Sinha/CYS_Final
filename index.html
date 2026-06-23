@@ -708,7 +708,7 @@ async function loadEvents(){
   const rolesGrid=document.getElementById('rolesGrid');
   try{
     const settSnap=await getDoc(doc(db,'settings','global'));
-    const enrollOpen=settSnap.exists()?(settSnap.data().enrollmentOpen!==false):true;
+    const globalEnrollOpen=settSnap.exists()?(settSnap.data().enrollmentOpen!==false):true;
     const snap=await getDocs(query(collection(db,'events'),orderBy('order','asc')));
     if(snap.empty){grid.innerHTML='<div class="loading-ph">Events will be announced soon.</div>';return;}
     grid.innerHTML='';
@@ -721,12 +721,18 @@ async function loadEvents(){
       const isRole=type==='public_role';
       if(isRole)hasRoles=true;
       const targetGrid=isRole?rolesGrid:grid;
+      
+      // Evaluates specific entry restriction overrides along with the global setting
+      const isClosedForThisEntry = !!ev.enrollmentClosed;
+      const isCurrentlyOpen = globalEnrollOpen && !isClosedForThisEntry;
+
       const logoHtml=ev.logoFile
         ?`<img src="${ev.logoFile}" alt="${ev.name}" class="ev-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ev-logo-ph" style="display:none;">${isRole?'◇':'◆'}</div>`
         :`<div class="ev-logo-ph">${isRole?'◇':'◆'}</div>`;
       const card=document.createElement('div');
       card.className='ev-card';
-      const btnLabel=isRole?(enrollOpen?'Apply Now →':'Applications Closed'):(enrollOpen?'Enroll Now →':'Enrollment Closed');
+      
+      const btnLabel=isRole?(isCurrentlyOpen?'Apply Now →':'Applications Closed'):(isCurrentlyOpen?'Enroll Now →':'Enrollment Closed');
       card.innerHTML=`${logoHtml}
         <div class="ev-name">${ev.name||''}</div>
         <div class="ev-tag" style="${isRole?'border-color:rgba(58,125,68,0.4);color:var(--green-light);':''}">${isRole?'Open Role':'Event'}  •  ${ev.category||''}</div>
@@ -735,11 +741,11 @@ async function loadEvents(){
           ${ev.maxParticipants&&!isRole?`<span>Max <b>${ev.maxParticipants}</b></span>`:''}
           ${ev.venue?`<span>◆ <b>${ev.venue}</b></span>`:''}
         </div>
-        <button class="ev-enroll" style="${isRole?'border-color:rgba(58,125,68,0.4);color:var(--green-light);':''}" ${!enrollOpen?'disabled':''}>
+        <button class="ev-enroll" style="${isRole?'border-color:rgba(58,125,68,0.4);color:var(--green-light);':''}" ${!isCurrentlyOpen?'disabled':''}>
           ${btnLabel}
         </button>`;
       const enrollBtn=card.querySelector('.ev-enroll');
-      if(enrollOpen){
+      if(isCurrentlyOpen){
         card.style.cursor='pointer';
         const target=`enroll.html?event=${d.id}${isRole?'&type=role':''}`;
         card.addEventListener('click',e=>{if(e.target!==enrollBtn)window.location.href=target;});
