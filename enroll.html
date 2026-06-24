@@ -186,8 +186,10 @@ body::before{
   display:flex;align-items:center;justify-content:space-between;
   transition:all .2s;width:100%;
 }
-.ev-opt:hover{border-color:var(--gold);background:var(--glass);}
+.ev-opt:hover:not(:disabled){border-color:var(--gold);background:var(--glass);}
 .ev-opt.sel{border-color:var(--gold);background:var(--glass);}
+.ev-opt.ev-opt-closed{cursor:not-allowed;opacity:.6;border-style:dashed;}
+.ev-opt.ev-opt-closed:hover{border-color:var(--b1);background:transparent;}
 .ev-opt-name{font-weight:600;color:var(--t1);}
 .ev-opt-cat{font-size:.56rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-top:1px;}
 .ev-check{
@@ -394,11 +396,15 @@ body::before{
 
 <script type="module">
 /*
- * enroll.html — Critically Yours 2025
+ * enroll.html — Critically Yours 2026
  * Uses signInWithPopup so the result is available immediately in the same
  * async call, avoiding the double-fire / state-change racing issue.
  * onAuthStateChanged is only used to restore an already-signed-in user
  * when the page is refreshed (e.g. the user reloads after signing in).
+ *
+ * Per-event enrollmentClosed: events with enrollmentClosed === true are
+ * shown as greyed-out / dashed and cannot be selected. A server-side
+ * re-check at submit time also guards against race conditions.
  */
 
 import { initializeApp }         from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -448,7 +454,7 @@ const PRE_SELECTED_EV = params.get('event') || null;
 
 if (IS_VOLUNTEER) {
   document.getElementById('pageTitle').innerHTML = 'Volunteer <em>Registration</em>';
-  document.getElementById('pageSub').textContent  = 'Register as a volunteer for Critically Yours 2025';
+  document.getElementById('pageSub').textContent  = 'Register as a volunteer for Critically Yours 2026';
   document.title = 'Volunteer Registration — Critically Yours';
 }
 
@@ -526,6 +532,9 @@ const afterSignIn = async user => {
   setTimeout(() => nextStep.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
 };
 
+/* ── Google SVG helper (reused across sign-in button resets) ── */
+const G_SVG = `<svg class="g-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Sign in with School Google Account`;
+
 /* ── Sign-in button click: popup flow ── */
 document.getElementById('btnSignIn').addEventListener('click', async () => {
   const btn = document.getElementById('btnSignIn');
@@ -535,7 +544,6 @@ document.getElementById('btnSignIn').addEventListener('click', async () => {
 
   try {
     const provider = new GoogleAuthProvider();
-    // Prefer school domain but don't hard-restrict — we validate email ourselves
     provider.setCustomParameters({ prompt: 'select_account' });
 
     const result = await signInWithPopup(auth, provider);
@@ -549,7 +557,7 @@ document.getElementById('btnSignIn').addEventListener('click', async () => {
       );
       await signOut(auth);
       btn.disabled = false;
-      btn.innerHTML = '<svg class="g-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Sign in with School Google Account';
+      btn.innerHTML = G_SVG;
       return;
     }
 
@@ -564,7 +572,7 @@ document.getElementById('btnSignIn').addEventListener('click', async () => {
       );
       await signOut(auth);
       btn.disabled = false;
-      btn.innerHTML = '<svg class="g-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Sign in with School Google Account';
+      btn.innerHTML = G_SVG;
       return;
     }
 
@@ -576,7 +584,7 @@ document.getElementById('btnSignIn').addEventListener('click', async () => {
       setStatus('s1Status', 'Sign-in error: ' + err.message, 'err');
     }
     btn.disabled = false;
-    btn.innerHTML = '<svg class="g-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Sign in with School Google Account';
+    btn.innerHTML = G_SVG;
   }
 });
 
@@ -587,7 +595,6 @@ document.getElementById('btnChange').addEventListener('click', async () => {
   selectedEventId = null;
   teacherMap = {};
 
-  // Reset UI
   document.getElementById('userBar').className = 'user-bar';
   document.getElementById('btnSignIn').style.display = 'flex';
   document.getElementById('step2Card').classList.add('hidden');
@@ -600,16 +607,14 @@ document.getElementById('btnChange').addEventListener('click', async () => {
 /* ── onAuthStateChanged: restore session on page refresh ONLY ── */
 let authHandled = false;
 onAuthStateChanged(auth, async user => {
-  if (authHandled) return;  // Ignore calls after popup sign-in already handled it
-  if (!user) return;        // Not signed in — nothing to restore
+  if (authHandled) return;
+  if (!user) return;
 
-  // Only restore if it's a valid school account
   if (!user.email || !user.email.endsWith('@dpsmegacity.in')) {
     await signOut(auth);
     return;
   }
 
-  // This is a restored session (page refresh) — check not already enrolled
   const dup = await getDocs(
     query(collection(db, 'registrations'), where('email', '==', user.email))
   );
@@ -636,42 +641,70 @@ async function loadEvents() {
       return;
     }
     list.innerHTML = '';
-    snap.forEach(d => {
-      const ev  = d.data();
-      const btn = document.createElement('button');
-      const isSel = d.id === selectedEventId;
-      btn.className = 'ev-opt' + (isSel ? ' sel' : '');
-      btn.setAttribute('data-id', d.id);
-      btn.innerHTML = `
-        <div>
-          <div class="ev-opt-name">${ev.name || ''}</div>
-          <div class="ev-opt-cat">${ev.category || ''}</div>
-        </div>
-        <div class="ev-check">${isSel ? '&#10003;' : ''}</div>`;
+    let hasAny = false;
 
-      btn.addEventListener('click', () => {
-        // Deselect all
-        document.querySelectorAll('.ev-opt').forEach(o => {
-          o.classList.remove('sel');
-          o.querySelector('.ev-check').innerHTML = '';
+    snap.forEach(d => {
+      const ev   = d.data();
+      // Skip internal/backend roles — not enrollable via this public form
+      const type = ev.entryType || 'event';
+      if (type === 'internal_role' || type === 'backend_role') return;
+
+      hasAny = true;
+      const isClosed = !!ev.enrollmentClosed;
+      const isSel    = d.id === selectedEventId && !isClosed;
+
+      const btn = document.createElement('button');
+      btn.className = 'ev-opt' + (isSel ? ' sel' : '') + (isClosed ? ' ev-opt-closed' : '');
+      btn.setAttribute('data-id', d.id);
+      btn.disabled = isClosed;
+
+      btn.innerHTML = `
+        <div style="flex:1;min-width:0;">
+          <div class="ev-opt-name" style="${isClosed ? 'opacity:.45;' : ''}">${ev.name || ''}</div>
+          <div class="ev-opt-cat" style="${isClosed ? 'opacity:.45;' : ''}">${ev.category || ''}</div>
+        </div>
+        ${isClosed
+          ? '<span style="font-size:.55rem;letter-spacing:2px;color:var(--red-l);text-transform:uppercase;border:1px solid rgba(192,57,43,.35);padding:3px 9px;border-radius:20px;flex-shrink:0;white-space:nowrap;">Closed</span>'
+          : '<div class="ev-check">' + (isSel ? '&#10003;' : '') + '</div>'
+        }`;
+
+      if (!isClosed) {
+        btn.addEventListener('click', () => {
+          // Deselect all open options
+          document.querySelectorAll('.ev-opt:not(.ev-opt-closed)').forEach(o => {
+            o.classList.remove('sel');
+            o.querySelector('.ev-check').innerHTML = '';
+          });
+          // Select this one
+          btn.classList.add('sel');
+          btn.querySelector('.ev-check').innerHTML = '&#10003;';
+          selectedEventId = d.id;
+          clearStatus('s2Status');
+          setStep(3);
+          setTimeout(() =>
+            document.getElementById('step3Card').scrollIntoView({ behavior: 'smooth', block: 'start' }),
+            100
+          );
         });
-        // Select this
-        btn.classList.add('sel');
-        btn.querySelector('.ev-check').innerHTML = '&#10003;';
-        selectedEventId = d.id;
-        clearStatus('s2Status');
-        setStep(3);
-        // Scroll to step 3
-        setTimeout(() =>
-          document.getElementById('step3Card').scrollIntoView({ behavior: 'smooth', block: 'start' }),
-          100
-        );
-      });
+      }
 
       list.appendChild(btn);
     });
 
-    if (selectedEventId) setStep(3);
+    if (!hasAny) {
+      list.innerHTML = '<div style="text-align:center;color:var(--t2);padding:16px;font-size:.74rem;">No events available yet.</div>';
+      return;
+    }
+
+    // If pre-selected event is now closed, clear the selection
+    if (selectedEventId) {
+      const preSnap = await getDoc(doc(db, 'events', selectedEventId));
+      if (preSnap.exists() && preSnap.data().enrollmentClosed) {
+        selectedEventId = null;
+      } else {
+        setStep(3);
+      }
+    }
 
   } catch (e) {
     list.innerHTML = '<div style="text-align:center;color:var(--red-l);padding:16px;">Failed to load events: ' + e.message + '</div>';
@@ -776,13 +809,31 @@ document.getElementById('btnSubmit').addEventListener('click', async () => {
   btn.innerHTML = '<div class="spinner"></div>Submitting&hellip;';
 
   try {
-    // Re-check enrollment open
+    // Re-check global enrollment open
     const settSnap = await getDoc(doc(db, 'settings', 'global'));
     if (settSnap.exists() && settSnap.data().enrollmentOpen === false && !IS_VOLUNTEER) {
       setStatus('s3Status', 'Enrollment is currently closed.', 'err');
       btn.disabled = false;
       btn.textContent = 'Submit Enrollment';
       return;
+    }
+
+    // Re-check per-event enrollmentClosed flag (race condition guard)
+    if (!IS_VOLUNTEER && selectedEventId) {
+      const evSnap = await getDoc(doc(db, 'events', selectedEventId));
+      if (evSnap.exists() && evSnap.data().enrollmentClosed === true) {
+        setStatus('s3Status',
+          'Enrollment for this event has been closed. Please go back to Step 2 and select a different event.',
+          'err'
+        );
+        btn.disabled = false;
+        btn.textContent = 'Submit Enrollment';
+        selectedEventId = null;
+        // Refresh the event list so closed badge appears
+        await loadEvents();
+        document.getElementById('step2Card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
     }
 
     // Re-check duplicate
