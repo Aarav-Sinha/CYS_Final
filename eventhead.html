@@ -57,7 +57,10 @@ body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(-
 .p-info{flex:1;min-width:180px;}
 .p-name{font-size:0.9rem;font-weight:600;color:var(--text-primary);}
 .p-meta{font-size:0.68rem;color:var(--text-secondary);margin-top:2px;}
-.p-contact{font-size:0.65rem;color:var(--gold);margin-top:2px;}
+.p-contact{font-size:0.65rem;color:var(--gold);margin-top:2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.p-contact a.wa-link{display:inline-flex;align-items:center;gap:4px;color:#25D366;text-decoration:none;font-size:0.65rem;padding:2px 7px;border-radius:10px;border:1px solid rgba(37,211,102,0.3);background:rgba(37,211,102,0.07);transition:background 0.2s;}
+.p-contact a.wa-link:hover{background:rgba(37,211,102,0.16);}
+.p-contact a.wa-link svg{flex-shrink:0;}
 .p-rating{display:flex;gap:4px;margin-top:8px;}
 .star{font-size:16px;cursor:pointer;color:var(--border);transition:color 0.15s;}
 .star.active{color:var(--gold);}
@@ -115,6 +118,20 @@ body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(-
 .participant-select:focus{border-color:var(--gold);}
 .participant-select option{background:var(--bg-dark);}
 
+/* ASSIGNED TASKS LIST */
+.tasks-list-section{margin-top:24px;}
+.tasks-list-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--text-primary);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.task-card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:10px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.task-card:hover{background:var(--bg-card-hover);}
+.task-info{flex:1;min-width:160px;}
+.task-card-title{font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;}
+.task-card-desc{font-family:'Cormorant Garamond',serif;font-size:0.92rem;color:var(--text-secondary);line-height:1.5;margin-bottom:6px;}
+.task-card-meta{font-size:0.6rem;letter-spacing:1px;color:var(--text-secondary);}
+.task-card-meta span{color:var(--gold);}
+.task-status-badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:0.58rem;letter-spacing:1px;text-transform:uppercase;flex-shrink:0;}
+.task-status-pending{background:rgba(201,168,76,0.12);color:var(--gold);border:1px solid rgba(201,168,76,0.3);}
+.task-status-done{background:rgba(74,124,89,0.12);color:var(--green-light);border:1px solid rgba(74,124,89,0.3);}
+
 /* QR */
 .qr-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:28px;text-align:center;max-width:280px;margin:0 auto;}
 .qr-wrap canvas{border-radius:8px;margin:16px auto;display:block;}
@@ -127,18 +144,9 @@ body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(-
   .sb-logo{padding:0;border:none;}
   .sb-logo span{display:inline;margin-left:6px;margin-top:0;}
   .sb-user,.sb-nav,.sb-bottom{display:none;}
-  
-  /* Responsive Mobile Menu Drawer Containers */
-  .sidebar.open .sb-user {
-    display: flex; position: fixed; top: 60px; left: 0; right: 0; background: var(--bg-sidebar); padding: 14px 18px; border-bottom: 1px solid var(--border); z-index: 99;
-  }
-  .sidebar.open .sb-nav {
-    display: flex; flex-direction: column; position: fixed; top: 126px; left: 0; right: 0; background: var(--bg-sidebar); padding: 10px 0; z-index: 99; border-bottom: 1px solid var(--border);
-  }
-  .sidebar.open .sb-bottom {
-    display: flex; position: fixed; top: 334px; left: 0; right: 0; background: var(--bg-sidebar); padding: 14px 18px; z-index: 99; border-bottom: 1px solid var(--border);
-  }
-  
+  .sidebar.open .sb-user {display:flex;position:fixed;top:60px;left:0;right:0;background:var(--bg-sidebar);padding:14px 18px;border-bottom:1px solid var(--border);z-index:99;}
+  .sidebar.open .sb-nav {display:flex;flex-direction:column;position:fixed;top:126px;left:0;right:0;background:var(--bg-sidebar);padding:10px 0;z-index:99;border-bottom:1px solid var(--border);}
+  .sidebar.open .sb-bottom {display:flex;position:fixed;top:334px;left:0;right:0;background:var(--bg-sidebar);padding:14px 18px;z-index:99;border-bottom:1px solid var(--border);}
   .mobile-btn{display:flex;width:34px;height:34px;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--gold);cursor:pointer;font-size:18px;}
 }
 </style>
@@ -227,6 +235,14 @@ body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(-
         <button class="btn-primary" onclick="assignTask()">Assign Task</button>
         <div class="msg" id="taskMsg"></div>
       </div>
+
+      <!-- Assigned Tasks List -->
+      <div class="tasks-list-section">
+        <div class="tasks-list-title">Tasks Assigned by You</div>
+        <div id="assignedTasksList">
+          <div class="empty-state"><p>Loading tasks...</p></div>
+        </div>
+      </div>
     </div>
 
     <div class="panel" id="panel-qr">
@@ -265,7 +281,11 @@ let currentFilter = 'all';
 let myAuthUser = null;
 let structuredAssignments = [];
 
-// Helper to convert Firebase Class IDs to Readable Roman Numerals
+// Build a WhatsApp icon SVG inline
+function waIcon() {
+  return `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+}
+
 function getClassDisplay(classId) {
   const classMap = {
     'uG0Ws6m9bwhfO9qx287g': 'IX',
@@ -287,7 +307,6 @@ onAuthStateChanged(auth, async user => {
   document.getElementById('sbAvatar').src = user.photoURL||'';
   document.getElementById('sbName').textContent = user.displayName||user.email;
 
-  // Structural parsing for multi-event capabilities
   structuredAssignments = myUserDoc.eventAssignments || [];
   if (structuredAssignments.length === 0 && myUserDoc.eventId) {
     structuredAssignments.push({ role: 'event_head', eventId: myUserDoc.eventId });
@@ -299,10 +318,8 @@ onAuthStateChanged(auth, async user => {
   }
 
   if (structuredAssignments.length > 1) {
-    // Branch execution to context selection system
     await presentEventSelector();
   } else {
-    // Single scope initialization
     myEventId = structuredAssignments[0].eventId;
     initEventHead();
   }
@@ -311,31 +328,26 @@ onAuthStateChanged(auth, async user => {
 async function presentEventSelector() {
   const dropdown = document.getElementById('switchEventDropdown');
   dropdown.innerHTML = '';
-  
   const eventsSnap = await getDocs(collection(db, 'events'));
   const eventsMap = {};
   eventsSnap.forEach(doc => { eventsMap[doc.id] = doc.data().name; });
-
   structuredAssignments.forEach(asm => {
     if (!asm.eventId) return;
     const nameStr = eventsMap[asm.eventId] || `Event Scope (ID: ${asm.eventId})`;
     dropdown.innerHTML += `<option value="${asm.eventId}">${nameStr}</option>`;
   });
-
   document.getElementById('eventSelectorOverlay').style.display = 'flex';
 }
 
 window.confirmEventSelection = function() {
   const selectedId = document.getElementById('switchEventDropdown').value;
   if (!selectedId) return;
-  
   myEventId = selectedId;
   document.getElementById('eventSelectorOverlay').style.display = 'none';
   initEventHead();
 };
 
 async function initEventHead() {
-  // Load event details
   const evSnap = await getDoc(doc(db,'events',myEventId));
   if (evSnap.exists()) {
     let titleHTML = evSnap.data().name||'';
@@ -348,6 +360,7 @@ async function initEventHead() {
   loadParticipants();
   loadMyAnnouncements();
   loadQR();
+  loadAssignedTasks();
 }
 
 async function loadParticipants() {
@@ -384,12 +397,24 @@ function renderParticipants() {
     row.className = 'participant-row';
     row.setAttribute('data-id', p.id);
     const readableClass = getClassDisplay(p.class);
+
+    // Build contact line: calling number + optional WhatsApp link
+    const callingNum = p.callingNumber || '';
+    let waHTML = '';
+    const waNum = p.whatsappNumber || '';
+    if (waNum) {
+      waHTML = `<a class="wa-link" href="https://wa.me/91${waNum}" target="_blank" rel="noopener">${waIcon()} ${waNum}</a>`;
+    }
+
     row.innerHTML = `
       <img class="p-avatar" src="${p.photoURL||''}" onerror="this.style.display='none'" alt="">
       <div class="p-info">
         <div class="p-name">${p.name||''} <span class="badge badge-${p.status==='audition_pending'?'pending':p.status}">${statusLabel(p.status)}</span></div>
         <div class="p-meta">${readableClass} ${p.section||''} &bull; Roll ${p.rollNumber||''} &bull; Reg ${p.registrationNumber||''}</div>
-        <div class="p-contact">&#9743; ${p.callingNumber||''}</div>
+        <div class="p-contact">
+          <span>&#9743; ${callingNum}</span>
+          ${waHTML}
+        </div>
         <div class="p-rating" id="stars-${p.id}">${buildStars(p.id, p.rating||0)}</div>
       </div>
       <div class="p-notes">
@@ -459,13 +484,87 @@ window.assignTask = async () => {
       participantId:partId, eventId:myEventId,
       title, description:desc, status:'pending',
       assignedBy: myAuthUser.displayName||myAuthUser.email,
+      assignedByEmail: myAuthUser.email,
       createdAt:serverTimestamp()
     });
     showMsg('taskMsg','Task assigned.','success');
     document.getElementById('taskTitle').value='';
     document.getElementById('taskDesc').value='';
+    loadAssignedTasks(); // Refresh task list after new assignment
   } catch(e) { showMsg('taskMsg','Error: '+e.message,'error'); }
 };
+
+// Build a name lookup map from allParticipants for the task list
+function getParticipantName(id) {
+  const p = allParticipants.find(x => x.id === id);
+  return p ? p.name : `Participant (${id.slice(0,6)}…)`;
+}
+
+async function loadAssignedTasks() {
+  const container = document.getElementById('assignedTasksList');
+  container.innerHTML = '<div class="empty-state"><p>Loading...</p></div>';
+  try {
+    const snap = await getDocs(query(
+      collection(db,'tasks'),
+      where('assignedByEmail','==', myAuthUser.email),
+      where('eventId','==', myEventId),
+      orderBy('createdAt','desc')
+    ));
+    if (snap.empty) {
+      container.innerHTML = '<div class="empty-state"><div class="es-icon">&#9636;</div><p>No tasks assigned yet.</p></div>';
+      return;
+    }
+    container.innerHTML = '';
+    snap.forEach(d => {
+      const t = d.data();
+      const time = t.createdAt?.toDate ? t.createdAt.toDate().toLocaleString('en-IN') : '';
+      const participantName = getParticipantName(t.participantId);
+      const statusClass = t.status === 'done' ? 'task-status-done' : 'task-status-pending';
+      const statusText = t.status === 'done' ? 'Done' : 'Pending';
+      container.innerHTML += `<div class="task-card">
+        <div class="task-info">
+          <div class="task-card-title">${t.title||''}</div>
+          <div class="task-card-desc">${t.description||''}</div>
+          <div class="task-card-meta">Assigned to <span>${participantName}</span> &bull; ${time}</div>
+        </div>
+        <span class="task-status-badge ${statusClass}">${statusText}</span>
+      </div>`;
+    });
+  } catch(e) {
+    // Fallback: query without orderBy in case index isn't set up yet
+    try {
+      const snap2 = await getDocs(query(
+        collection(db,'tasks'),
+        where('assignedByEmail','==', myAuthUser.email),
+        where('eventId','==', myEventId)
+      ));
+      if (snap2.empty) {
+        container.innerHTML = '<div class="empty-state"><div class="es-icon">&#9636;</div><p>No tasks assigned yet.</p></div>';
+        return;
+      }
+      const tasks = [];
+      snap2.forEach(d => tasks.push({id:d.id,...d.data()}));
+      tasks.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
+      container.innerHTML = '';
+      tasks.forEach(t => {
+        const time = t.createdAt?.toDate ? t.createdAt.toDate().toLocaleString('en-IN') : '';
+        const participantName = getParticipantName(t.participantId);
+        const statusClass = t.status === 'done' ? 'task-status-done' : 'task-status-pending';
+        const statusText = t.status === 'done' ? 'Done' : 'Pending';
+        container.innerHTML += `<div class="task-card">
+          <div class="task-info">
+            <div class="task-card-title">${t.title||''}</div>
+            <div class="task-card-desc">${t.description||''}</div>
+            <div class="task-card-meta">Assigned to <span>${participantName}</span> &bull; ${time}</div>
+          </div>
+          <span class="task-status-badge ${statusClass}">${statusText}</span>
+        </div>`;
+      });
+    } catch(e2) {
+      container.innerHTML = '<div class="empty-state"><p>Could not load tasks.</p></div>';
+    }
+  }
+}
 
 window.postAnnouncement = async () => {
   const title = document.getElementById('annTitle').value.trim();
@@ -492,7 +591,7 @@ async function loadMyAnnouncements() {
     container.innerHTML = '';
     snap.forEach(d => {
       const a = d.data();
-      if(a.eventId !== myEventId) return; // Only verify announcements related to current contextual view
+      if(a.eventId !== myEventId) return;
       const time = a.createdAt?.toDate ? a.createdAt.toDate().toLocaleString('en-IN') : '';
       container.innerHTML += `<div class="ann-card">
         <div class="ann-meta">
@@ -527,8 +626,6 @@ window.showPanel = (id, btn) => {
   document.getElementById('panel-'+id).classList.add('active');
   if (btn) btn.classList.add('active');
   document.getElementById('topbarTitle').textContent = btn?btn.textContent.trim():id;
-  
-  // Cleanly closes mobile menu drawer container view when tapped
   document.getElementById('sidebar').classList.remove('open');
 };
 
