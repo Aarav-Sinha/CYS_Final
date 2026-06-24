@@ -6,7 +6,6 @@
 <title>Participant Portal — Critically Yours</title>
 <link rel="icon" type="image/png" href="cys_logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Josefin+Sans:wght@200;300;400;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <style>
 :root{
   --gold:#C9A84C;--gold-dim:#8B6914;--green:#4A7C59;--green-light:#6BAA7D;
@@ -237,7 +236,7 @@ body{font-family:'Josefin Sans',sans-serif;background:var(--bg-dark);color:var(-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, doc, getDoc, collection, query, where, getDocs, addDoc, serverTimestamp, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
+import Qrcode from "https://cdn.jsdelivr.net/npm/qrcode@1.5.3/+esm";
 const firebaseConfig = {
   apiKey:"AIzaSyBKeQxNTRaGsry7vpHZOBOD6CCuvZhBpU0",
   authDomain:"critically-yours-v5.firebaseapp.com",
@@ -400,7 +399,9 @@ async function loadTasks() {
 function loadQR() {
   const canvas = document.getElementById('qrCanvas');
   const qrId = myReg.qrId || myReg.id;
-  QRCode.toCanvas(canvas, qrId, { width: 180, margin: 2, color: { dark: '#C9A84C', light: '#00000000' } }, err => {
+  
+  // Changed "QRCode" to "Qrcode" to match the ESM variable definition
+  Qrcode.toCanvas(canvas, qrId, { width: 180, margin: 2, color: { dark: '#C9A84C', light: '#00000000' } }, err => {
     if (err) { canvas.parentElement.innerHTML += '<p style="color:var(--red-light);font-size:0.75rem;">QR generation failed.</p>'; }
   });
   document.getElementById('qrIdLabel').textContent = 'ID: ' + qrId;
