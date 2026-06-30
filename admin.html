@@ -5,15 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Admin — Critically Yours</title>
 <link rel="icon" type="image/png" href="cys_logo.png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Josefin+Sans:wght=200;300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Josefin+Sans:wght@200;300;400;600&display=swap" rel="stylesheet">
 <style>
 :root{--gold:#C9A84C;--gold-dim:#8B6914;--gold-g:rgba(201,168,76,0.15);--green:#3A7D44;--green-l:#5BAD6F;--green-d:#1E4D28;--red:#C0392B;--red-l:#e74c3c;--bg:#06080A;--bg2:#090C07;--bg3:#0C0F0A;--card:rgba(255,255,255,0.03);--cardh:rgba(255,255,255,0.06);--glass:rgba(201,168,76,0.06);--t1:#F0E8D0;--t2:#9A8050;--t3:#6A5830;--b1:rgba(201,168,76,0.15);--b2:rgba(58,125,68,0.18);}
 [data-theme="light"]{--bg:#F5F0E8;--bg2:#EDE8DC;--bg3:#E5DFD0;--card:rgba(0,0,0,0.03);--cardh:rgba(0,0,0,0.06);--glass:rgba(201,168,76,0.08);--t1:#1A1208;--t2:#5A4010;--t3:#8A6830;--b1:rgba(201,168,76,0.25);--b2:rgba(58,125,68,0.25);}
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;overflow-x:hidden;}
 body{font-family:'Josefin Sans',sans-serif;background:var(--bg);color:var(--t1);display:flex;height:100vh;transition:background .4s,color .4s;}
-
-/* SIDEBAR */
 .sb{width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--b1);display:flex;flex-direction:column;height:100vh;position:sticky;top:0;overflow-y:auto;transition:background .4s,transform .3s ease;z-index:100;}
 .sb-head{padding:18px 16px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:10px;}
 .sb-logo-img{width:32px;height:32px;object-fit:contain;border-radius:6px;}
@@ -33,27 +31,19 @@ body{font-family:'Josefin Sans',sans-serif;background:var(--bg);color:var(--t1);
 .sb-out:hover{background:rgba(192,57,43,0.2);}
 .mob-sb-btn{display:none;width:34px;height:34px;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--b1);border-radius:6px;color:var(--gold);cursor:pointer;font-size:16px;flex-shrink:0;transition:all .2s;}
 .mob-sb-btn:active{background:var(--glass);}
-
-/* MAIN */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
 .topbar{height:52px;padding:0 22px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;background:var(--bg);position:sticky;top:0;z-index:10;flex-shrink:0;}
 .topbar-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--t1);}
 .tb-right{display:flex;gap:8px;align-items:center;}
 .theme-btn{width:30px;height:30px;border-radius:50%;background:var(--card);border:1px solid var(--b1);color:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;}
 .content-area{flex:1;overflow-y:auto;padding:22px;}
-
-/* PANELS */
 .panel{display:none;animation:fadeUp .35s ease;}.panel.on{display:block;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
-
-/* STATS */
 .stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:20px;}
 .stat-c{background:var(--card);border:1px solid var(--b1);border-radius:10px;padding:16px 14px;transition:all .2s;}
 .stat-c:hover{background:var(--cardh);}
 .stat-v{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--gold);line-height:1;}
 .stat-l{font-size:.54rem;letter-spacing:2px;color:var(--t2);text-transform:uppercase;margin-top:6px;}
-
-/* TABLE */
 .tbl-wrap{background:var(--card);border:1px solid var(--b1);border-radius:10px;overflow:hidden;margin-bottom:18px;}
 .tbl-head{padding:13px 16px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
 .tbl-title{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--t1);}
@@ -73,8 +63,6 @@ tr:hover td{background:var(--cardh);}
 .b-rej{background:rgba(192,57,43,0.12);color:var(--red-l);border:1px solid rgba(192,57,43,0.3);}
 .b-open{background:rgba(58,125,68,0.12);color:var(--green-l);border:1px solid rgba(58,125,68,0.3);}
 .b-res{background:rgba(201,168,76,0.12);color:var(--gold);border:1px solid rgba(201,168,76,0.3);}
-
-/* ACTIONS */
 .ab{padding:4px 11px;border-radius:4px;font-family:'Josefin Sans',sans-serif;font-size:.58rem;letter-spacing:.5px;cursor:pointer;transition:all .2s;border:1px solid var(--b1);background:transparent;color:var(--t2);}
 .ab:hover{border-color:var(--gold);color:var(--gold);}
 .ab-g{background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:#06080A;border-color:transparent;}
@@ -83,8 +71,6 @@ tr:hover td{background:var(--cardh);}
 .ab-r:hover{background:rgba(192,57,43,.15);}
 .ab-gr{border-color:rgba(58,125,68,.4);color:var(--green-l);}
 .ab-gr:hover{background:rgba(58,125,68,.15);}
-
-/* FORM SECTION */
 .fs{background:var(--card);border:1px solid var(--b1);border-radius:10px;padding:20px;margin-bottom:16px;}
 .fs-title{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--t1);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--b1);}
 .fg{margin-bottom:13px;}
@@ -103,8 +89,6 @@ tr:hover td{background:var(--cardh);}
 .msg{padding:10px 13px;border-radius:6px;font-size:.74rem;margin-top:10px;display:none;}
 .msg.s{background:rgba(58,125,68,.12);border:1px solid rgba(58,125,68,.3);color:var(--green-l);display:block;}
 .msg.e{background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.3);color:var(--red-l);display:block;}
-
-/* TOGGLES */
 .t-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--b1);}
 .t-row:last-child{border-bottom:none;}
 .t-info .t-label{font-size:.8rem;font-weight:600;color:var(--t1);}
@@ -115,8 +99,6 @@ tr:hover td{background:var(--cardh);}
 .tsl::before{content:'';position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:#888;border-radius:50%;transition:.3s;}
 .ts input:checked+.tsl{background:var(--green);}
 .ts input:checked+.tsl::before{transform:translateX(20px);background:#fff;}
-
-/* SLIDESHOW IMAGE LIST */
 .img-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;background:var(--glass);border:1px solid var(--b1);font-size:.7rem;color:var(--t1);margin:3px;}
 .img-tag button{background:none;border:none;color:var(--t3);cursor:pointer;font-size:12px;line-height:1;padding:0;}
 .img-tag button:hover{color:var(--red-l);}
@@ -124,33 +106,13 @@ tr:hover td{background:var(--cardh);}
 .img-add-row{display:flex;gap:8px;align-items:center;}
 .img-add-row input{flex:1;padding:8px 11px;border-radius:6px;background:var(--bg);border:1px solid var(--b1);color:var(--t1);font-family:'Josefin Sans',sans-serif;font-size:.78rem;outline:none;}
 .img-add-row input:focus{border-color:var(--gold);}
-
-/* ATTENDANCE */
-.att-date-head{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);margin-bottom:14px;}
-.att-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
-.att-card{background:var(--card);border:1px solid var(--b1);border-radius:8px;padding:13px 15px;display:flex;align-items:center;gap:12px;}
-.att-av{width:32px;height:32px;border-radius:50%;border:2px solid var(--b1);object-fit:cover;flex-shrink:0;font-size:12px;background:var(--glass);display:flex;align-items:center;justify-content:center;color:var(--gold);}
-.att-av img{width:100%;height:100%;border-radius:50%;object-fit:cover;}
-.att-name{font-size:.76rem;font-weight:600;color:var(--t1);}
-.att-role{font-size:.58rem;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase;}
-.att-time{font-size:.6rem;color:var(--t2);margin-top:1px;}
-.att-present{width:10px;height:10px;border-radius:50%;background:var(--green-l);margin-left:auto;flex-shrink:0;}
-.att-absent{width:10px;height:10px;border-radius:50%;border:2px solid var(--b1);margin-left:auto;flex-shrink:0;}
-
-/* TICKET CARD */
 .tk-card{background:var(--card);border:1px solid var(--b1);border-radius:8px;padding:14px 16px;margin-bottom:10px;}
 .tk-cat{font-size:.56rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
 .tk-title{font-size:.84rem;font-weight:600;color:var(--t1);margin:3px 0;}
 .tk-body{font-size:.74rem;color:var(--t2);line-height:1.6;margin-bottom:8px;}
 .tk-meta{font-size:.6rem;color:var(--t3);}
-
-/* LOADING */
 .loading-ph{text-align:center;padding:30px;color:var(--t2);font-size:.75rem;}
-
-/* SCROLLABLE TABLE */
 .tbl-scroll{overflow-x:auto;}
-
-/* PERMISSIONS */
 .perm-lbl{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--t2);cursor:pointer;padding:5px 10px;border-radius:5px;border:1px solid var(--b1);background:var(--bg);transition:all .2s;}
 .perm-lbl:hover{border-color:var(--gold);color:var(--t1);}
 .perm-lbl input:checked~*{color:var(--gold);}
@@ -159,20 +121,107 @@ tr:hover td{background:var(--cardh);}
 .type-public_role{background:rgba(58,125,68,0.12);color:var(--green-l);border:1px solid rgba(58,125,68,0.3);}
 .type-internal_role{background:rgba(100,100,200,0.12);color:#9090E0;border:1px solid rgba(100,100,200,0.3);}
 .type-backend_role{background:rgba(192,57,43,0.1);color:var(--red-l);border:1px solid rgba(192,57,43,0.3);}
-
-/* ── TEAM PREVIEW CARDS (admin panel) ── */
-.team-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-top:16px;}
-.team-preview-card{background:var(--bg);border:1px solid var(--b1);border-radius:10px;padding:16px 12px;text-align:center;}
-.team-preview-av{width:52px;height:52px;border-radius:50%;border:2px solid var(--b1);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--gold);background:var(--glass);overflow:hidden;}
-.team-preview-av img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
-.team-preview-name{font-size:.72rem;font-weight:600;color:var(--t1);margin-bottom:3px;}
-.team-preview-role{font-size:.55rem;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase;}
-
-/* MOBILE GLASS OVERLAY SIDEBAR */
 .sb-overlay{display:none;position:fixed;inset:0;background:rgba(6,8,10,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:98;opacity:0;transition:opacity 0.3s ease;}
 .sb-overlay.on{display:block;opacity:1;}
+/* MODAL */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(6,8,10,0.78);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);z-index:300;align-items:center;justify-content:center;}
+.modal-backdrop.on{display:flex;}
+.modal-box{background:var(--bg2);border:1px solid var(--b1);border-radius:14px;padding:26px 24px;width:min(620px,95vw);max-height:90vh;overflow-y:auto;position:relative;}
+.modal-close{position:absolute;top:13px;right:15px;background:none;border:none;color:var(--t2);font-size:1.2rem;cursor:pointer;line-height:1;padding:4px 6px;border-radius:4px;transition:color .2s;}
+.modal-close:hover{color:var(--red-l);}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--t1);margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--b1);}
 
-/* PHONE ADAPTIVE STYLES */
+/* ===========================
+   ATTENDANCE REDESIGN
+   =========================== */
+.att-panel-wrap{background:var(--card);border:1px solid var(--b1);border-radius:12px;overflow:hidden;margin-bottom:18px;}
+.att-panel-header{padding:16px 20px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;background:var(--glass);}
+.att-panel-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--t1);}
+.att-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.att-date-picker{padding:8px 13px;border-radius:7px;background:var(--bg);border:1px solid var(--b1);color:var(--t1);font-family:'Josefin Sans',sans-serif;font-size:.72rem;outline:none;transition:border .2s;}
+.att-date-picker:focus{border-color:var(--gold);}
+.att-toolbar-btn{padding:8px 16px;border-radius:7px;font-family:'Josefin Sans',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:1.5px;cursor:pointer;transition:all .2s;text-transform:uppercase;border:1px solid;}
+.att-toolbar-btn.primary{background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:#06080A;border-color:transparent;}
+.att-toolbar-btn.primary:hover{opacity:.88;transform:translateY(-1px);}
+.att-toolbar-btn.secondary{background:transparent;border-color:var(--b1);color:var(--t2);}
+.att-toolbar-btn.secondary:hover{border-color:var(--gold);color:var(--gold);}
+
+.att-summary-bar{display:flex;gap:8px;flex-wrap:wrap;padding:14px 20px;border-bottom:1px solid var(--b1);background:var(--bg2);}
+.att-sum-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:16px;font-size:.58rem;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;border:1px solid;transition:all .2s;}
+.att-sum-chip .s-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.att-sum-chip.c-in{background:rgba(91,173,111,0.12);color:#5BAD6F;border-color:rgba(91,173,111,0.3);}.att-sum-chip.c-in .s-dot{background:#5BAD6F;}
+.att-sum-chip.c-out{background:rgba(231,76,60,0.12);color:#e74c3c;border-color:rgba(231,76,60,0.3);}.att-sum-chip.c-out .s-dot{background:#e74c3c;}
+.att-sum-chip.c-flag{background:rgba(201,168,76,0.12);color:#C9A84C;border-color:rgba(201,168,76,0.3);}.att-sum-chip.c-flag .s-dot{background:#C9A84C;}
+.att-sum-chip.c-none{background:rgba(100,100,100,0.08);color:#777;border-color:rgba(100,100,100,0.2);}.att-sum-chip.c-none .s-dot{background:#555;}
+
+.att-body{padding:20px;}
+.att-section-label{font-size:.52rem;letter-spacing:3px;color:var(--t3);text-transform:uppercase;margin:16px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--b1);}
+.att-section-label:first-child{margin-top:0;}
+.att-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:12px;margin-bottom:6px;}
+.att-empty-msg{text-align:center;padding:32px;color:var(--t2);font-size:.74rem;font-style:italic;}
+
+/* Individual Attendance Card */
+.att-pcard{background:var(--bg2);border:1px solid var(--b1);border-radius:10px;padding:15px 16px;position:relative;overflow:hidden;transition:border-color .25s, box-shadow .25s, transform .2s;}
+.att-pcard:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,0.15);}
+.att-pcard::after{content:'';position:absolute;top:0;left:0;width:3px;height:100%;border-radius:10px 0 0 10px;background:var(--b1);transition:background .3s,height .3s;}
+.att-pcard.s-checked_in{border-color:rgba(91,173,111,0.3);}.att-pcard.s-checked_in::after{background:#5BAD6F;}
+.att-pcard.s-did_not_come{border-color:rgba(231,76,60,0.25);}.att-pcard.s-did_not_come::after{background:#e74c3c;}
+.att-pcard.s-flagged{border-color:rgba(201,168,76,0.3);}.att-pcard.s-flagged::after{background:#C9A84C;}
+
+.att-pcard-top{display:flex;align-items:center;gap:12px;margin-bottom:13px;}
+.att-pav{width:38px;height:38px;border-radius:50%;flex-shrink:0;background:var(--glass);border:1.5px solid var(--b1);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:var(--gold);overflow:hidden;}
+.att-pav img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.att-pcard-name{font-size:.8rem;font-weight:600;color:var(--t1);line-height:1.3;}
+.att-pcard-role{font-size:.56rem;letter-spacing:1.8px;color:var(--gold);text-transform:uppercase;margin-top:2px;}
+.att-pcard-sub{font-size:.58rem;color:var(--t2);margin-top:2px;}
+
+/* Status pills */
+.att-pills{display:flex;gap:5px;margin-bottom:11px;}
+.att-pill{flex:1;padding:7px 2px 6px;border-radius:7px;border:1.5px solid var(--b1);background:transparent;color:var(--t3);font-family:'Josefin Sans',sans-serif;font-size:.52rem;letter-spacing:.8px;text-transform:uppercase;font-weight:700;cursor:pointer;transition:all .22s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px;line-height:1;user-select:none;}
+.att-pill-icon{font-size:.95rem;display:block;line-height:1;}
+.att-pill:hover:not(.p-checkin):not(.p-notcome):not(.p-flagged){border-color:var(--t2);color:var(--t2);}
+.att-pill.p-checkin{background:rgba(91,173,111,0.18);border-color:#5BAD6F;color:#5BAD6F;}
+.att-pill.p-notcome{background:rgba(231,76,60,0.18);border-color:#e74c3c;color:#e74c3c;}
+.att-pill.p-flagged{background:rgba(201,168,76,0.18);border-color:#C9A84C;color:#C9A84C;}
+
+/* Note */
+.att-note-toggle{background:none;border:none;padding:0;font-family:'Josefin Sans',sans-serif;font-size:.58rem;color:var(--t3);cursor:pointer;display:flex;align-items:center;gap:5px;letter-spacing:.5px;transition:color .2s;margin-bottom:8px;}
+.att-note-toggle:hover{color:var(--t2);}
+.att-note-arrow{display:inline-block;transition:transform .22s;font-size:.65rem;}
+.att-note-toggle.open .att-note-arrow{transform:rotate(90deg);}
+.att-note-wrap{display:none;margin-bottom:10px;}
+.att-note-wrap.open{display:block;animation:attNoteIn .2s ease;}
+@keyframes attNoteIn{from{opacity:0;transform:translateY(-3px);}to{opacity:1;transform:translateY(0);}}
+.att-note-ta{width:100%;padding:8px 10px;border-radius:6px;background:var(--bg);border:1px solid var(--b1);color:var(--t1);font-family:'Josefin Sans',sans-serif;font-size:.72rem;outline:none;resize:none;min-height:54px;transition:border .2s;line-height:1.55;}
+.att-note-ta:focus{border-color:var(--gold);}
+.att-note-ta::placeholder{color:var(--t3);font-size:.68rem;}
+
+/* Save row */
+.att-save-row{display:flex;align-items:center;gap:8px;}
+.att-save-btn{flex:1;padding:8px;border-radius:7px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:#06080A;font-family:'Josefin Sans',sans-serif;font-size:.57rem;font-weight:700;letter-spacing:1.8px;border:none;cursor:pointer;transition:all .22s;text-transform:uppercase;}
+.att-save-btn:hover{opacity:.88;transform:translateY(-1px);}
+.att-save-btn:active{transform:translateY(0);}
+.att-save-btn.saved-ok{background:linear-gradient(135deg,#5BAD6F,#3A7D44);color:#fff;}
+.att-save-btn.saved-ok::after{content:' ✓';}
+.att-ts{font-size:.55rem;color:var(--t3);min-height:13px;text-align:right;margin-top:4px;line-height:1.3;}
+.att-saving-spin{display:none;width:14px;height:14px;border:2px solid var(--b1);border-top-color:var(--gold);border-radius:50%;animation:attSpin .5s linear infinite;flex-shrink:0;}
+@keyframes attSpin{to{transform:rotate(360deg);}}
+
+/* Self attendance strip */
+.att-self-card{background:var(--glass);border:1px solid var(--b1);border-radius:10px;padding:15px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:18px;}
+.att-self-info{display:flex;align-items:center;gap:12px;}
+.att-self-label{font-size:.76rem;font-weight:600;color:var(--t1);}
+.att-self-sub{font-size:.6rem;color:var(--t2);margin-top:2px;}
+
+.att-msg{padding:9px 14px;border-radius:7px;font-size:.72rem;margin-bottom:14px;display:none;}
+.att-msg.s{background:rgba(58,125,68,.12);border:1px solid rgba(58,125,68,.3);color:var(--green-l);display:block;}
+.att-msg.e{background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.3);color:var(--red-l);display:block;}
+
+/* Legend */
+.att-legend{display:flex;gap:12px;flex-wrap:wrap;align-items:center;font-size:.58rem;color:var(--t2);letter-spacing:.5px;}
+.att-legend-item{display:flex;align-items:center;gap:5px;}
+.att-legend-dot{width:8px;height:8px;border-radius:50%;}
+
 @media(max-width:700px){
   body{flex-direction:column;}
   .sb{position:fixed;top:0;left:0;height:100vh;width:260px;transform:translateX(-100%);box-shadow:20px 0 40px rgba(0,0,0,0.6);z-index:99;}
@@ -185,6 +234,7 @@ tr:hover td{background:var(--cardh);}
   .content-area{padding:16px;}
   .fgrid{grid-template-columns:1fr;}
   .stat-row{grid-template-columns:repeat(2,1fr);}
+  .att-cards-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -306,81 +356,30 @@ tr:hover td{background:var(--cardh);}
     <div class="panel" id="p-addparticipant">
       <div class="fs">
         <div class="fs-title">Add Participant Manually</div>
-        <p style="font-size:.72rem;color:var(--t2);margin-bottom:4px;line-height:1.7;">For students who cannot use their school Google account. Their <strong style="color:var(--gold);">personal email</strong> will be their portal login &mdash; they sign in with Google using that email on <code style="font-size:.68rem;color:var(--t2);background:var(--bg);padding:1px 5px;border-radius:3px;">login.html</code>.</p>
+        <p style="font-size:.72rem;color:var(--t2);margin-bottom:4px;line-height:1.7;">For students who cannot use their school Google account. Their <strong style="color:var(--gold);">personal email</strong> will be their portal login.</p>
         <div style="background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:10px 14px;font-size:.68rem;color:var(--t2);line-height:1.7;margin-bottom:18px;margin-top:10px;">
           <strong style="color:var(--gold);">&#9670; Note:</strong> Duplicate email check is enforced. If the student already enrolled via enroll.html, submission will be blocked.
         </div>
         <div class="fgrid">
-          <div class="fg">
-            <label>Full Name <span style="color:var(--red-l);">*</span></label>
-            <input type="text" id="apName" placeholder="Student full name">
-          </div>
-          <div class="fg">
-            <label>Personal Email (Portal Login) <span style="color:var(--red-l);">*</span></label>
-            <input type="email" id="apEmail" placeholder="personal@gmail.com">
-            <span style="font-size:.58rem;color:var(--t3);display:block;margin-top:4px;">Student will use this email to sign in to participant portal via Google</span>
-          </div>
-          <div class="fg">
-            <label>Registration Number <span style="color:var(--red-l);">*</span></label>
-            <input type="text" id="apReg" placeholder="e.g. 12345">
-          </div>
-          <div class="fg">
-            <label>Roll Number <span style="color:var(--red-l);">*</span></label>
-            <input type="number" id="apRoll" placeholder="e.g. 18" min="1">
-          </div>
+          <div class="fg"><label>Full Name <span style="color:var(--red-l);">*</span></label><input type="text" id="apName" placeholder="Student full name"></div>
+          <div class="fg"><label>Personal Email (Portal Login) <span style="color:var(--red-l);">*</span></label><input type="email" id="apEmail" placeholder="personal@gmail.com"><span style="font-size:.58rem;color:var(--t3);display:block;margin-top:4px;">Student signs in via Google with this email</span></div>
+          <div class="fg"><label>Registration Number <span style="color:var(--red-l);">*</span></label><input type="text" id="apReg" placeholder="e.g. 12345"></div>
+          <div class="fg"><label>Roll Number <span style="color:var(--red-l);">*</span></label><input type="number" id="apRoll" placeholder="e.g. 18" min="1"></div>
         </div>
         <div class="fgrid">
-          <div class="fg">
-            <label>Class <span style="color:var(--red-l);">*</span></label>
-            <select id="apClass" onchange="onApClassChange()">
-              <option value="">Select class</option>
-            </select>
-          </div>
-          <div class="fg">
-            <label>Section <span style="color:var(--red-l);">*</span></label>
-            <select id="apSection" onchange="onApSectionChange()">
-              <option value="">Select section</option>
-            </select>
-          </div>
-          <div class="fg">
-            <label>Class Teacher</label>
-            <input type="text" id="apTeacher" readonly placeholder="Auto-detected from section">
-          </div>
+          <div class="fg"><label>Class <span style="color:var(--red-l);">*</span></label><select id="apClass" onchange="onApClassChange()"><option value="">Select class</option></select></div>
+          <div class="fg"><label>Section <span style="color:var(--red-l);">*</span></label><select id="apSection" onchange="onApSectionChange()"><option value="">Select section</option></select></div>
+          <div class="fg"><label>Class Teacher</label><input type="text" id="apTeacher" readonly placeholder="Auto-detected"></div>
         </div>
         <div class="fgrid">
-          <div class="fg">
-            <label>Calling Number <span style="color:var(--red-l);">*</span></label>
-            <input type="tel" id="apCall" placeholder="10-digit number" maxlength="10" oninput="if(document.getElementById('apSameCb').checked)document.getElementById('apWA').value=this.value">
-          </div>
-          <div class="fg">
-            <label>WhatsApp Number <span style="color:var(--red-l);">*</span></label>
-            <input type="tel" id="apWA" placeholder="10-digit number" maxlength="10">
-            <label style="display:flex;align-items:center;gap:6px;margin-top:7px;font-size:.7rem;color:var(--t2);cursor:pointer;">
-              <input type="checkbox" id="apSameCb" style="accent-color:var(--gold);" onchange="if(this.checked){document.getElementById('apWA').value=document.getElementById('apCall').value;document.getElementById('apWA').readOnly=true;}else{document.getElementById('apWA').readOnly=false;}">
-              Same as calling
-            </label>
-          </div>
+          <div class="fg"><label>Calling Number <span style="color:var(--red-l);">*</span></label><input type="tel" id="apCall" placeholder="10-digit number" maxlength="10" oninput="if(document.getElementById('apSameCb').checked)document.getElementById('apWA').value=this.value"></div>
+          <div class="fg"><label>WhatsApp Number <span style="color:var(--red-l);">*</span></label><input type="tel" id="apWA" placeholder="10-digit number" maxlength="10"><label style="display:flex;align-items:center;gap:6px;margin-top:7px;font-size:.7rem;color:var(--t2);cursor:pointer;"><input type="checkbox" id="apSameCb" style="accent-color:var(--gold);" onchange="if(this.checked){document.getElementById('apWA').value=document.getElementById('apCall').value;document.getElementById('apWA').readOnly=true;}else{document.getElementById('apWA').readOnly=false;}"> Same as calling</label></div>
         </div>
         <div class="fgrid">
-          <div class="fg">
-            <label>Event <span style="color:var(--red-l);">*</span></label>
-            <select id="apEvEvent">
-              <option value="">Select event&hellip;</option>
-            </select>
-          </div>
-          <div class="fg">
-            <label>Initial Status</label>
-            <select id="apStatus">
-              <option value="audition_pending">Audition Pending</option>
-              <option value="selected">Selected</option>
-              <option value="rejected">Rejected</option>
-            </select>
-          </div>
+          <div class="fg"><label>Event <span style="color:var(--red-l);">*</span></label><select id="apEvEvent"><option value="">Select event&hellip;</option></select></div>
+          <div class="fg"><label>Initial Status</label><select id="apStatus"><option value="audition_pending">Audition Pending</option><option value="selected">Selected</option><option value="rejected">Rejected</option></select></div>
         </div>
-        <div class="btn-row" style="margin-top:6px;">
-          <button class="btn-prim" onclick="submitAddParticipant()">Add Participant</button>
-          <button class="btn-sec" onclick="clearApForm()">Clear</button>
-        </div>
+        <div class="btn-row" style="margin-top:6px;"><button class="btn-prim" onclick="submitAddParticipant()">Add Participant</button><button class="btn-sec" onclick="clearApForm()">Clear</button></div>
         <div class="msg" id="apMsg"></div>
       </div>
     </div>
@@ -392,15 +391,15 @@ tr:hover td{background:var(--cardh);}
         <div class="fgrid">
           <div class="fg"><label>Entry Type</label>
             <select id="evType" onchange="onEvTypeChange()">
-              <option value="event">&#9672; Competitive Event (listed in Events)</option>
-              <option value="public_role">&#9671; Public Role (listed in Open Roles, public enrollment)</option>
-              <option value="internal_role">&#9670; Internal Role (backend only, admin assigns)</option>
-              <option value="backend_role">&#9632; Backend Role (invisible to public, admin only)</option>
+              <option value="event">&#9672; Competitive Event</option>
+              <option value="public_role">&#9671; Public Role</option>
+              <option value="internal_role">&#9670; Internal Role</option>
+              <option value="backend_role">&#9632; Backend Role</option>
             </select>
           </div>
           <div class="fg"><label>Name</label><input type="text" id="evName" placeholder="Poetry Slam / Logistics Head"></div>
           <div class="fg"><label>Category / Role Label</label><input type="text" id="evCat" placeholder="Literary / Operations"></div>
-          <div class="fg"><label>Logo Filename (e.g. poetry_logo.png)</label><input type="text" id="evLogo" placeholder="poetry_logo.png"></div>
+          <div class="fg"><label>Logo Filename</label><input type="text" id="evLogo" placeholder="poetry_logo.png"></div>
           <div class="fg"><label>Venue</label><input type="text" id="evVenue" placeholder="Auditorium Hall A"></div>
           <div class="fg ev-only-field"><label>Max Participants</label><input type="number" id="evMax" placeholder="20" min="1"></div>
           <div class="fg"><label>Display Order</label><input type="number" id="evOrder" placeholder="1" min="1"></div>
@@ -408,10 +407,7 @@ tr:hover td{background:var(--cardh);}
         <div class="fg"><label>Description</label><textarea id="evDesc" placeholder="Brief description&hellip;"></textarea></div>
         <div style="background:rgba(192,57,43,0.06);border:1px solid rgba(192,57,43,0.22);border-radius:8px;padding:12px 16px;margin-top:2px;margin-bottom:2px;">
           <div style="display:flex;align-items:center;justify-content:space-between;">
-            <div>
-              <div style="font-size:.78rem;font-weight:600;color:var(--t1);">Stop Enrollment for this Entry</div>
-              <div style="font-size:.64rem;color:var(--t2);margin-top:2px;">Overrides the global enrollment toggle. Blocks new registrations for this specific event/role only.</div>
-            </div>
+            <div><div style="font-size:.78rem;font-weight:600;color:var(--t1);">Stop Enrollment for this Entry</div><div style="font-size:.64rem;color:var(--t2);margin-top:2px;">Blocks new registrations for this specific event/role only.</div></div>
             <label class="ts" style="flex-shrink:0;margin-left:16px;"><input type="checkbox" id="evEnrollClosed"><span class="tsl"></span></label>
           </div>
         </div>
@@ -433,15 +429,11 @@ tr:hover td{background:var(--cardh);}
         <div class="tbl-head">
           <div class="tbl-title">All Events &amp; Roles</div>
           <select class="sel-filter" id="evTypeFilter" onchange="renderEvTable()">
-            <option value="">All Types</option>
-            <option value="event">Events</option>
-            <option value="public_role">Public Roles</option>
-            <option value="internal_role">Internal Roles</option>
-            <option value="backend_role">Backend Roles</option>
+            <option value="">All Types</option><option value="event">Events</option><option value="public_role">Public Roles</option><option value="internal_role">Internal Roles</option><option value="backend_role">Backend Roles</option>
           </select>
         </div>
         <div class="tbl-scroll"><table><thead><tr><th>Order</th><th>Type</th><th>Name</th><th>Category</th><th>Venue</th><th>Max</th><th>Enroll</th><th>Actions</th></tr></thead>
-        <tbody id="evTbody"><tr><td colspan="7" class="loading-ph">Loading&hellip;</td></tr></tbody></table></div>
+        <tbody id="evTbody"><tr><td colspan="8" class="loading-ph">Loading&hellip;</td></tr></tbody></table></div>
       </div>
     </div>
 
@@ -449,7 +441,7 @@ tr:hover td{background:var(--cardh);}
     <div class="panel" id="p-rolepermissions">
       <div class="fs">
         <div class="fs-title">Role Permissions &amp; Portal Features</div>
-        <p style="font-size:.72rem;color:var(--t2);margin-bottom:16px;">Configure what each role's head can access in their event/role portal. Per-entry overrides are set when creating/editing the event above.</p>
+        <p style="font-size:.72rem;color:var(--t2);margin-bottom:16px;">Configure what each role's head can access in their portal.</p>
         <div id="rolePermsList"><div class="loading-ph">Loading&hellip;</div></div>
       </div>
       <div class="fs">
@@ -559,13 +551,12 @@ tr:hover td{background:var(--cardh);}
           <label class="ts"><input type="checkbox" id="tgSlideshow" onchange="saveToggle('slideshowEnabled',this.checked)"><span class="tsl"></span></label>
         </div>
         <div style="margin-top:16px;">
-          <label style="font-size:.56rem;letter-spacing:2px;color:var(--t2);text-transform:uppercase;display:block;margin-bottom:8px;">Slideshow Images (filename.ext — file must be deployed)</label>
+          <label style="font-size:.56rem;letter-spacing:2px;color:var(--t2);text-transform:uppercase;display:block;margin-bottom:8px;">Slideshow Images</label>
           <div class="imgs-container" id="imgsContainer"></div>
           <div class="img-add-row">
             <input type="text" id="imgInput" placeholder="e.g. slide1.jpg" onkeydown="if(event.key==='Enter')addSlideImg()">
             <button class="btn-prim" onclick="addSlideImg()">Add</button>
           </div>
-          <div style="font-size:.62rem;color:var(--t3);margin-top:6px;">Add filenames of images you have deployed. They will loop in a slideshow.</div>
         </div>
         <div class="btn-row" style="margin-top:16px;"><button class="btn-prim" onclick="saveSlideshow()">Save Slideshow Settings</button></div>
         <div class="msg" id="slideMsg"></div>
@@ -579,9 +570,7 @@ tr:hover td{background:var(--cardh);}
       </div>
       <div class="fs">
         <div class="fs-title">Fest Date (Countdown)</div>
-        <div class="fgrid">
-          <div class="fg"><label>Date &amp; Time</label><input type="datetime-local" id="festDate"></div>
-        </div>
+        <div class="fgrid"><div class="fg"><label>Date &amp; Time</label><input type="datetime-local" id="festDate"></div></div>
         <div class="btn-row"><button class="btn-prim" onclick="saveFestDate()">Save Date</button></div>
         <div class="msg" id="dateMsg"></div>
       </div>
@@ -597,8 +586,7 @@ tr:hover td{background:var(--cardh);}
       </div>
       <div class="fs">
         <div class="fs-title">CYS Logo</div>
-        <div class="fg"><label>Logo Filename (deployed as-is)</label><input type="text" id="logoFile" placeholder="cys_logo.png"></div>
-        <div style="font-size:.62rem;color:var(--t3);margin-top:4px;">The logo file must be deployed alongside the HTML files. Default: <em>cys_logo.png</em></div>
+        <div class="fg"><label>Logo Filename</label><input type="text" id="logoFile" placeholder="cys_logo.png"></div>
         <div class="btn-row" style="margin-top:10px;"><button class="btn-prim" onclick="saveLogo()">Save Logo Filename</button></div>
         <div class="msg" id="logoMsg"></div>
       </div>
@@ -642,12 +630,11 @@ tr:hover td{background:var(--cardh);}
       </div>
     </div>
 
-    <!-- ═══════════════════════ OUR TEAM ═══════════════════════ -->
+    <!-- OUR TEAM -->
     <div class="panel" id="p-team">
-      <!-- TIER MANAGEMENT -->
       <div class="fs">
         <div class="fs-title">Manage Tiers</div>
-        <p style="font-size:.72rem;color:var(--t2);margin-bottom:14px;">Tiers group your team on the homepage (e.g. Core Committee, Role Heads, Event Heads). Create tiers first, then add members into them. They appear in display-order on the public page.</p>
+        <p style="font-size:.72rem;color:var(--t2);margin-bottom:14px;">Tiers group your team on the homepage. Create tiers first, then add members into them.</p>
         <div class="fgrid">
           <div class="fg"><label>Tier Name</label><input type="text" id="tierName" placeholder="Core Committee"></div>
           <div class="fg"><label>Display Order</label><input type="number" id="tierOrder" placeholder="1" min="1"></div>
@@ -660,30 +647,19 @@ tr:hover td{background:var(--cardh);}
         <div class="tbl-scroll"><table><thead><tr><th>Order</th><th>Name</th><th>Actions</th></tr></thead>
         <tbody id="tierTbody"><tr><td colspan="3" class="loading-ph">Loading&hellip;</td></tr></tbody></table></div>
       </div>
-
-      <!-- MEMBER MANAGEMENT -->
       <div class="fs">
         <div class="fs-title" id="memberFormTitle">Add Team Member</div>
         <div class="fgrid">
           <div class="fg"><label>Full Name</label><input type="text" id="memName" placeholder="Aarav Sinha"></div>
           <div class="fg"><label>Role / Title</label><input type="text" id="memRole" placeholder="Head of Design"></div>
-          <div class="fg">
-            <label>Photo Filename</label>
-            <input type="text" id="memPhoto" placeholder="aarav_sinha.jpg">
-            <div style="font-size:.58rem;color:var(--t3);margin-top:5px;">Deploy the photo file alongside the HTML files. Leave blank to show initials instead.</div>
-          </div>
+          <div class="fg"><label>Photo Filename</label><input type="text" id="memPhoto" placeholder="aarav_sinha.jpg"><div style="font-size:.58rem;color:var(--t3);margin-top:5px;">Leave blank to show initials.</div></div>
           <div class="fg"><label>Assign to Tier</label><select id="memTier"><option value="">Select tier&hellip;</option></select></div>
           <div class="fg"><label>Display Order</label><input type="number" id="memOrder" placeholder="1" min="1"></div>
         </div>
         <input type="hidden" id="memEditId">
-        <div class="btn-row">
-          <button class="btn-prim" onclick="saveMember()">Save Member</button>
-          <button class="btn-sec" onclick="clearMemberForm()">Clear</button>
-        </div>
+        <div class="btn-row"><button class="btn-prim" onclick="saveMember()">Save Member</button><button class="btn-sec" onclick="clearMemberForm()">Clear</button></div>
         <div class="msg" id="memMsg"></div>
       </div>
-
-      <!-- MEMBERS TABLE -->
       <div class="tbl-wrap">
         <div class="tbl-head">
           <div class="tbl-title">All Team Members</div>
@@ -696,27 +672,60 @@ tr:hover td{background:var(--cardh);}
         <tbody id="memTbody"><tr><td colspan="6" class="loading-ph">Loading&hellip;</td></tr></tbody></table></div>
       </div>
     </div>
-    <!-- ══════════════════════════════════════════════════════════ -->
 
-    <!-- ATTENDANCE -->
+    <!-- =====================
+         ATTENDANCE — REDESIGNED
+         ===================== -->
     <div class="panel" id="p-attendance">
-      <div class="fs">
-        <div class="fs-title">Attendance Management</div>
-        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
-          <input type="date" id="attDate" style="padding:8px 12px;border-radius:6px;background:var(--bg);border:1px solid var(--b1);color:var(--t1);font-family:'Josefin Sans',sans-serif;font-size:.78rem;outline:none;">
-          <button class="btn-prim" onclick="startAttendance()">Start Attendance for this Day</button>
-          <button class="btn-sec" onclick="loadAttendance()">Load Attendance</button>
+
+      <!-- Self check-in strip -->
+      <div class="att-self-card">
+        <div class="att-self-info">
+          <div class="att-pav" id="selfAvatar" style="width:42px;height:42px;font-size:1.1rem;">&#9670;</div>
+          <div>
+            <div class="att-self-label" id="selfName">You</div>
+            <div class="att-self-sub">Mark yourself present for today's session</div>
+          </div>
         </div>
-        <div class="msg" id="attMsg"></div>
-        <div class="att-date-head" id="attDateHead"></div>
-        <div class="att-grid" id="attGrid"></div>
+        <button class="att-toolbar-btn primary" onclick="markAdminPresent()" style="white-space:nowrap;">&#10003; Check Myself In</button>
       </div>
-      <div class="fs">
-        <div class="fs-title">Mark Admin Attendance (Self)</div>
-        <p style="font-size:.72rem;color:var(--t2);margin-bottom:14px;">Mark yourself present for today. Security scans everyone else.</p>
-        <button class="btn-prim" onclick="markAdminPresent()">Mark Myself Present Today</button>
-        <div class="msg" id="selfAttMsg"></div>
+
+      <!-- Main attendance panel -->
+      <div class="att-panel-wrap">
+        <div class="att-panel-header">
+          <div>
+            <div class="att-panel-title">Attendance Register</div>
+            <div style="font-size:.58rem;color:var(--t2);margin-top:3px;letter-spacing:.5px;">Select a date and start or load a session</div>
+          </div>
+          <div class="att-toolbar">
+            <input type="date" id="attDate" class="att-date-picker">
+            <button class="att-toolbar-btn primary" onclick="startAttendance()">Start Session</button>
+            <button class="att-toolbar-btn secondary" onclick="loadAttendance()">Reload</button>
+          </div>
+        </div>
+
+        <!-- Summary bar — populated by JS -->
+        <div class="att-summary-bar" id="attSummaryBar" style="display:none;">
+          <div class="att-sum-chip c-in"><span class="s-dot"></span><span id="sumIn">0</span> Checked In</div>
+          <div class="att-sum-chip c-out"><span class="s-dot"></span><span id="sumOut">0</span> Did Not Come</div>
+          <div class="att-sum-chip c-flag"><span class="s-dot"></span><span id="sumFlag">0</span> Flagged</div>
+          <div class="att-sum-chip c-none"><span class="s-dot"></span><span id="sumNone">0</span> Unmarked</div>
+        </div>
+
+        <div class="att-body">
+          <div class="att-msg" id="attMsg"></div>
+
+          <!-- Legend -->
+          <div class="att-legend" style="margin-bottom:18px;">
+            <div class="att-legend-item"><div class="att-legend-dot" style="background:#5BAD6F;"></div><span>Checked In — Present &amp; accounted for</span></div>
+            <div class="att-legend-item"><div class="att-legend-dot" style="background:#e74c3c;"></div><span>Did Not Come — Absent</span></div>
+            <div class="att-legend-item"><div class="att-legend-dot" style="background:#C9A84C;"></div><span>Flagged — Needs follow-up</span></div>
+          </div>
+
+          <div id="attCardsContainer"><div class="att-empty-msg">Select a date above and click <strong>Reload</strong> to view attendance.</div></div>
+        </div>
       </div>
+
     </div>
 
     <!-- TICKETS -->
@@ -744,26 +753,11 @@ tr:hover td{background:var(--cardh);}
     <div class="panel" id="p-settings">
       <div class="fs">
         <div class="fs-title">Feature Toggles</div>
-        <div class="t-row">
-          <div class="t-info"><div class="t-label">Enrollment Open</div><div class="t-desc">Allow participants to submit enrollment forms</div></div>
-          <label class="ts"><input type="checkbox" id="tgEnroll" onchange="saveToggle('enrollmentOpen',this.checked)"><span class="tsl"></span></label>
-        </div>
-        <div class="t-row">
-          <div class="t-info"><div class="t-label">Volunteer Registration Open</div><div class="t-desc">Show volunteer registration button on homepage</div></div>
-          <label class="ts"><input type="checkbox" id="tgVolunteer" onchange="saveToggle('volunteerOpen',this.checked)"><span class="tsl"></span></label>
-        </div>
-        <div class="t-row">
-          <div class="t-info"><div class="t-label">Participant Portal Active</div><div class="t-desc">Toggle participant.html accessibility</div></div>
-          <label class="ts"><input type="checkbox" id="tgPartPortal" onchange="saveToggle('participantPortalOpen',this.checked)"><span class="tsl"></span></label>
-        </div>
-        <div class="t-row">
-          <div class="t-info"><div class="t-label">Volunteer Portal Active</div><div class="t-desc">Toggle volunteer.html accessibility</div></div>
-          <label class="ts"><input type="checkbox" id="tgVolPortal" onchange="saveToggle('volunteerPortalOpen',this.checked)"><span class="tsl"></span></label>
-        </div>
-        <div class="t-row">
-          <div class="t-info"><div class="t-label">Allow Non-School Accounts</div><div class="t-desc">Permit non-@dpsmegacity.in accounts added by admin</div></div>
-          <label class="ts"><input type="checkbox" id="tgNonSchool" onchange="saveToggle('allowNonSchoolAccounts',this.checked)"><span class="tsl"></span></label>
-        </div>
+        <div class="t-row"><div class="t-info"><div class="t-label">Enrollment Open</div><div class="t-desc">Allow participants to submit enrollment forms</div></div><label class="ts"><input type="checkbox" id="tgEnroll" onchange="saveToggle('enrollmentOpen',this.checked)"><span class="tsl"></span></label></div>
+        <div class="t-row"><div class="t-info"><div class="t-label">Volunteer Registration Open</div><div class="t-desc">Show volunteer registration button on homepage</div></div><label class="ts"><input type="checkbox" id="tgVolunteer" onchange="saveToggle('volunteerOpen',this.checked)"><span class="tsl"></span></label></div>
+        <div class="t-row"><div class="t-info"><div class="t-label">Participant Portal Active</div><div class="t-desc">Toggle participant.html accessibility</div></div><label class="ts"><input type="checkbox" id="tgPartPortal" onchange="saveToggle('participantPortalOpen',this.checked)"><span class="tsl"></span></label></div>
+        <div class="t-row"><div class="t-info"><div class="t-label">Volunteer Portal Active</div><div class="t-desc">Toggle volunteer.html accessibility</div></div><label class="ts"><input type="checkbox" id="tgVolPortal" onchange="saveToggle('volunteerPortalOpen',this.checked)"><span class="tsl"></span></label></div>
+        <div class="t-row"><div class="t-info"><div class="t-label">Allow Non-School Accounts</div><div class="t-desc">Permit non-@dpsmegacity.in accounts added by admin</div></div><label class="ts"><input type="checkbox" id="tgNonSchool" onchange="saveToggle('allowNonSchoolAccounts',this.checked)"><span class="tsl"></span></label></div>
       </div>
     </div>
 
@@ -782,9 +776,42 @@ tr:hover td{background:var(--cardh);}
   </div><!-- /content-area -->
 </div><!-- /main -->
 
+<!-- EDIT REGISTRATION MODAL -->
+<div class="modal-backdrop" id="editRegModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeRegModal()">&#10005;</button>
+    <div class="modal-title">Edit Registration</div>
+    <input type="hidden" id="erDocId">
+    <div class="fgrid">
+      <div class="fg"><label>Full Name <span style="color:var(--red-l);">*</span></label><input type="text" id="erName"></div>
+      <div class="fg"><label>Email <span style="font-size:.52rem;color:var(--t3);">(read-only)</span></label><input type="email" id="erEmail" readonly style="opacity:.55;cursor:not-allowed;"></div>
+      <div class="fg"><label>Registration Number</label><input type="text" id="erReg"></div>
+      <div class="fg"><label>Roll Number</label><input type="number" id="erRoll" min="1"></div>
+      <div class="fg"><label>Class</label><select id="erClass"></select></div>
+      <div class="fg"><label>Section</label><select id="erSection"></select></div>
+      <div class="fg"><label>Class Teacher</label><input type="text" id="erTeacher" readonly style="opacity:.65;cursor:not-allowed;"></div>
+      <div class="fg"><label>Calling Number</label><input type="tel" id="erCall" maxlength="10"></div>
+      <div class="fg"><label>WhatsApp Number</label><input type="tel" id="erWA" maxlength="10"></div>
+      <div class="fg"><label>Event</label><select id="erEvent"></select></div>
+      <div class="fg"><label>Status</label>
+        <select id="erStatus">
+          <option value="audition_pending">Audition Pending</option>
+          <option value="selected">Selected</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:6px;">
+      <button class="btn-prim" onclick="saveRegEdit()">Save Changes</button>
+      <button class="btn-sec" onclick="closeRegModal()">Cancel</button>
+    </div>
+    <div class="msg" id="erMsg"></div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, collection, query, where, getDocs, orderBy, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, collection, query, where, getDocs, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const FC={apiKey:"AIzaSyBKeQxNTRaGsry7vpHZOBOD6CCuvZhBpU0",authDomain:"critically-yours-v5.firebaseapp.com",projectId:"critically-yours-v5",storageBucket:"critically-yours-v5.firebasestorage.app",messagingSenderId:"436240015995",appId:"1:436240015995:web:e646abe16d80d7eab9f8de"};
@@ -825,12 +852,17 @@ onAuthStateChanged(auth,async user=>{
   document.getElementById('sbAv').src=user.photoURL||'';
   document.getElementById('sbUN').textContent=user.displayName||user.email;
   document.getElementById('sbUR').textContent=email===ADMIN_EMAIL?'Administrator':'IT Team';
+  // Self card
+  const selfAv=document.getElementById('selfAvatar');
+  if(user.photoURL){selfAv.innerHTML=`<img src="${user.photoURL}" alt="" onerror="this.outerHTML='&#9670;'">`;}
+  document.getElementById('selfName').textContent=user.displayName||user.email;
   initAdmin();
 });
 
 async function initAdmin(){
   await loadSettings();
   await loadEventsData();
+  await loadClasses();
   await loadTiers();
   loadDashboard();
   loadUsers();
@@ -839,7 +871,6 @@ async function initAdmin(){
   loadTimeline();
   loadRules();
   loadTickets();
-  loadClasses();
   loadAttendance();
   loadMembersTable();
 }
@@ -861,7 +892,6 @@ window.nav=function(id,btn){
 };
 
 function showMsg(id,msg,type){const el=document.getElementById(id);if(!el)return;el.textContent=msg;el.className='msg '+(type==='s'?'s':'e');setTimeout(()=>{el.className='msg';},5000);}
-
 function sBadge(s){if(s==='selected')return'<span class="badge b-sel">Selected</span>';if(s==='rejected')return'<span class="badge b-rej">Rejected</span>';return'<span class="badge b-pend">Pending</span>';}
 
 /* SETTINGS */
@@ -879,7 +909,6 @@ async function loadSettings(){
     slideshowImgs=d.slideshowImages||[];renderSlideImgs();
   }catch(e){console.warn(e);}
 }
-
 window.saveToggle=async function(key,val){
   try{await setDoc(doc(db,'settings','global'),{[key]:val},{merge:true});if(key==='allowNonSchoolAccounts')allowNonSchoolGlobal=val;}catch(e){alert('Save failed: '+e.message);}
 };
@@ -888,32 +917,21 @@ window.saveToggle=async function(key,val){
 const EV_TYPE_LABELS={event:'Event',public_role:'Public Role',internal_role:'Internal Role',backend_role:'Backend Role'};
 window.onEvTypeChange=function(){const t=document.getElementById('evType').value;const isRole=(t==='internal_role'||t==='backend_role');document.querySelectorAll('.ev-only-field').forEach(el=>{el.style.display=isRole?'none':'';});};
 async function loadEventsData(){
-  const tbody=document.getElementById('evTbody');
   try{
     const snap=await getDocs(query(collection(db,'events'),orderBy('order','asc')));
     evCache=[];snap.forEach(d=>evCache.push({id:d.id,...d.data()}));
     renderEvTable();
     ['uEvent','regEvFilter','expEvent'].forEach(selId=>{const sel=document.getElementById(selId);if(!sel)return;const cur=sel.value;const first=selId==='uEvent'?'<option value="">None</option>':'<option value="">All Events</option>';sel.innerHTML=first+evCache.map(ev=>`<option value="${ev.id}">${ev.name} (${EV_TYPE_LABELS[ev.entryType||'event']||'Event'})</option>`).join('');sel.value=cur;});
-    /* populate Add-Participant event selector — events + public roles */
     const apSel=document.getElementById('apEvEvent');
-    if(apSel){const cur=apSel.value;apSel.innerHTML='<option value="">Select event / role…</option>'+evCache.filter(ev=>['event','public_role'].includes(ev.entryType||'event')).map(ev=>`<option value="${ev.id}">[${EV_TYPE_LABELS[ev.entryType||'event']}] ${ev.name}</option>`).join('');apSel.value=cur;}
-  }catch(e){tbody.innerHTML='<tr><td colspan="7" class="loading-ph">Error loading events.</td></tr>';}
+    if(apSel){const cur=apSel.value;apSel.innerHTML='<option value="">Select event / role&hellip;</option>'+evCache.filter(ev=>['event','public_role'].includes(ev.entryType||'event')).map(ev=>`<option value="${ev.id}">[${EV_TYPE_LABELS[ev.entryType||'event']}] ${ev.name}</option>`).join('');apSel.value=cur;}
+  }catch(e){document.getElementById('evTbody').innerHTML='<tr><td colspan="8" class="loading-ph">Error loading events.</td></tr>';}
 }
 window.renderEvTable=function(){const tbody=document.getElementById('evTbody');const typeFilter=document.getElementById('evTypeFilter')?.value||'';const filtered=evCache.filter(ev=>!typeFilter||(ev.entryType||'event')===typeFilter);if(!filtered.length){tbody.innerHTML='<tr><td colspan="8" class="loading-ph">No entries.</td></tr>';return;}tbody.innerHTML='';filtered.forEach(ev=>{const t=ev.entryType||'event';const badge=`<span class="type-badge type-${t}">${EV_TYPE_LABELS[t]||t}</span>`;const enrollClosed=!!ev.enrollmentClosed;const enrollBadge=enrollClosed?'<span class="badge b-rej" style="font-size:.5rem;">Closed</span>':'<span class="badge b-sel" style="font-size:.5rem;">Open</span>';const toggleLabel=enrollClosed?'Open':'Close';const toggleClass=enrollClosed?'ab ab-gr':'ab ab-r';tbody.innerHTML+=`<tr><td>${ev.order||''}</td><td>${badge}</td><td>${ev.name||''}</td><td>${ev.category||''}</td><td>${ev.venue||''}</td><td>${ev.maxParticipants||'&mdash;'}</td><td>${enrollBadge}</td><td style="white-space:nowrap;"><button class="ab ab-g" onclick="editEvent('${ev.id}')">Edit</button> <button class="${toggleClass}" onclick="toggleEvEnroll('${ev.id}',${!enrollClosed})" style="margin-left:4px;">${toggleLabel} Enroll</button> <button class="ab ab-r" onclick="deleteEvent('${ev.id}')" style="margin-left:4px;">Delete</button></td></tr>`;});};
 window.saveEvent=async function(){const editId=document.getElementById('evEditId').value;const entryType=document.getElementById('evType').value;const portalFeatures={canViewParticipants:document.getElementById('pfParticipants').checked,canPostAnnouncements:document.getElementById('pfAnnouncements').checked,canAssignTasks:document.getElementById('pfTasks').checked,canChangeStatus:document.getElementById('pfStatusChange').checked,canRateParticipants:document.getElementById('pfRatings').checked};const enrollmentClosed=document.getElementById('evEnrollClosed').checked;const data={entryType,name:document.getElementById('evName').value.trim(),category:document.getElementById('evCat').value.trim(),logoFile:document.getElementById('evLogo').value.trim(),venue:document.getElementById('evVenue').value.trim(),maxParticipants:parseInt(document.getElementById('evMax').value)||null,description:document.getElementById('evDesc').value.trim(),order:parseInt(document.getElementById('evOrder').value)||99,portalFeatures,enrollmentClosed,updatedAt:serverTimestamp()};if(!data.name){showMsg('evMsg','Name is required.','e');return;}try{if(editId)await updateDoc(doc(db,'events',editId),data);else await addDoc(collection(db,'events'),{...data,createdAt:serverTimestamp()});showMsg('evMsg','Saved successfully.','s');clearEvForm();loadEventsData();}catch(e){showMsg('evMsg','Error: '+e.message,'e');}};
 window.clearEvForm=function(){document.getElementById('evEditId').value='';['evName','evCat','evLogo','evVenue','evMax','evDesc','evOrder'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('evType').value='event';['pfParticipants','pfAnnouncements','pfTasks','pfStatusChange','pfRatings'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=true;});const ecEl=document.getElementById('evEnrollClosed');if(ecEl)ecEl.checked=false;onEvTypeChange();document.getElementById('evFormTitle').textContent='Add Event / Role';};
 window.editEvent=function(id){const ev=evCache.find(e=>e.id===id);if(!ev)return;document.getElementById('evEditId').value=id;document.getElementById('evType').value=ev.entryType||'event';document.getElementById('evName').value=ev.name||'';document.getElementById('evCat').value=ev.category||'';document.getElementById('evLogo').value=ev.logoFile||'';document.getElementById('evVenue').value=ev.venue||'';document.getElementById('evMax').value=ev.maxParticipants||'';document.getElementById('evDesc').value=ev.description||'';document.getElementById('evOrder').value=ev.order||'';const pf=ev.portalFeatures||{};const def=(k,d=true)=>pf[k]!==undefined?pf[k]:d;document.getElementById('pfParticipants').checked=def('canViewParticipants');document.getElementById('pfAnnouncements').checked=def('canPostAnnouncements');document.getElementById('pfTasks').checked=def('canAssignTasks');document.getElementById('pfStatusChange').checked=def('canChangeStatus');document.getElementById('pfRatings').checked=def('canRateParticipants');const ec=document.getElementById('evEnrollClosed');if(ec)ec.checked=!!ev.enrollmentClosed;onEvTypeChange();document.getElementById('evFormTitle').textContent='Edit Entry';document.getElementById('p-events').scrollTop=0;};
 window.deleteEvent=async function(id){if(!confirm('Delete this entry? This cannot be undone.'))return;await deleteDoc(doc(db,'events',id));loadEventsData();};
-window.toggleEvEnroll=async function(id,closedState){
-  const ev=evCache.find(e=>e.id===id);if(!ev)return;
-  const action=closedState?'close enrollment for':'re-open enrollment for';
-  if(!confirm(`This will ${action} "${ev.name}". Continue?`))return;
-  try{
-    await updateDoc(doc(db,'events',id),{enrollmentClosed:closedState,updatedAt:serverTimestamp()});
-    await loadEventsData();
-    showMsg('evMsg',`Enrollment ${closedState?'closed':'re-opened'} for "${ev.name}".`,'s');
-  }catch(e){showMsg('evMsg','Error: '+e.message,'e');}
-};
+window.toggleEvEnroll=async function(id,closedState){const ev=evCache.find(e=>e.id===id);if(!ev)return;if(!confirm(`This will ${closedState?'close enrollment for':'re-open enrollment for'} "${ev.name}". Continue?`))return;try{await updateDoc(doc(db,'events',id),{enrollmentClosed:closedState,updatedAt:serverTimestamp()});await loadEventsData();showMsg('evMsg',`Enrollment ${closedState?'closed':'re-opened'} for "${ev.name}".`,'s');}catch(e){showMsg('evMsg','Error: '+e.message,'e');}};
 
 /* ROLE PERMISSIONS */
 async function loadRolePermissions(){
@@ -922,7 +940,7 @@ async function loadRolePermissions(){
     const snap=await getDocs(query(collection(db,'events'),orderBy('order','asc')));
     if(snap.empty){list.innerHTML='<div class="loading-ph">No events/roles yet.</div>';return;}
     list.innerHTML='';
-    snap.forEach(d=>{const ev=d.data();const t=ev.entryType||'event';const pf=ev.portalFeatures||{};const chk=(k,def=true)=>pf[k]!==undefined?pf[k]:def;const badge=`<span class="type-badge type-${t}">${EV_TYPE_LABELS[t]||t}</span>`;list.innerHTML+=`<div class="fs" style="margin-bottom:12px;padding:14px 18px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">${badge}<span style="font-size:.84rem;font-weight:600;color:var(--t1);">${ev.name||''}</span><span style="font-size:.6rem;color:var(--t2);">${ev.category||''}</span></div><div style="display:flex;flex-wrap:wrap;gap:8px;"><label class="perm-lbl"><input type="checkbox" ${chk('canViewParticipants')?'checked':''} onchange="updateEvPerm('${d.id}','canViewParticipants',this.checked)" style="accent-color:var(--gold);"> View Registrations/Members</label><label class="perm-lbl"><input type="checkbox" ${chk('canPostAnnouncements')?'checked':''} onchange="updateEvPerm('${d.id}','canPostAnnouncements',this.checked)" style="accent-color:var(--gold);"> Post Announcements</label><label class="perm-lbl"><input type="checkbox" ${chk('canAssignTasks')?'checked':''} onchange="updateEvPerm('${d.id}','canAssignTasks',this.checked)" style="accent-color:var(--gold);"> Assign Tasks</label><label class="perm-lbl"><input type="checkbox" ${chk('canChangeStatus')?'checked':''} onchange="updateEvPerm('${d.id}','canChangeStatus',this.checked)" style="accent-color:var(--gold);"> Change Status</label><label class="perm-lbl"><input type="checkbox" ${chk('canRateParticipants')?'checked':''} onchange="updateEvPerm('${d.id}','canRateParticipants',this.checked)" style="accent-color:var(--gold);"> Rate &amp; Notes</label></div></div>`;});
+    snap.forEach(d=>{const ev=d.data();const t=ev.entryType||'event';const pf=ev.portalFeatures||{};const chk=(k,def=true)=>pf[k]!==undefined?pf[k]:def;const badge=`<span class="type-badge type-${t}">${EV_TYPE_LABELS[t]||t}</span>`;list.innerHTML+=`<div class="fs" style="margin-bottom:12px;padding:14px 18px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">${badge}<span style="font-size:.84rem;font-weight:600;color:var(--t1);">${ev.name||''}</span></div><div style="display:flex;flex-wrap:wrap;gap:8px;"><label class="perm-lbl"><input type="checkbox" ${chk('canViewParticipants')?'checked':''} onchange="updateEvPerm('${d.id}','canViewParticipants',this.checked)" style="accent-color:var(--gold);"> View Registrations/Members</label><label class="perm-lbl"><input type="checkbox" ${chk('canPostAnnouncements')?'checked':''} onchange="updateEvPerm('${d.id}','canPostAnnouncements',this.checked)" style="accent-color:var(--gold);"> Post Announcements</label><label class="perm-lbl"><input type="checkbox" ${chk('canAssignTasks')?'checked':''} onchange="updateEvPerm('${d.id}','canAssignTasks',this.checked)" style="accent-color:var(--gold);"> Assign Tasks</label><label class="perm-lbl"><input type="checkbox" ${chk('canChangeStatus')?'checked':''} onchange="updateEvPerm('${d.id}','canChangeStatus',this.checked)" style="accent-color:var(--gold);"> Change Status</label><label class="perm-lbl"><input type="checkbox" ${chk('canRateParticipants')?'checked':''} onchange="updateEvPerm('${d.id}','canRateParticipants',this.checked)" style="accent-color:var(--gold);"> Rate &amp; Notes</label></div></div>`;});
     const settSnap=await getDoc(doc(db,'settings','global'));
     if(settSnap.exists()&&settSnap.data().defaultPermissions){const dp=settSnap.data().defaultPermissions;document.querySelectorAll('.dp-ev').forEach(cb=>{const type=cb.dataset.type;const key=cb.dataset.key;if(dp[type]&&dp[type][key]!==undefined)cb.checked=dp[type][key];else cb.checked=true;});}
     else{document.querySelectorAll('.dp-ev').forEach(cb=>cb.checked=true);}
@@ -940,7 +958,13 @@ async function loadDashboard(){
     document.getElementById('statRow').innerHTML=`<div class="stat-c"><div class="stat-v">${total}</div><div class="stat-l">Total Registered</div></div><div class="stat-c"><div class="stat-v" style="color:var(--gold);">${pend}</div><div class="stat-l">Audition Pending</div></div><div class="stat-c"><div class="stat-v" style="color:var(--green-l);">${sel}</div><div class="stat-l">Selected</div></div><div class="stat-c"><div class="stat-v" style="color:var(--red-l);">${rej}</div><div class="stat-l">Rejected</div></div>`;
     recent.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
     const tbody=document.getElementById('recentTbody');tbody.innerHTML='';
-    recent.slice(0,12).forEach(r=>{const evName=evCache.find(e=>e.id===r.eventId)?.name||'--';const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';tbody.innerHTML+=`<tr><td>${r.name||''}</td><td>${evName}</td><td>${r.class||''} ${r.section||''}</td><td>${sBadge(r.status)}</td><td>${date}</td></tr>`;});
+    recent.slice(0,12).forEach(r=>{
+      const evName=evCache.find(e=>e.id===r.eventId)?.name||'--';
+      const clsObj=clCache.find(c=>c.id===r.class);
+      const clsDisplay=clsObj?`${clsObj.name} ${r.section||''}`.trim():`${r.class||''} ${r.section||''}`.trim();
+      const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';
+      tbody.innerHTML+=`<tr><td>${r.name||''}</td><td>${evName}</td><td>${clsDisplay}</td><td>${sBadge(r.status)}</td><td>${date}</td></tr>`;
+    });
     if(!recent.length)tbody.innerHTML='<tr><td colspan="5" class="loading-ph">No registrations yet.</td></tr>';
   }catch(e){console.error(e);}
 }
@@ -977,7 +1001,7 @@ window.addUser=async function(){
   if(!name||!email||!role){showMsg('uMsg','All fields required.','e');return;}
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showMsg('uMsg','Invalid email address.','e');return;}
   const isNonSchool=!email.endsWith('@dpsmegacity.in');
-  if(isNonSchool&&!allowNonSchoolGlobal){showMsg('uMsg','Error: External accounts are blocked. Turn on "Allow Non-School Accounts" in Global Settings first.','e');return;}
+  if(isNonSchool&&!allowNonSchoolGlobal){showMsg('uMsg','External accounts are blocked. Enable "Allow Non-School Accounts" in Global Settings first.','e');return;}
   try{
     const existing=await getDocs(query(collection(db,'users'),where('email','==',email)));
     if(!existing.empty){
@@ -998,24 +1022,100 @@ window.removeUser=async function(id){if(!confirm('Revoke all access for this use
 
 /* REGISTRATIONS */
 window.loadRegs=async function(){
-  const tbody=document.getElementById('regTbody');tbody.innerHTML='<tr><td colspan="9" class="loading-ph">Loading&hellip;</td></tr>';
-  const evFilter=document.getElementById('regEvFilter').value;const stFilter=document.getElementById('regStFilter').value;
+  const tbody=document.getElementById('regTbody');
+  tbody.innerHTML='<tr><td colspan="9" class="loading-ph">Loading&hellip;</td></tr>';
+  const evFilter=document.getElementById('regEvFilter').value;
+  const stFilter=document.getElementById('regStFilter').value;
   try{
     const snap=await getDocs(query(collection(db,'registrations'),orderBy('createdAt','desc')));
     tbody.innerHTML='';let found=0;
-    snap.forEach(d=>{const r=d.data();if(evFilter&&r.eventId!==evFilter)return;if(stFilter&&r.status!==stFilter)return;found++;const evName=evCache.find(e=>e.id===r.eventId)?.name||'--';const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';tbody.innerHTML+=`<tr><td>${r.name||''}</td><td>${evName}</td><td>${r.class||''} ${r.section||''}</td><td>${r.rollNumber||''}</td><td style="font-size:.64rem;">${r.callingNumber||''}</td><td style="font-size:.64rem;">${r.whatsappNumber||''}</td><td>${sBadge(r.status)}</td><td>${date}</td><td style="white-space:nowrap;"><button class="ab ab-gr" onclick="setRegStatus('${d.id}','selected')">Select</button> <button class="ab ab-r" onclick="setRegStatus('${d.id}','rejected')">Reject</button> <button class="ab" onclick="setRegStatus('${d.id}','audition_pending')">Pending</button></td></tr>`;});
+    snap.forEach(d=>{
+      const r=d.data();
+      if(evFilter&&r.eventId!==evFilter)return;
+      if(stFilter&&r.status!==stFilter)return;
+      found++;
+      const evName=evCache.find(e=>e.id===r.eventId)?.name||'--';
+      const clsObj=clCache.find(c=>c.id===r.class);
+      const clsDisplay=clsObj?`${clsObj.name} ${r.section||''}`.trim():`${r.class||''} ${r.section||''}`.trim();
+      const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';
+      tbody.innerHTML+=`<tr>
+        <td>${r.name||''}</td>
+        <td>${evName}</td>
+        <td>${clsDisplay}</td>
+        <td>${r.rollNumber||''}</td>
+        <td style="font-size:.64rem;">${r.callingNumber||''}</td>
+        <td style="font-size:.64rem;">${r.whatsappNumber||''}</td>
+        <td>${sBadge(r.status)}</td>
+        <td>${date}</td>
+        <td style="white-space:nowrap;">
+          <button class="ab ab-g" onclick="openRegEdit('${d.id}')">Edit</button>
+          <button class="ab ab-gr" onclick="setRegStatus('${d.id}','selected')" style="margin-left:3px;">Select</button>
+          <button class="ab ab-r" onclick="setRegStatus('${d.id}','rejected')" style="margin-left:3px;">Reject</button>
+          <button class="ab" onclick="setRegStatus('${d.id}','audition_pending')" style="margin-left:3px;">Pending</button>
+        </td>
+      </tr>`;
+    });
     if(!found)tbody.innerHTML='<tr><td colspan="9" class="loading-ph">No registrations found.</td></tr>';
   }catch(e){tbody.innerHTML='<tr><td colspan="9" class="loading-ph">Error loading.</td></tr>';}
 };
 window.setRegStatus=async function(id,status){if(!confirm(`Set status to "${status}"?`))return;await updateDoc(doc(db,'registrations',id),{status,updatedAt:serverTimestamp()});loadRegs();loadDashboard();};
+
+/* EDIT REGISTRATION MODAL */
+function populateErClass(selectedClassId,selectedSection){
+  const clsSel=document.getElementById('erClass');
+  clsSel.innerHTML='<option value="">Select class</option>'+clCache.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  clsSel.value=selectedClassId||'';
+  populateErSection(selectedClassId,selectedSection);
+}
+function populateErSection(classId,selectedSection){
+  const secSel=document.getElementById('erSection');
+  secSel.innerHTML='<option value="">Select section</option>';
+  document.getElementById('erTeacher').value='';
+  if(!classId)return;
+  const cls=clCache.find(c=>c.id===classId);
+  if(!cls||!cls.sections)return;
+  cls.sections.forEach(s=>{const name=typeof s==='string'?s:(s.name||s);secSel.innerHTML+=`<option value="${name}">${name}</option>`;});
+  secSel.value=selectedSection||'';
+  updateErTeacher(classId,secSel.value);
+}
+function updateErTeacher(classId,sectionName){
+  const cls=clCache.find(c=>c.id===classId);
+  if(!cls||!cls.sections)return;
+  const sec=cls.sections.find(s=>(typeof s==='string'?s:(s.name||s))===sectionName);
+  document.getElementById('erTeacher').value=sec&&sec.teacher?sec.teacher:'';
+}
+document.getElementById('erClass').addEventListener('change',function(){populateErSection(this.value,'');});
+document.getElementById('erSection').addEventListener('change',function(){updateErTeacher(document.getElementById('erClass').value,this.value);});
+window.openRegEdit=async function(id){
+  try{
+    const snap=await getDoc(doc(db,'registrations',id));if(!snap.exists())return;
+    const r=snap.data();
+    document.getElementById('erDocId').value=id;document.getElementById('erName').value=r.name||'';document.getElementById('erEmail').value=r.email||'';document.getElementById('erReg').value=r.registrationNumber||'';document.getElementById('erRoll').value=r.rollNumber||'';document.getElementById('erCall').value=r.callingNumber||'';document.getElementById('erWA').value=r.whatsappNumber||'';document.getElementById('erStatus').value=r.status||'audition_pending';
+    populateErClass(r.class||'',r.section||'');
+    const erEv=document.getElementById('erEvent');erEv.innerHTML=evCache.map(ev=>`<option value="${ev.id}"${ev.id===r.eventId?' selected':''}>${ev.name}</option>`).join('');
+    document.getElementById('erMsg').className='msg';document.getElementById('editRegModal').classList.add('on');
+  }catch(e){alert('Could not load registration: '+e.message);}
+};
+window.closeRegModal=function(){document.getElementById('editRegModal').classList.remove('on');};
+document.getElementById('editRegModal').addEventListener('click',function(e){if(e.target===this)closeRegModal();});
+window.saveRegEdit=async function(){
+  const id=document.getElementById('erDocId').value;const name=document.getElementById('erName').value.trim();const call=document.getElementById('erCall').value.trim();const wa=document.getElementById('erWA').value.trim();const classId=document.getElementById('erClass').value;const section=document.getElementById('erSection').value;
+  if(!name){showMsg('erMsg','Name is required.','e');return;}
+  if(call&&!/^\d{10}$/.test(call)){showMsg('erMsg','Calling number must be 10 digits.','e');return;}
+  if(wa&&!/^\d{10}$/.test(wa)){showMsg('erMsg','WhatsApp number must be 10 digits.','e');return;}
+  const clsObj=clCache.find(c=>c.id===classId);const className=clsObj?clsObj.name:(classId||'');const clsSec=clsObj?.sections?.find(s=>(typeof s==='string'?s:(s.name||s))===section);const classTeacher=clsSec&&clsSec.teacher?clsSec.teacher:(document.getElementById('erTeacher').value||'');
+  const updates={name,registrationNumber:document.getElementById('erReg').value.trim(),rollNumber:document.getElementById('erRoll').value.trim(),class:classId||className,section,classTeacher,callingNumber:call,whatsappNumber:wa,eventId:document.getElementById('erEvent').value,status:document.getElementById('erStatus').value,updatedAt:serverTimestamp(),lastEditedBy:authUser.email};
+  try{await updateDoc(doc(db,'registrations',id),updates);showMsg('erMsg','Saved successfully.','s');setTimeout(closeRegModal,1200);loadRegs();loadDashboard();}catch(e){showMsg('erMsg','Error: '+e.message,'e');}
+};
 
 /* CLASSES */
 async function loadClasses(){
   try{
     const snap=await getDocs(query(collection(db,'classes'),orderBy('order','asc')));
     clCache=[];snap.forEach(d=>clCache.push({id:d.id,...d.data()}));
-    const sel=document.getElementById('clSelect');sel.innerHTML='<option value="">Select class</option>'+clCache.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
-  }catch(e){}
+    const sel=document.getElementById('clSelect');
+    sel.innerHTML='<option value="">Select class</option>'+clCache.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  }catch(e){console.warn('loadClasses error',e);}
 }
 window.addClass=async function(){const name=document.getElementById('clName').value.trim();const order=parseInt(document.getElementById('clOrder').value)||99;if(!name){showMsg('clMsg','Class name required.','e');return;}await addDoc(collection(db,'classes'),{name,order,sections:[],createdAt:serverTimestamp()});showMsg('clMsg','Class added.','s');document.getElementById('clName').value='';loadClasses();};
 window.loadSectionsAdmin=function(){const classId=document.getElementById('clSelect').value;const panel=document.getElementById('sectionsPanel');const addPanel=document.getElementById('addSecPanel');if(!classId){panel.innerHTML='';addPanel.style.display='none';return;}addPanel.style.display='block';const cls=clCache.find(c=>c.id===classId);if(!cls){panel.innerHTML='';return;}const secs=cls.sections||[];if(!secs.length){panel.innerHTML='<div style="font-size:.72rem;color:var(--t2);margin-bottom:10px;">No sections yet. Add below.</div>';return;}panel.innerHTML=`<div class="tbl-scroll"><table style="width:100%;"><thead><tr><th>Section</th><th>Class Teacher</th><th>Actions</th></tr></thead><tbody>${secs.map((s,i)=>`<tr><td>${s.name||s}</td><td>${s.teacher||''}</td><td><button class="ab ab-r" onclick="removeSection('${classId}',${i})">Remove</button></td></tr>`).join('')}</tbody></table></div>`;};
@@ -1062,7 +1162,7 @@ window.deleteRule=async function(id){if(!confirm('Delete?'))return;await deleteD
 window.saveTagline=async function(){const val=document.getElementById('heroTagline').value.trim();if(!val){showMsg('tagMsg','Tagline cannot be empty.','e');return;}await setDoc(doc(db,'settings','global'),{heroTagline:val},{merge:true});showMsg('tagMsg','Tagline saved.','s');};
 window.saveFestDate=async function(){const val=document.getElementById('festDate').value;if(!val){showMsg('dateMsg','Select a date and time.','e');return;}await setDoc(doc(db,'settings','global'),{festDate:new Date(val)},{merge:true});showMsg('dateMsg','Date saved.','s');};
 window.saveVenue=async function(){const name=document.getElementById('vName').value.trim();const address=document.getElementById('vAddr').value.trim();const hall=document.getElementById('vHall').value.trim();await setDoc(doc(db,'settings','global'),{venue:{name,address,hall}},{merge:true});showMsg('venueMsg','Venue saved.','s');};
-window.saveLogo=async function(){const val=document.getElementById('logoFile').value.trim();if(!val){showMsg('logoMsg','Enter a filename.','e');return;}await setDoc(doc(db,'settings','global'),{logoFile:val},{merge:true});showMsg('logoMsg','Logo filename saved. Make sure the file is deployed.','s');};
+window.saveLogo=async function(){const val=document.getElementById('logoFile').value.trim();if(!val){showMsg('logoMsg','Enter a filename.','e');return;}await setDoc(doc(db,'settings','global'),{logoFile:val},{merge:true});showMsg('logoMsg','Logo filename saved.','s');};
 
 /* SLIDESHOW */
 function renderSlideImgs(){const con=document.getElementById('imgsContainer');if(!con)return;con.innerHTML='';slideshowImgs.forEach((src,i)=>{const tag=document.createElement('div');tag.className='img-tag';tag.innerHTML=`${src} <button onclick="removeSlideImg(${i})">&#10005;</button>`;con.appendChild(tag);});}
@@ -1070,48 +1170,24 @@ window.addSlideImg=function(){const val=document.getElementById('imgInput').valu
 window.removeSlideImg=function(i){slideshowImgs.splice(i,1);renderSlideImgs();};
 window.saveSlideshow=async function(){await setDoc(doc(db,'settings','global'),{slideshowImages:slideshowImgs},{merge:true});showMsg('slideMsg','Slideshow images saved.','s');};
 
-/* ═══════════════════════════════ OUR TEAM ═══════════════════════════════ */
-
-/* TIERS */
+/* OUR TEAM — TIERS */
 async function loadTiers(){
   try{
     const snap=await getDocs(query(collection(db,'teamTiers'),orderBy('order','asc')));
     tierCache=[];snap.forEach(d=>tierCache.push({id:d.id,...d.data()}));
     renderTierTable();
-    /* populate both tier selects */
-    ['memTier','memTierFilter'].forEach(selId=>{
-      const sel=document.getElementById(selId);if(!sel)return;
-      const first=selId==='memTierFilter'?'<option value="">All Tiers</option>':'<option value="">Select tier&hellip;</option>';
-      sel.innerHTML=first+tierCache.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');
-    });
+    ['memTier','memTierFilter'].forEach(selId=>{const sel=document.getElementById(selId);if(!sel)return;const first=selId==='memTierFilter'?'<option value="">All Tiers</option>':'<option value="">Select tier&hellip;</option>';sel.innerHTML=first+tierCache.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');});
   }catch(e){console.warn('Tier load error',e);}
 }
-
 function renderTierTable(){
   const tbody=document.getElementById('tierTbody');if(!tbody)return;
-  if(!tierCache.length){tbody.innerHTML='<tr><td colspan="3" class="loading-ph">No tiers yet. Add one above.</td></tr>';return;}
-  tbody.innerHTML='';
-  tierCache.forEach(t=>{
-    tbody.innerHTML+=`<tr><td>${t.order||''}</td><td>${t.name||''}</td><td><button class="ab ab-r" onclick="deleteTier('${t.id}')">Delete</button></td></tr>`;
-  });
+  if(!tierCache.length){tbody.innerHTML='<tr><td colspan="3" class="loading-ph">No tiers yet.</td></tr>';return;}
+  tbody.innerHTML='';tierCache.forEach(t=>{tbody.innerHTML+=`<tr><td>${t.order||''}</td><td>${t.name||''}</td><td><button class="ab ab-r" onclick="deleteTier('${t.id}')">Delete</button></td></tr>`;});
 }
+window.addTier=async function(){const name=document.getElementById('tierName').value.trim();const order=parseInt(document.getElementById('tierOrder').value)||99;if(!name){showMsg('tierMsg','Tier name required.','e');return;}await addDoc(collection(db,'teamTiers'),{name,order,createdAt:serverTimestamp()});showMsg('tierMsg','Tier added.','s');document.getElementById('tierName').value='';document.getElementById('tierOrder').value='';await loadTiers();loadMembersTable();};
+window.deleteTier=async function(id){if(!confirm('Delete this tier?'))return;await deleteDoc(doc(db,'teamTiers',id));await loadTiers();loadMembersTable();};
 
-window.addTier=async function(){
-  const name=document.getElementById('tierName').value.trim();
-  const order=parseInt(document.getElementById('tierOrder').value)||99;
-  if(!name){showMsg('tierMsg','Tier name required.','e');return;}
-  await addDoc(collection(db,'teamTiers'),{name,order,createdAt:serverTimestamp()});
-  showMsg('tierMsg','Tier added.','s');
-  document.getElementById('tierName').value='';document.getElementById('tierOrder').value='';
-  await loadTiers();loadMembersTable();
-};
-
-window.deleteTier=async function(id){
-  if(!confirm('Delete this tier? Members assigned to it will remain in Firestore but will no longer appear under a tier on the homepage.'))return;
-  await deleteDoc(doc(db,'teamTiers',id));await loadTiers();loadMembersTable();
-};
-
-/* MEMBERS */
+/* OUR TEAM — MEMBERS */
 async function loadMembersTable(){
   const tbody=document.getElementById('memTbody');if(!tbody)return;
   const tierFilter=document.getElementById('memTierFilter')?.value||'';
@@ -1120,100 +1196,358 @@ async function loadMembersTable(){
     const snap=await getDocs(query(collection(db,'teamMembers'),orderBy('order','asc')));
     tbody.innerHTML='';let found=0;
     snap.forEach(d=>{
-      const m=d.data();
-      if(tierFilter&&m.tierId!==tierFilter)return;
-      found++;
+      const m=d.data();if(tierFilter&&m.tierId!==tierFilter)return;found++;
       const tierName=tierCache.find(t=>t.id===m.tierId)?.name||'&mdash;';
       const initial=(m.name||'?')[0].toUpperCase();
-      const photoCell=m.photo
-        ?`<img src="${m.photo}" alt="" style="width:34px;height:34px;border-radius:50%;object-fit:cover;border:1px solid var(--b1);display:block;" onerror="this.outerHTML='<div style=\\'width:34px;height:34px;border-radius:50%;background:var(--glass);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--gold);\\'>${initial}</div>'">`
-        :`<div style="width:34px;height:34px;border-radius:50%;background:var(--glass);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--gold);">${initial}</div>`;
-      tbody.innerHTML+=`<tr>
-        <td>${photoCell}</td>
-        <td>${m.name||''}</td>
-        <td style="font-size:.7rem;color:var(--t2);">${m.role||''}</td>
-        <td><span class="badge b-pend" style="font-size:.52rem;">${tierName}</span></td>
-        <td>${m.order||''}</td>
-        <td style="white-space:nowrap;">
-          <button class="ab ab-g" onclick="editMember('${d.id}')">Edit</button>
-          <button class="ab ab-r" onclick="deleteMember('${d.id}')">Delete</button>
-        </td>
-      </tr>`;
+      const photoCell=m.photo?`<img src="${m.photo}" alt="" style="width:34px;height:34px;border-radius:50%;object-fit:cover;border:1px solid var(--b1);display:block;" onerror="this.outerHTML='<div style=\\'width:34px;height:34px;border-radius:50%;background:var(--glass);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--gold);\\'>${initial}</div>'">`:`<div style="width:34px;height:34px;border-radius:50%;background:var(--glass);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--gold);">${initial}</div>`;
+      tbody.innerHTML+=`<tr><td>${photoCell}</td><td>${m.name||''}</td><td style="font-size:.7rem;color:var(--t2);">${m.role||''}</td><td><span class="badge b-pend" style="font-size:.52rem;">${tierName}</span></td><td>${m.order||''}</td><td style="white-space:nowrap;"><button class="ab ab-g" onclick="editMember('${d.id}')">Edit</button> <button class="ab ab-r" onclick="deleteMember('${d.id}')">Delete</button></td></tr>`;
     });
     if(!found)tbody.innerHTML='<tr><td colspan="6" class="loading-ph">No members found.</td></tr>';
   }catch(e){tbody.innerHTML='<tr><td colspan="6" class="loading-ph">Error loading members.</td></tr>';}
 }
+window.saveMember=async function(){const editId=document.getElementById('memEditId').value;const name=document.getElementById('memName').value.trim();const role=document.getElementById('memRole').value.trim();const photo=document.getElementById('memPhoto').value.trim();const tierId=document.getElementById('memTier').value;const order=parseInt(document.getElementById('memOrder').value)||99;if(!name||!role||!tierId){showMsg('memMsg','Name, Role, and Tier are required.','e');return;}const data={name,role,photo:photo||null,tierId,order,updatedAt:serverTimestamp()};try{if(editId)await updateDoc(doc(db,'teamMembers',editId),data);else await addDoc(collection(db,'teamMembers'),{...data,createdAt:serverTimestamp()});showMsg('memMsg','Member saved.','s');clearMemberForm();loadMembersTable();}catch(e){showMsg('memMsg','Error: '+e.message,'e');}};
+window.clearMemberForm=function(){document.getElementById('memEditId').value='';['memName','memRole','memPhoto','memOrder'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});const t=document.getElementById('memTier');if(t)t.value='';document.getElementById('memberFormTitle').textContent='Add Team Member';};
+window.editMember=async function(id){try{const snap=await getDoc(doc(db,'teamMembers',id));if(!snap.exists())return;const m=snap.data();document.getElementById('memEditId').value=id;document.getElementById('memName').value=m.name||'';document.getElementById('memRole').value=m.role||'';document.getElementById('memPhoto').value=m.photo||'';document.getElementById('memTier').value=m.tierId||'';document.getElementById('memOrder').value=m.order||'';document.getElementById('memberFormTitle').textContent='Edit Member';document.getElementById('p-team').querySelector('.fs').scrollIntoView({behavior:'smooth',block:'start'});}catch(e){alert('Error: '+e.message);}};
+window.deleteMember=async function(id){if(!confirm('Remove this team member?'))return;await deleteDoc(doc(db,'teamMembers',id));loadMembersTable();};
 
-window.saveMember=async function(){
-  const editId=document.getElementById('memEditId').value;
-  const name=document.getElementById('memName').value.trim();
-  const role=document.getElementById('memRole').value.trim();
-  const photo=document.getElementById('memPhoto').value.trim();
-  const tierId=document.getElementById('memTier').value;
-  const order=parseInt(document.getElementById('memOrder').value)||99;
-  if(!name||!role||!tierId){showMsg('memMsg','Name, Role, and Tier are required.','e');return;}
-  const data={name,role,photo:photo||null,tierId,order,updatedAt:serverTimestamp()};
-  try{
-    if(editId)await updateDoc(doc(db,'teamMembers',editId),data);
-    else await addDoc(collection(db,'teamMembers'),{...data,createdAt:serverTimestamp()});
-    showMsg('memMsg','Member saved successfully.','s');
-    clearMemberForm();loadMembersTable();
-  }catch(e){showMsg('memMsg','Error: '+e.message,'e');}
-};
+/* ============================================================
+   ATTENDANCE — FULL REDESIGN
+   Firestore doc: attendance/{attKey}
+   attKey = uid_date  (for users) or regId_date (for participants) or adminUid_date
+   Fields: id, name, role, type (admin/staff/participant), date,
+           status ('checked_in' | 'did_not_come' | 'flagged'),
+           note, markedAt, markedBy, photoURL
+   ============================================================ */
 
-window.clearMemberForm=function(){
-  document.getElementById('memEditId').value='';
-  ['memName','memRole','memPhoto','memOrder'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  const t=document.getElementById('memTier');if(t)t.value='';
-  document.getElementById('memberFormTitle').textContent='Add Team Member';
-};
+// In-memory map of card states keyed by attKey
+const attState = {};
 
-window.editMember=async function(id){
-  try{
-    const snap=await getDoc(doc(db,'teamMembers',id));
-    if(!snap.exists())return;
-    const m=snap.data();
-    document.getElementById('memEditId').value=id;
-    document.getElementById('memName').value=m.name||'';
-    document.getElementById('memRole').value=m.role||'';
-    document.getElementById('memPhoto').value=m.photo||'';
-    document.getElementById('memTier').value=m.tierId||'';
-    document.getElementById('memOrder').value=m.order||'';
-    document.getElementById('memberFormTitle').textContent='Edit Member';
-    /* scroll to form */
-    document.getElementById('p-team').querySelector('.fs').scrollIntoView({behavior:'smooth',block:'start'});
-  }catch(e){alert('Error loading member: '+e.message);}
-};
-
-window.deleteMember=async function(id){
-  if(!confirm('Remove this team member from the website?'))return;
-  await deleteDoc(doc(db,'teamMembers',id));loadMembersTable();
-};
-/* ════════════════════════════════════════════════════════════════════════ */
-
-/* ATTENDANCE */
 async function loadAttendance(){
-  const dateInput=document.getElementById('attDate');
-  if(dateInput&&!dateInput.value)dateInput.value=new Date().toISOString().split('T')[0];
-  const selectedDate=dateInput?dateInput.value:new Date().toISOString().split('T')[0];
-  const attHead=document.getElementById('attDateHead');const attGrid=document.getElementById('attGrid');
-  if(!attHead||!attGrid)return;
-  attHead.textContent='Attendance — '+new Date(selectedDate+'T12:00:00').toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  attGrid.innerHTML='<div class="loading-ph">Loading&hellip;</div>';
-  try{
-    const [usersSnap,regsSnap,attSnap]=await Promise.all([getDocs(collection(db,'users')),getDocs(query(collection(db,'registrations'),where('status','==','selected'))),getDocs(query(collection(db,'attendance'),where('date','==',selectedDate)))]);
-    const attMap={};attSnap.forEach(d=>{const a=d.data();attMap[a.uid]=a;});
-    attGrid.innerHTML='';
-    const adminPresent=attMap[authUser.uid];
-    attGrid.innerHTML+=`<div class="att-card"><div class="att-av">&#9670;</div><div style="flex:1;min-width:0;"><div class="att-name">${authUser.displayName||authUser.email}</div><div class="att-role">Administrator</div>${adminPresent?`<div class="att-time">In at ${new Date(adminPresent.markedAt?.toDate()).toLocaleTimeString('en-IN')}</div>`:''}</div>${adminPresent?'<div class="att-present" title="Present"></div>':'<div class="att-absent" title="Absent"></div>'}</div>`;
-    usersSnap.forEach(d=>{const u=d.data();const isPresent=!!attMap[u.email];const roles=(u.roles||[u.role]).filter(Boolean).join(', ');const time=isPresent&&attMap[u.email]?.markedAt?'In at '+new Date(attMap[u.email].markedAt.toDate()).toLocaleTimeString('en-IN'):'';attGrid.innerHTML+=`<div class="att-card"><div class="att-av">&#9671;</div><div style="flex:1;min-width:0;"><div class="att-name">${u.name||u.email}</div><div class="att-role">${roles}</div>${time?`<div class="att-time">${time}</div>`:''}</div>${isPresent?'<div class="att-present" title="Present"></div>':'<div class="att-absent" title="Absent"></div>'}</div>`;});
-    regsSnap.forEach(d=>{const r=d.data();const isPresent=!!attMap[r.uid||r.email];const evName=evCache.find(e=>e.id===r.eventId)?.name||'Participant';attGrid.innerHTML+=`<div class="att-card"><div class="att-av" style="overflow:hidden;">${r.photoURL?`<img src="${r.photoURL}" alt="" onerror="this.parentElement.textContent='&#9673;'">`:'&#9673;'}</div><div style="flex:1;min-width:0;"><div class="att-name">${r.name||''}</div><div class="att-role">${evName}</div></div>${isPresent?'<div class="att-present" title="Present"></div>':'<div class="att-absent" title="Absent"></div>'}</div>`;});
-    if(!attGrid.children.length)attGrid.innerHTML='<div class="loading-ph">No members found.</div>';
-  }catch(e){attGrid.innerHTML='<div class="loading-ph">Error loading attendance.</div>';}
+  const dateInput = document.getElementById('attDate');
+  if(dateInput && !dateInput.value) dateInput.value = new Date().toISOString().split('T')[0];
+  const selectedDate = dateInput ? dateInput.value : new Date().toISOString().split('T')[0];
+  const container = document.getElementById('attCardsContainer');
+  const summaryBar = document.getElementById('attSummaryBar');
+  const msgEl = document.getElementById('attMsg');
+
+  msgEl.className = 'att-msg';
+  container.innerHTML = '<div class="att-empty-msg">Loading attendance&hellip;</div>';
+
+  try {
+    // Load existing attendance records for this date
+    const attSnap = await getDocs(query(collection(db,'attendance'), where('date','==',selectedDate)));
+    const attMap = {};
+    attSnap.forEach(d => { attMap[d.id] = d.data(); });
+
+    // Load all staff users
+    const usersSnap = await getDocs(collection(db,'users'));
+    // Load selected participants
+    const regsSnap = await getDocs(query(collection(db,'registrations'), where('status','==','selected')));
+
+    // Build combined list of people
+    const people = [];
+
+    // Admin self
+    if(authUser){
+      const adminKey = authUser.uid + '_' + selectedDate;
+      people.push({
+        attKey: adminKey,
+        id: authUser.uid,
+        name: authUser.displayName || authUser.email,
+        role: 'Administrator',
+        sub: authUser.email,
+        type: 'admin',
+        photoURL: authUser.photoURL || '',
+      });
+    }
+
+    // Staff
+    usersSnap.forEach(d => {
+      const u = d.data();
+      const key = (u.email || d.id) + '_' + selectedDate;
+      const roles = (u.roles || [u.role]).filter(Boolean).join(', ');
+      people.push({
+        attKey: key,
+        id: u.email || d.id,
+        name: u.name || u.email || 'Unknown',
+        role: roles,
+        sub: u.email || '',
+        type: 'staff',
+        photoURL: '',
+      });
+    });
+
+    // Participants
+    regsSnap.forEach(d => {
+      const r = d.data();
+      const evName = evCache.find(e => e.id === r.eventId)?.name || 'Participant';
+      const key = (r.uid || r.email || d.id) + '_' + selectedDate;
+      people.push({
+        attKey: key,
+        id: r.uid || r.email || d.id,
+        name: r.name || 'Unknown',
+        role: evName,
+        sub: r.class ? ((clCache.find(c=>c.id===r.class)?.name||r.class) + ' ' + (r.section||'')).trim() : '',
+        type: 'participant',
+        photoURL: r.photoURL || '',
+      });
+    });
+
+    if(!people.length){
+      container.innerHTML = '<div class="att-empty-msg">No people found. Add staff or participants first.</div>';
+      summaryBar.style.display = 'none';
+      return;
+    }
+
+    // Populate attState from Firestore
+    people.forEach(p => {
+      const existing = attMap[p.attKey];
+      attState[p.attKey] = {
+        status: existing?.status || '',
+        note: existing?.note || '',
+        savedAt: existing?.markedAt || null,
+      };
+    });
+
+    // Render
+    container.innerHTML = '';
+    const sections = [
+      { label: 'Administration', types: ['admin'] },
+      { label: 'Staff & Team', types: ['staff'] },
+      { label: 'Selected Participants', types: ['participant'] },
+    ];
+
+    sections.forEach(sec => {
+      const group = people.filter(p => sec.types.includes(p.type));
+      if(!group.length) return;
+      const secLabel = document.createElement('div');
+      secLabel.className = 'att-section-label';
+      secLabel.textContent = sec.label;
+      container.appendChild(secLabel);
+      const grid = document.createElement('div');
+      grid.className = 'att-cards-grid';
+      group.forEach(p => { grid.appendChild(buildAttCard(p)); });
+      container.appendChild(grid);
+    });
+
+    updateSummaryBar(people.map(p => attState[p.attKey]?.status || ''));
+    summaryBar.style.display = 'flex';
+
+  } catch(e) {
+    container.innerHTML = '<div class="att-empty-msg">Error loading attendance: ' + e.message + '</div>';
+    console.error(e);
+  }
 }
-window.startAttendance=async function(){const dateInput=document.getElementById('attDate');const selectedDate=dateInput?dateInput.value:new Date().toISOString().split('T')[0];await setDoc(doc(db,'attendance_sessions',selectedDate),{date:selectedDate,startedAt:serverTimestamp(),startedBy:authUser.email},{merge:true});showMsg('attMsg','Attendance session started for '+selectedDate+'. Security can now scan QR codes.','s');loadAttendance();};
-window.markAdminPresent=async function(){const today=new Date().toISOString().split('T')[0];await setDoc(doc(db,'attendance',authUser.uid+'_'+today),{uid:authUser.uid,email:authUser.email,name:authUser.displayName,date:today,role:'admin',markedAt:serverTimestamp(),markedBy:'self'},{merge:true});showMsg('selfAttMsg','Marked present for today.','s');loadAttendance();};
-window.loadAttendance=loadAttendance;
+
+function buildAttCard(p){
+  const state = attState[p.attKey] || { status: '', note: '' };
+  const initial = (p.name || '?')[0].toUpperCase();
+  const card = document.createElement('div');
+  card.className = 'att-pcard' + (state.status ? ' s-' + state.status : '');
+  card.dataset.attkey = p.attKey;
+
+  // Avatar
+  const avHTML = p.photoURL
+    ? `<div class="att-pav"><img src="${p.photoURL}" alt="" onerror="this.parentElement.innerHTML='${initial}'"></div>`
+    : `<div class="att-pav">${initial}</div>`;
+
+  // Timestamp display
+  let tsText = '';
+  if(state.savedAt){
+    const d = state.savedAt.toDate ? state.savedAt.toDate() : new Date(state.savedAt);
+    tsText = 'Saved ' + d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  }
+
+  card.innerHTML = `
+    <div class="att-pcard-top">
+      ${avHTML}
+      <div style="flex:1;min-width:0;">
+        <div class="att-pcard-name">${escHtml(p.name)}</div>
+        <div class="att-pcard-role">${escHtml(p.role)}</div>
+        ${p.sub ? `<div class="att-pcard-sub">${escHtml(p.sub)}</div>` : ''}
+      </div>
+    </div>
+    <div class="att-pills">
+      <button class="att-pill${state.status==='checked_in'?' p-checkin':''}" data-status="checked_in" onclick="pillClick(this,'${p.attKey}')">
+        <span class="att-pill-icon">✓</span>Checked In
+      </button>
+      <button class="att-pill${state.status==='did_not_come'?' p-notcome':''}" data-status="did_not_come" onclick="pillClick(this,'${p.attKey}')">
+        <span class="att-pill-icon">✕</span>Did Not Come
+      </button>
+      <button class="att-pill${state.status==='flagged'?' p-flagged':''}" data-status="flagged" onclick="pillClick(this,'${p.attKey}')">
+        <span class="att-pill-icon">⚑</span>Flagged
+      </button>
+    </div>
+    <button class="att-note-toggle${state.note?' open':''}" onclick="toggleNote(this)">
+      <span class="att-note-arrow">&#9658;</span> ${state.note ? 'Edit note' : 'Add note'}
+    </button>
+    <div class="att-note-wrap${state.note?' open':''}">
+      <textarea class="att-note-ta" placeholder="Add a note about this person&hellip;" rows="2">${escHtml(state.note)}</textarea>
+    </div>
+    <button class="att-save-btn" onclick="saveAttCard(this,'${p.attKey}','${escAttr(p.name)}','${escAttr(p.role)}','${escAttr(p.type)}','${escAttr(p.id)}')">
+      Save
+    </button>
+    <div class="att-ts">${tsText}</div>
+  `;
+  return card;
+}
+
+window.pillClick = function(btn, attKey){
+  const card = btn.closest('.att-pcard');
+  const newStatus = btn.dataset.status;
+  const currentStatus = attState[attKey]?.status;
+
+  // Toggle off if clicking active pill
+  const finalStatus = (currentStatus === newStatus) ? '' : newStatus;
+
+  // Update in-memory state
+  if(!attState[attKey]) attState[attKey] = { status:'', note:'' };
+  attState[attKey].status = finalStatus;
+
+  // Update pill classes
+  card.querySelectorAll('.att-pill').forEach(p => {
+    p.classList.remove('p-checkin','p-notcome','p-flagged');
+  });
+  if(finalStatus === 'checked_in') btn.classList.add('p-checkin');
+  else if(finalStatus === 'did_not_come') btn.classList.add('p-notcome');
+  else if(finalStatus === 'flagged') btn.classList.add('p-flagged');
+
+  // Update card border
+  card.className = 'att-pcard' + (finalStatus ? ' s-' + finalStatus : '');
+  card.dataset.attkey = attKey;
+};
+
+window.toggleNote = function(btn){
+  const wrap = btn.nextElementSibling;
+  const isOpen = wrap.classList.contains('open');
+  btn.classList.toggle('open', !isOpen);
+  wrap.classList.toggle('open', !isOpen);
+  btn.querySelector('.att-note-arrow').style.transform = !isOpen ? 'rotate(90deg)' : '';
+  btn.innerHTML = btn.innerHTML.replace(/(Edit note|Add note)/, !isOpen ? 'Edit note' : 'Add note');
+  if(!isOpen){ const ta = wrap.querySelector('textarea'); if(ta) ta.focus(); }
+};
+
+window.saveAttCard = async function(btn, attKey, name, role, type, personId){
+  const card = btn.closest('.att-pcard');
+  const note = card.querySelector('.att-note-ta')?.value?.trim() || '';
+  const status = attState[attKey]?.status || '';
+  const dateInput = document.getElementById('attDate');
+  const selectedDate = dateInput ? dateInput.value : new Date().toISOString().split('T')[0];
+
+  // Update note in state
+  if(!attState[attKey]) attState[attKey] = {};
+  attState[attKey].note = note;
+
+  // Visual feedback — saving
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  try {
+    await setDoc(doc(db,'attendance',attKey), {
+      id: personId,
+      name,
+      role,
+      type,
+      date: selectedDate,
+      status,
+      note,
+      markedAt: serverTimestamp(),
+      markedBy: authUser?.email || 'admin',
+    }, { merge: true });
+
+    // Success feedback
+    btn.classList.add('saved-ok');
+    btn.textContent = 'Saved';
+    const ts = card.querySelector('.att-ts');
+    if(ts) ts.textContent = 'Saved ' + new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    attState[attKey].savedAt = new Date();
+
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.classList.remove('saved-ok');
+      btn.textContent = 'Save';
+      updateSummaryBar();
+    }, 1800);
+
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = 'Save';
+    const attMsgEl = document.getElementById('attMsg');
+    if(attMsgEl){ attMsgEl.textContent = 'Error saving: ' + e.message; attMsgEl.className='att-msg e'; setTimeout(()=>attMsgEl.className='att-msg',4000); }
+  }
+};
+
+function updateSummaryBar(statusArray){
+  if(!statusArray){
+    // Re-compute from current attState
+    statusArray = Object.values(attState).map(s => s.status || '');
+  }
+  const counts = { checked_in:0, did_not_come:0, flagged:0, none:0 };
+  statusArray.forEach(s => {
+    if(s === 'checked_in') counts.checked_in++;
+    else if(s === 'did_not_come') counts.did_not_come++;
+    else if(s === 'flagged') counts.flagged++;
+    else counts.none++;
+  });
+  const si = document.getElementById('sumIn');
+  const so = document.getElementById('sumOut');
+  const sf = document.getElementById('sumFlag');
+  const sn = document.getElementById('sumNone');
+  if(si) si.textContent = counts.checked_in;
+  if(so) so.textContent = counts.did_not_come;
+  if(sf) sf.textContent = counts.flagged;
+  if(sn) sn.textContent = counts.none;
+}
+
+window.startAttendance = async function(){
+  const dateInput = document.getElementById('attDate');
+  const selectedDate = dateInput ? dateInput.value : new Date().toISOString().split('T')[0];
+  if(!selectedDate){ return; }
+  try{
+    await setDoc(doc(db,'attendance_sessions',selectedDate),{date:selectedDate,startedAt:serverTimestamp(),startedBy:authUser.email},{merge:true});
+    const msgEl = document.getElementById('attMsg');
+    if(msgEl){ msgEl.textContent = 'Attendance session started for ' + selectedDate; msgEl.className = 'att-msg s'; setTimeout(()=>msgEl.className='att-msg',4000); }
+    loadAttendance();
+  }catch(e){
+    const msgEl = document.getElementById('attMsg');
+    if(msgEl){ msgEl.textContent = 'Error: ' + e.message; msgEl.className = 'att-msg e'; setTimeout(()=>msgEl.className='att-msg',4000); }
+  }
+};
+
+window.markAdminPresent = async function(){
+  const today = new Date().toISOString().split('T')[0];
+  const attKey = authUser.uid + '_' + today;
+  try{
+    await setDoc(doc(db,'attendance',attKey),{
+      id: authUser.uid,
+      name: authUser.displayName || authUser.email,
+      role: 'Administrator',
+      type: 'admin',
+      date: today,
+      status: 'checked_in',
+      note: '',
+      markedAt: serverTimestamp(),
+      markedBy: 'self',
+    },{merge:true});
+    // Update local state
+    if(!attState[attKey]) attState[attKey] = {};
+    attState[attKey].status = 'checked_in';
+    // Flash success on self card
+    const btn = document.querySelector('[onclick*="markAdminPresent"]');
+    if(btn){ const orig=btn.textContent; btn.textContent='✓ Checked In!'; btn.style.background='linear-gradient(135deg,#5BAD6F,#3A7D44)'; btn.style.color='#fff'; setTimeout(()=>{btn.textContent=orig;btn.style.background='';btn.style.color='';},2200); }
+    // Reload if on attendance date == today
+    const dateInput = document.getElementById('attDate');
+    if(!dateInput?.value || dateInput.value === today) loadAttendance();
+  }catch(e){
+    alert('Error marking attendance: ' + e.message);
+  }
+};
+
+window.loadAttendance = loadAttendance;
+
+// Helper: escape HTML
+function escHtml(str){ return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escAttr(str){ return String(str||'').replace(/'/g,'\\\''); }
 
 /* TICKETS */
 async function loadTickets(){
@@ -1236,131 +1570,58 @@ window.exportCSV=async function(){
     const evFilter=document.getElementById('expEvent').value;const stFilter=document.getElementById('expStatus').value;
     const snap=await getDocs(collection(db,'registrations'));
     const rows=[['Name','Email','Reg No','Class','Section','Roll','Event','Status','Calling','WhatsApp','Class Teacher','Registered On']];
-    snap.forEach(d=>{const r=d.data();if(evFilter&&r.eventId!==evFilter)return;if(stFilter&&r.status!==stFilter)return;const evName=evCache.find(e=>e.id===r.eventId)?.name||r.eventId||'';const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';rows.push([r.name,r.email,r.registrationNumber,r.class,r.section,r.rollNumber,evName,r.status,r.callingNumber,r.whatsappNumber,r.classTeacher,date]);});
+    snap.forEach(d=>{
+      const r=d.data();if(evFilter&&r.eventId!==evFilter)return;if(stFilter&&r.status!==stFilter)return;
+      const evName=evCache.find(e=>e.id===r.eventId)?.name||r.eventId||'';const clsObj=clCache.find(c=>c.id===r.class);const clsDisplay=clsObj?clsObj.name:(r.class||'');const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-IN'):'';
+      rows.push([r.name,r.email,r.registrationNumber,clsDisplay,r.section,r.rollNumber,evName,r.status,r.callingNumber,r.whatsappNumber,r.classTeacher,date]);
+    });
     const csv=rows.map(r=>r.map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');
     const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`cy_registrations_${new Date().toISOString().split('T')[0]}.csv`;a.click();
   }catch(e){alert('Export failed: '+e.message);}
 };
 
-
-/* ═══════════════════════════ ADD PARTICIPANT ═══════════════════════════ */
+/* ADD PARTICIPANT */
 let apClassesCache=[];
 let apTeacherMap={};
-
 function populateApClasses(){
-  /* re-use clCache which is already loaded; also refresh just in case */
   const sel=document.getElementById('apClass');if(!sel)return;
-  const src=clCache.length?clCache:[];
-  sel.innerHTML='<option value="">Select class</option>'+src.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
-  apClassesCache=src;
+  sel.innerHTML='<option value="">Select class</option>'+clCache.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  apClassesCache=clCache;
   document.getElementById('apSection').innerHTML='<option value="">Select section</option>';
   document.getElementById('apTeacher').value='';
 }
-
 window.onApClassChange=function(){
-  const classId=document.getElementById('apClass').value;
-  const secSel=document.getElementById('apSection');
-  secSel.innerHTML='<option value="">Select section</option>';
-  document.getElementById('apTeacher').value='';
-  apTeacherMap={};
-  if(!classId)return;
-  const cls=apClassesCache.find(c=>c.id===classId);
-  if(!cls||!cls.sections)return;
-  cls.sections.forEach(s=>{
-    const name=typeof s==='string'?s:(s.name||s);
-    const teacher=typeof s==='string'?'':(s.teacher||'');
-    secSel.innerHTML+=`<option value="${name}">${name}</option>`;
-    apTeacherMap[name]=teacher;
-  });
+  const classId=document.getElementById('apClass').value;const secSel=document.getElementById('apSection');
+  secSel.innerHTML='<option value="">Select section</option>';document.getElementById('apTeacher').value='';apTeacherMap={};if(!classId)return;
+  const cls=apClassesCache.find(c=>c.id===classId);if(!cls||!cls.sections)return;
+  cls.sections.forEach(s=>{const name=typeof s==='string'?s:(s.name||s);const teacher=typeof s==='string'?'':(s.teacher||'');secSel.innerHTML+=`<option value="${name}">${name}</option>`;apTeacherMap[name]=teacher;});
 };
-
-window.onApSectionChange=function(){
-  const sec=document.getElementById('apSection').value;
-  document.getElementById('apTeacher').value=apTeacherMap[sec]||'';
-};
-
+window.onApSectionChange=function(){const sec=document.getElementById('apSection').value;document.getElementById('apTeacher').value=apTeacherMap[sec]||'';};
 window.submitAddParticipant=async function(){
-  const name=document.getElementById('apName').value.trim();
-  const email=document.getElementById('apEmail').value.trim().toLowerCase();
-  const reg=document.getElementById('apReg').value.trim();
-  const roll=document.getElementById('apRoll').value.trim();
-  const cls=document.getElementById('apClass').value;
-  const sec=document.getElementById('apSection').value;
-  const teacher=document.getElementById('apTeacher').value.trim();
-  const call=document.getElementById('apCall').value.trim();
-  const wa=document.getElementById('apWA').value.trim();
-  const eventId=document.getElementById('apEvEvent').value;
-  const status=document.getElementById('apStatus').value;
-
-  /* basic validation */
-  if(!name||!email||!reg||!roll||!cls||!sec||!call||!wa||!eventId){
-    showMsg('apMsg','Please fill all required fields (marked *).','e');return;
-  }
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-    showMsg('apMsg','Enter a valid email address.','e');return;
-  }
-  if(!/^\d{10}$/.test(call)){
-    showMsg('apMsg','Calling number must be exactly 10 digits.','e');return;
-  }
-  if(!/^\d{10}$/.test(wa)){
-    showMsg('apMsg','WhatsApp number must be exactly 10 digits.','e');return;
-  }
-
-  showMsg('apMsg','<span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border:2px solid transparent;border-top:2px solid currentColor;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;"></span>Checking for duplicates&hellip;</span>','');
-
+  const name=document.getElementById('apName').value.trim();const email=document.getElementById('apEmail').value.trim().toLowerCase();const reg=document.getElementById('apReg').value.trim();const roll=document.getElementById('apRoll').value.trim();const classId=document.getElementById('apClass').value;const sec=document.getElementById('apSection').value;const teacher=document.getElementById('apTeacher').value.trim();const call=document.getElementById('apCall').value.trim();const wa=document.getElementById('apWA').value.trim();const eventId=document.getElementById('apEvEvent').value;const status=document.getElementById('apStatus').value;
+  if(!name||!email||!reg||!roll||!classId||!sec||!call||!wa||!eventId){showMsg('apMsg','Please fill all required fields.','e');return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showMsg('apMsg','Enter a valid email address.','e');return;}
+  if(!/^\d{10}$/.test(call)){showMsg('apMsg','Calling number must be exactly 10 digits.','e');return;}
+  if(!/^\d{10}$/.test(wa)){showMsg('apMsg','WhatsApp number must be exactly 10 digits.','e');return;}
+  showMsg('apMsg','Checking for duplicates…','');
   try{
-    /* duplicate email check */
     const dup=await getDocs(query(collection(db,'registrations'),where('email','==',email)));
-    if(!dup.empty){
-      showMsg('apMsg','A registration with this email already exists. Check the Registrations panel.','e');return;
-    }
-
-    /* generate QR ID same format as enroll.html */
+    if(!dup.empty){showMsg('apMsg','A registration with this email already exists.','e');return;}
     const qrId='CY'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,5).toUpperCase();
-
-    await addDoc(collection(db,'registrations'),{
-      uid: null,                 /* no firebase auth uid — admin-added */
-      name,
-      registrationNumber: reg,
-      class: cls,
-      section: sec,
-      rollNumber: roll,
-      classTeacher: teacher,
-      email,
-      callingNumber: call,
-      whatsappNumber: wa,
-      photoURL: '',
-      qrId,
-      isVolunteer: false,
-      adminAdded: true,          /* flag so portals can note this was admin-added */
-      eventId,
-      status: status||'audition_pending',
-      createdAt: serverTimestamp()
-    });
-
-    showMsg('apMsg','Participant added successfully. They can now log in via the participant portal using their personal Google account.','s');
-    clearApForm();
-    loadDashboard();
-    loadRegs();
-  }catch(e){
-    showMsg('apMsg','Error: '+e.message,'e');
-  }
+    await addDoc(collection(db,'registrations'),{uid:null,name,registrationNumber:reg,class:classId,section:sec,rollNumber:roll,classTeacher:teacher,email,callingNumber:call,whatsappNumber:wa,photoURL:'',qrId,isVolunteer:false,adminAdded:true,eventId,status:status||'audition_pending',createdAt:serverTimestamp()});
+    showMsg('apMsg','Participant added successfully.','s');clearApForm();loadDashboard();loadRegs();
+  }catch(e){showMsg('apMsg','Error: '+e.message,'e');}
 };
-
 window.clearApForm=function(){
-  ['apName','apEmail','apReg','apRoll','apCall','apWA','apTeacher'].forEach(id=>{
-    const el=document.getElementById(id);if(el){el.value='';el.readOnly=(id==='apTeacher');}
-  });
+  ['apName','apEmail','apReg','apRoll','apCall','apWA','apTeacher'].forEach(id=>{const el=document.getElementById(id);if(el){el.value='';el.readOnly=(id==='apTeacher');}});
   const apClass=document.getElementById('apClass');if(apClass)apClass.value='';
   const apSec=document.getElementById('apSection');if(apSec)apSec.innerHTML='<option value="">Select section</option>';
   const apEv=document.getElementById('apEvEvent');if(apEv)apEv.value='';
   const apSt=document.getElementById('apStatus');if(apSt)apSt.value='audition_pending';
   const cb=document.getElementById('apSameCb');if(cb)cb.checked=false;
   const waEl=document.getElementById('apWA');if(waEl)waEl.readOnly=false;
-  apTeacherMap={};
-  document.getElementById('apMsg').className='msg';
+  apTeacherMap={};document.getElementById('apMsg').className='msg';
 };
-/* ════════════════════════════════════════════════════════════════════════ */
 
 window.filterTbl=function(tbodyId,val){document.querySelectorAll('#'+tbodyId+' tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(val.toLowerCase())?'':'none';});};
 window.doSignOut=async function(){await signOut(auth);window.location.href='login.html';};
